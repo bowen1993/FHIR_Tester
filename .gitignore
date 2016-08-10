@@ -12,6 +12,11 @@ __pycache__/
 
 #node modules
 node_modules/*
+*/node_modules/*
+
+#bower
+bower_components/*
+*/bower_components/*
 
 # Distribution / packaging
 .Python
