@@ -1,0 +1,76 @@
+.head-bar {
+    flex: 0 1 50px;
+    background-color: rgb(207, 216, 220);
+    padding: 10px;
+}
+
+.head-bar .head-title {
+    float: left;
+}
+
+.head-bar .head-title .head-title-text {
+    font-size: 1.4em;
+    line-height: 1.4em;
+    color: #000;
+}
+
+.head-bar .head-tools {
+    float: right;
+}
+
+.btn-test {
+    background-color: rgba(0, 200, 83, 0.4);
+    color: #fff;
+}
+
+.btn-test:hover{
+    line-height: 2em;
+}
+
+.btn-test:hover .btn-test-text{
+    font-weight: bold;
+    color: #fff;
+}
+
+.btn-test .btn-test-text {
+    font-size: 1em;
+    line-height: 1.1em;
+}
+
+.area-title{
+    color: #fff;
+    font-weight: 200;
+    font-size: 1.5em;
+}
+
+.area-title-black{
+    color:#000;
+}
+
+
+.input-url{
+    margin: 10px;
+    width: 80%;
+    background-color:rgba(245, 245, 245, 0.3);
+    color:#eee;
+	box-shadow: none;
+	font-size: 1.2em;
+    line-height: 1.5em;
+	border-radius: 0px;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 0px;
+	border-bottom: 2px solid;
+}
+
+.input-url:focus, .input-url:active{
+    outline: none;
+}
+
+.input-right, .input-right:focus{
+    border-bottom: 2px solid rgba(0, 200, 83, 1);
+}
+
+.input-error, .input-error:focus{
+    border-bottom: 2px solid rgba(213, 0, 0, 1);
+}
