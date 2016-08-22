@@ -1,6 +1,6 @@
 .head-bar {
     flex: 0 1 50px;
-    background-color: rgb(207, 216, 220);
+    background-color: black;
     padding: 10px;
 }
 
@@ -11,7 +11,7 @@
 .head-bar .head-title .head-title-text {
     font-size: 1.4em;
     line-height: 1.4em;
-    color: #000;
+    color: #fff;
 }
 
 .head-bar .head-tools {
@@ -74,3 +74,33 @@
 .input-error, .input-error:focus{
     border-bottom: 2px solid rgba(213, 0, 0, 1);
 }
+
+.step-brief{
+    margin: 5px auto;
+    padding:20px;
+    width: 90%;
+    border: 1px solid rgba(60, 116, 247, 1);
+    border-radius: 5px;
+}
+
+.step-brief-success{
+    background-color: rgba(178, 255, 89, 0.862);
+}
+
+.step-brief-failed{
+    background-color: rgba(246, 0, 56, 0.878);
+}
+
+.step-brief .step-brief-text{
+    font-size: 1.2em;
+    line-height: 1.3em;
+}
+
+.step-img{
+    margin:10px auto;
+}
+
+/*img.full-img{
+    max-width: 100%;
+    width:auto;
+}*/

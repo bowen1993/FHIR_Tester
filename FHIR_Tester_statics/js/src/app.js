@@ -66,9 +66,9 @@ var app = app || {};
                         <CodeEditor updateCode={this.updateCode} language="python"/>
                     </div>
                     <div className="result-area">
-                    <div className="loading" hidden={!this.state.isLoading}>
-                        <img src="../img/5.png" alt="loading" class="img-responsive loading-img" />
-                    </div> 
+                        <div className="loading" hidden={!this.state.isLoading}>
+                            <img src="../img/5.png" alt="loading" class="img-responsive loading-img" />
+                        </div> 
                     { !this.state.isLoading && this.state.isResultReady ? <ResultDisplay {...this.state.testResult}/> : null }
                     </div>
                 </div>

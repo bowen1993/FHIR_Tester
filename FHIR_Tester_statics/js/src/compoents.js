@@ -58,11 +58,83 @@ var app = app || {};
         render: function(){
             return (
                 <div className="result-container bg-success">
-                    <span className="area-title area-title-black">Test Type: </span> <span>{this.props.testType}</span>
+                    <div className="result-head"><span className="area-title area-title-black">Test Type: </span> <span>{this.props.testType}</span></div>
+                    <div className="detail-result">
+                        <div className="result-sum">
+                            <h3>Level: 1</h3>
+                        </div>
+                        <StepDisplay />
+                    </div>
                 </div>
             )
         }
     });
 
+    var StepDisplay = app.StepDisplay = React.createClass({
+        getInitialState: function(){
+            return {
+                is_img_hide:true,
+                is_modal_show:false
+            }
+        },
+        handleTextClick:function(){
+            this.setState({is_img_hide:!this.state.is_img_hide});
+        },
+        handleShowFullImage:function(event){
+            event.stopPropagation();
+            this.setState({is_modal_show:true});
+        },
+        handleHideModal(){
+            this.setState({is_modal_show:false});
+        },
+        handleShowModal(){
+            this.setState({is_modal_show: true});
+        },
+        render:function(){
+            return (
+                <div className="step-brief step-brief-failed" onClick={this.handleTextClick}>
+                    <div><span  className="step-brief-text">This is a step info</span></div>
+                    <div hidden={this.state.is_img_hide} className="step-img-block">
+                        <button onClick={this.handleShowFullImage} className="btn btn-primary">Full Image</button>
+                        <img className="img-responsive img-rounded step-img" src="../img/1.png" />
+                    </div>
+                    {this.state.is_modal_show ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src="../img/1.png" />} /> : null}
+                </div>
+            );
+        }
+    });
+    var FullImageArea = app.FullImageArea = React.createClass({
+        render:function(){
+            return(
+                <img src={this.props.img_src} className="img-responsive" />
+            );
+        }
+    });
+    var Modal = app.Modal = React.createClass({
+        componentDidMount(){
+            $(ReactDOM.findDOMNode(this)).modal('show');
+            $(ReactDOM.findDOMNode(this)).on('hidden.bs.modal', this.props.handleHideModal);
+        },
+        render:function(){
+            return (
+                <div className="modal modal-wide fade">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 className="modal-title">{this.props.title}</h4>
+                            </div>
+                            <div className="modal-body">
+                                {this.props.content}
+                            </div>
+                            <div className="modal-footer text-center">
+                                <button className="btn btn-primary center-block" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    });
 })();
 

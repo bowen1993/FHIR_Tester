@@ -85,6 +85,7 @@ div.result-area{
     align-items: center;
     justify-content: center;
     padding: 10px;
+    overflow: auto;
 }
 
 .result-area .loading{
@@ -104,4 +105,24 @@ div.result-area{
     color:#000;
     border: 2px solid rgba(131, 150, 190, 1);
     border-radius: 10px;
+    overflow: auto;
 }
+
+.result-head{
+    margin:10px 20px;
+}
+
+.step-brief .step-brief-text{
+    width: 100%;
+}
+
+
+
+.modal.modal-wide .modal-dialog {
+    max-width: 90%;
+    width:auto;
+}
+.modal-wide .modal-body {
+  overflow-y: auto;
+}
+
