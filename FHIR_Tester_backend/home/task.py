@@ -30,5 +30,7 @@ class test_task:
         return self.test_type == 1
     def run(self):
         pass
-    def get_result(self):
+    def save_result(self):
         pass
+    def get_id(self):
+        return self.task_name
