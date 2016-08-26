@@ -1,6 +1,7 @@
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #include <cstdint>
 #include <cstring>
+#include <cmath>
 #include <future>
 #include <iostream>
 #include <iterator>
@@ -25,8 +26,9 @@
 #define  STDOUT 1
 #define  STDERR 2
 
-
 extern char** environ;
+
+
 
 posix_spawn_file_actions_t setupIoRedirection(const std::string&, const std::string&);
 int createProcess(pid_t&, const std::string&, posix_spawn_file_actions_t&);
@@ -63,9 +65,10 @@ static PyObject* wrap_excute(PyObject* self, PyObject* args){
     int timeLimit, memoryLimit;
     const char* res;
     PyObject* ret;
-    if( !PyArg_ParseTuple(args, "sssii", inputFilepath, outputFilepath, command, &timeLimit, &memoryLimit)){
+    if( !PyArg_ParseTuple(args, "sssii", &inputFilepath, &outputFilepath, &command, &timeLimit, &memoryLimit)){
         return NULL;
     }
+    // std::cout << timeLimit << memoryLimit << std::endl;
     res = excute(std::string(inputFilepath), std::string(outputFilepath), std::string(command), timeLimit, memoryLimit);
     ret = Py_BuildValue("s", res);
     return ret;
@@ -84,6 +87,12 @@ PyMODINIT_FUNC initRunner(void){
         return;
     }
 }
+
+// int main(){
+//     const char* res = excute("./hello.py", "io.txt", "python", 1000, 100);
+//     std::cout << res << std::endl;
+//     return 0;
+// }
 
 const char* excute(std::string inputFilepath, std::string outputFilepath, std::string command, int timeLimit, int memoryLimit){
     // IO redirection
@@ -215,7 +224,7 @@ long long getMillisecondsNow() {
 
     //clock_gettime(CLOCK_REALTIME, &spec);
     seconds                 = spec.tv_sec;
-    milliseconds            = round(spec.tv_nsec / 1.0e6);
+    milliseconds            = std::round(spec.tv_nsec / 1.0e6);
     long long currentTime   = seconds * 1000 + milliseconds;
 
     return currentTime;
