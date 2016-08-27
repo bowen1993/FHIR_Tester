@@ -5,7 +5,7 @@ from django.db import models
 class task(models.Model):
     task_id = models.CharField(max_length=10, primary_key=True)
     language = models.CharField(max_length=16)
-    type = models.CharField(max_length=16)
+    task_type = models.CharField(max_length=16)
     status = models.CharField(max_length=16)
     code = models.TextField(null=True)
     create_time = models.DateTimeField(auto_now_add=True)
