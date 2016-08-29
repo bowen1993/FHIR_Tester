@@ -9,7 +9,7 @@ import random
 import string
 from datetime import datetime, date
 from type_generator import *
-from config import *
+
 
 
 possibles = globals().copy()

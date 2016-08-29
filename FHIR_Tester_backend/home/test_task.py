@@ -7,6 +7,7 @@ import string
 from home import Runner
 from home.models import task, result, task_steps
 
+
 def random_string_generate(length):
     '''
     random string generator
@@ -43,32 +44,39 @@ class test_task:
     def isProcessable(self):
         return self.test_type == 1
     def run(self):
-        if self.is_finished:
-            return
-        #write code to file
-        code_filename = self.write_code2file()
-        #print code_filename
-        if not code_filename:
-            #print "no code file"
-            self.form_error_report("Can't run code. Wrong code type or server error")
-            self.save_result()
-            return
-        #run code with runner.excute
-        output_filename = self.task_name + '_out'
-        #print output_filename
-        command = self.get_command()
-        #print command
-        if not command:
-            #print 'No command'
-            self.form_error_report("Can't excute code")
-            self.save_result()
-            return
-        res = Runner.excute(code_filename, output_filename, command, 1000, 100)
-        #print res
+        if self.test_type == 0:
+            #run standard test
+            #create basic resources
+            #create random cases and send 
+            #generate results
+            pass
+        else:
+            if self.is_finished:
+                return
+            #write code to file
+            code_filename = self.write_code2file()
+            #print code_filename
+            if not code_filename:
+                #print "no code file"
+                self.form_error_report("Can't run code. Wrong code type or server error")
+                self.save_result()
+                return
+            #run code with runner.excute
+            output_filename = self.task_name + '_out'
+            #print output_filename
+            command = self.get_command()
+            #print command
+            if not command:
+                #print 'No command'
+                self.form_error_report("Can't excute code")
+                self.save_result()
+                return
+            res = Runner.excute(code_filename, output_filename, command, 1000, 100)
+            #print res
 
-        #analyse output file
-        #remove output file
-        #save result to database
+            #analyse output file
+            #remove output file
+            #save result to database
     def get_code_filename(self):
         filename = self.task_name
         if self.language == 'python':

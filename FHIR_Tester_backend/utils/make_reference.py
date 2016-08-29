@@ -2,6 +2,8 @@ import names
 import json
 from vcf import VCFReader
 import random
+import os
+
 
 def make_patients(index):
     gender = 'female' if random.random() < 0.5 else 'male'
@@ -18,7 +20,7 @@ def make_patients(index):
         'gender': gender
     }
     print json.dumps(data)
-    res_file = open('Patient_%d.json' % index, 'w')
+    res_file = open('resources/Patient_%d.json' % index, 'w')
     res_file.write(json.dumps(data))
     res_file.close()
 
@@ -36,7 +38,7 @@ def make_practitioner(index):
     }
     pstr = json.dumps(tmpl)
     print pstr
-    res_file = open('Practitioner_%d.json' % index, 'w')
+    res_file = open('resources/Practitioner_%d.json' % index, 'w')
     res_file.write(pstr)
     res_file.close()
 
@@ -98,7 +100,7 @@ def make_provenance(patient_id,index):
     tmpl['target'][0]['reference']='Patient/%s'%patient_id
     pstr = json.dumps(tmpl)
     print pstr
-    res_file = open('Provenance_%d.json' % index, 'w')
+    res_file = open('resources/Provenance_%d.json' % index, 'w')
     res_file.write(pstr)
     res_file.close()
 
@@ -150,7 +152,7 @@ def make_device(index):
     }
     pstr = json.dumps(tmpl)
     print pstr
-    res_file = open('Device_%d.json' % index, 'w')
+    res_file = open('resources/Device_%d.json' % index, 'w')
     res_file.write(pstr)
     res_file.close()
     
@@ -170,7 +172,7 @@ def make_encounter(index):
     }
     pstr = json.dumps(tmpl)
     print pstr
-    res_file = open('Encoutner_%d.json' % index, 'w')
+    res_file = open('resources/Encoutner_%d.json' % index, 'w')
     res_file.write(pstr)
     res_file.close()
 
@@ -209,7 +211,7 @@ def make_specimen(patient_id,index):
     tmpl['subject']['reference'] = 'Patient/%s'%patient_id
     pstr = json.dumps(tmpl)
     print pstr
-    res_file = open('Specimen_%d.json' % index, 'w')
+    res_file = open('resources/Specimen_%d.json' % index, 'w')
     res_file.write(pstr)
     res_file.close()
 
@@ -243,7 +245,7 @@ def make_observation(index):
     }
     pstr = json.dumps(tmpl)
     print pstr
-    res_file = open('Observation_%d.json' % index, 'w')
+    res_file = open('resources/Observation_%d.json' % index, 'w')
     res_file.write(pstr)
     res_file.close()
 
@@ -302,7 +304,7 @@ def make_ImagingStudy(patient_id,index):
     tmpl['patient']['reference'] = 'Patient/%s'%patient_id
     pstr = json.dumps(tmpl)
     print pstr
-    res_file = open('ImagingStudy_%d.json'%index, 'w')
+    res_file = open('resources/ImagingStudy_%d.json'%index, 'w')
     res_file.write(pstr)
     res_file.close()
 
@@ -335,11 +337,13 @@ def make_media():
     }
     pstr = json.dumps(tmpl)
     print pstr
-    res_file = open('Media.json', 'w')
+    res_file = open('resources/Media.json', 'w')
     res_file.write(pstr)
     res_file.close()
     
 if __name__ == '__main__':
+    if not os.path.exists('resources/'):
+        os.mkdir('resources')
     for index in range(5):
         make_patients(index)
         make_practitioner(index)

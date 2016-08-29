@@ -132,10 +132,16 @@ def create_integer(customed=None):
         return customed
 
 def create_code(code="",customed='code'):
-    if len(code) != 0:
-        return {customed:code}
+    if customed != 'code':
+        if len(code) != 0:
+            return code
+        else:
+            return random_string_generate(5)
     else:
-        return {customed:random_string_generate(5)}
+        if len(code) != 0:
+            return {customed:code}
+        else:
+            return {customed:random_string_generate(5)}
 
 def create_attachment(data=None,content_type="application/pdf", language="en"):
     return {
