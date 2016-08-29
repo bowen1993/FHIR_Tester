@@ -1,6 +1,7 @@
 import random
 import string
 from datetime import datetime, date
+import pytz
 
 def random_string_generate(length):
     '''
@@ -22,7 +23,7 @@ def create_reference(reference_type=None):
     @return reference object
     @rtype:dict
     '''
-    reference_str = "%s/%s" % (reference_type if reference_type else random_string_generate(3), random_string_generate(5))
+    reference_str = "%s/%s" % (reference_type if reference_type else random_string_generate(3), "1")
     return {'reference':reference_str}
 
 def random_picker(pick_list):
@@ -178,7 +179,7 @@ def create_date():
     return date.today().isoformat()
 
 def create_datetime():
-    time_isoStr = datetime.now().isoformat(' ')
+    time_isoStr = datetime.now(pytz.timezone('US/Pacific')).isoformat('T')
     return time_isoStr
 
 def create_narrative():

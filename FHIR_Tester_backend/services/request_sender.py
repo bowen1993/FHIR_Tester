@@ -1,4 +1,5 @@
 import requests
+import traceback
 
 def send_create_resource_request(resource_obj,url, access_token=None):
     print url
@@ -13,4 +14,5 @@ def send_create_resource_request(resource_obj,url, access_token=None):
         except:
             return r.text
     except:
+        traceback.print_exc()
         return 'Server Error'

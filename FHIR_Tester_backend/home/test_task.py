@@ -6,6 +6,8 @@ import random
 import string
 from home import Runner
 from home.models import task, result, task_steps
+from services.create_resource import *
+from services.genomic_standard_test import *
 
 
 def random_string_generate(length):
@@ -24,11 +26,18 @@ def form_taskname(salt):
     timestamp = datetime.now().isoformat()
     return hashlib.sha1(timestamp+salt).hexdigest()[:10]
 
+def ana_pre_creation_result(raw_info):
+    processed_info = {}
+    for key in raw_info:
+        processed_info[key] = 1
+    return processed_info
+
 class test_task:
-    def __init__(self, language="", code="", test_type=0):
+    def __init__(self, language="", code="", test_type=0, url=""):
         self.test_type = test_type
         self.language = language
         self.code = code
+        self.url = url
         self.task_name = form_taskname(language)
         self.result = ''
         self.status='created'
@@ -45,12 +54,14 @@ class test_task:
         return self.test_type == 1
     def run(self):
         print 'running'
+        print self.url
         if self.test_type == 0:
             #run standard test
             #create basic resources
+            pre_resource_raw = create_pre_resources(self.url,'resources')
+            pre_resource_info = ana_pre_creation_result(pre_resource_raw)
             #create random cases and send 
             #generate results
-            pass
         else:
             if self.is_finished:
                 return

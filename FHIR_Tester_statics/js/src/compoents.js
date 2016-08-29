@@ -43,6 +43,7 @@ var app = app || {};
             }else{
                 this.setState({url_vaild:false});
             }
+            this.props.updateUrl(url_str);
         },
         classNames:function(){
             return 'input-url ' + ((this.state.url_vaild) ? 'input-right':'input-error');

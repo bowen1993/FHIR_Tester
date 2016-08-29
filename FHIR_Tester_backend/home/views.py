@@ -10,6 +10,7 @@ from home.task_runner import perform_test
 def submit_task(request):
     #get code, language, type
     req_json = json.loads(request.body)
+    print req_json
     code = req_json['code']
     language = req_json['language']
     test_type = req_json['type']
