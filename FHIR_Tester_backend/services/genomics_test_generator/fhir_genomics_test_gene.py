@@ -140,7 +140,7 @@ def create_orthogonal_test_cases(element_test_cases):
             wrong_cases.append(wrong_case)
     all_cases = right_cases + wrong_cases
     total_cases = len(all_cases)
-    return  all_cases
+    return  right_cases, wrong_cases
     
 
 def create_all_test_cases(element_test_cases):
@@ -174,7 +174,7 @@ def create_all_test_cases(element_test_cases):
             wrong_cases.append(wrong_case)
     all_cases = right_cases + wrong_cases
     total_cases = len(all_cases)
-    return all_cases
+    return (right_cases, wrong_cases)
 
 
     
