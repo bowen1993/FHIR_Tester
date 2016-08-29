@@ -44,6 +44,7 @@ class test_task:
     def isProcessable(self):
         return self.test_type == 1
     def run(self):
+        print 'running'
         if self.test_type == 0:
             #run standard test
             #create basic resources
@@ -73,10 +74,38 @@ class test_task:
                 return
             res = Runner.excute(code_filename, output_filename, command, 1000, 100)
             #print res
-
             #analyse output file
-            #remove output file
+            self.save_steps(output_filename)
+            #remove code & output file
+            print code_filename
+            print output_filename
+            os.remove(code_filename)
+            os.remove(output_filename)
             #save result to database
+            self.result = res.split(',')[0]
+            self.status='finished'
+            self.is_finished = True
+            try:
+                with transaction.atomic():
+                    task_obj = task.objects.get(task_id=self.task_name)
+                    task_obj.status = self.status
+                    new_result = result(task=task_obj,status=self.result)
+                    new_result.save()
+                    task_obj.save()
+            except:
+                print 'Save result error, task: %s' % self.task_name
+        print 'finished'
+    def save_steps(self, output_filename):
+        output = open(output_filename, 'r')
+        for line in output.xreadlines():
+            trimline = line[:-1]
+            with transaction.atomic():
+                try:
+                    new_task_step = task_steps(task_id=self.task_name,additional_info=trimline)
+                    new_task_step.save()
+                except:
+                    print 'Save step error, task: %s' % self.task_name
+
     def get_code_filename(self):
         filename = self.task_name
         if self.language == 'python':

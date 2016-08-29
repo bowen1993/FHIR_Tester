@@ -107,7 +107,12 @@ const char* excute(std::string inputFilepath, std::string outputFilepath, std::s
     }
     exitCode = runProcess(pid, timeLimit, memoryLimit, usedTime, usedMemory);
     char buff[256];
-    snprintf(buff, sizeof(buff), "Success,%d,%d,%d", exitCode,usedTime, usedMemory);
+    if (exitCode == 0){
+        snprintf(buff, sizeof(buff), "Success,%d,%d,%d", exitCode,usedTime, usedMemory);
+    }else{
+        snprintf(buff, sizeof(buff), "Failed,%d,%d,%d", exitCode,usedTime, usedMemory);
+    }
+    
     std::string buffAsStdStr = buff;
     return buffAsStdStr.c_str();
 }
