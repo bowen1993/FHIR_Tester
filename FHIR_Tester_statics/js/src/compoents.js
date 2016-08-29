@@ -4,7 +4,6 @@ var app = app || {};
     app.TestButton = React.createClass({
         handleClick: function() {
             this.props.submitTestTask(this.props.btnType);
-
         },
         render: function() {
             return ( <button onClick = { this.handleClick }

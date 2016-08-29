@@ -3,8 +3,8 @@ var app = app || {};
 
 (function() {
     app.APP_TEST = 1;
-    app.STANDARD_TEST = 2;
-    app.SERVER_TEST = 3;
+    app.STANDARD_TEST = 0;
+    app.SERVER_TEST = 2;
     var TestButton  = app.TestButton;  
     var CodeEditor = app.CodeEditor; 
     var UrlEditor = app.UrlEditor;
@@ -46,6 +46,20 @@ var app = app || {};
         handleTaskSubmit:function(submitType){
             //this.state.isLoading = !this.state.isLoading;
             //this.setState({isLoading:!this.state.isLoading});
+            if (submitType == 2){
+                var post_data = {code:this.state.code,language:'python',type:submitType,url:""};
+                console.log(post_data);
+                $.ajax({
+                    url:'http://localhost:8000/home/submit',
+                    type:'POST',
+                    data:JSON.stringify(post_data),
+                    dataType:'json',
+                    cache:false,
+                    success:function(data){
+                        console.log(data)
+                    }
+                });
+            }
             var test_result = {
                 testType:app.type2str(submitType),
                 testResult:'Success',
@@ -59,8 +73,8 @@ var app = app || {};
                     <div className="test-input">
                         <div className="btnArea">
                             <TestButton btn_name="App Test" submitTestTask={this.handleTaskSubmit} btnType={app.APP_TEST}/>
-                            <TestButton btn_name="Server Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/>
-                            <TestButton btn_name="Standard Test" submitTestTask={this.handleTaskSubmit} btnType={app.SERVER_TEST}/> 
+                            <TestButton btn_name="Server Test" submitTestTask={this.handleTaskSubmit} btnType={app.SERVER_TEST}/>
+                            <TestButton btn_name="Standard Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/> 
                         </div>
                         <UrlEditor />
                         <CodeEditor updateCode={this.updateCode} language="python"/>

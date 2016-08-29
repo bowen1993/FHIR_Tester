@@ -110,7 +110,7 @@ const char* excute(std::string inputFilepath, std::string outputFilepath, std::s
     if (exitCode == 0){
         snprintf(buff, sizeof(buff), "Success,%d,%d,%d", exitCode,usedTime, usedMemory);
     }else{
-        snprintf(buff, sizeof(buff), "Failed,%d,%d,%d", exitCode,usedTime, usedMemory);
+        snprintf(buff, sizeof(buff), "Error,%d,%d,%d", exitCode,usedTime, usedMemory);
     }
     
     std::string buffAsStdStr = buff;
