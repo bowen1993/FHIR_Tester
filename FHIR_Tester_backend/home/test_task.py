@@ -97,7 +97,7 @@ class test_task:
         return command
     def form_error_report(self, error_msg):
         self.result = error_msg
-        self.status="Error"
+        self.status="Program Error"
     def save_result(self):
         task_obj = None
         with transaction.atomic():
