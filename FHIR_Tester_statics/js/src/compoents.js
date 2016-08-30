@@ -57,7 +57,7 @@ var app = app || {};
     app.ResultDisplay = React.createClass({
         render: function(){
             return (
-                <div className="result-container bg-success">
+                <div className="result-container">
                     <div className="result-head"><span className="area-title area-title-black">Test Type: </span> <span>{this.props.testType}</span></div>
                     <div className="detail-result">
                         <div className="result-sum">

@@ -103,7 +103,7 @@ div.result-area{
     flex: 1 1 auto;
     padding: 10px;
     color:#000;
-    border: 2px solid rgba(131, 150, 190, 1);
+    /*border: 2px solid rgba(131, 150, 190, 1);*/
     border-radius: 10px;
     overflow: auto;
 }
