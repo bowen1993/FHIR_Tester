@@ -14,9 +14,11 @@ def submit_task(request):
     code = req_json['code']
     language = req_json['language']
     test_type = req_json['type']
+    access_token = req_json['access_token']
+    print access_token
     url = req_json['url']
     #return task id
-    task_id = perform_test(language=language,code=code,url=url,test_type=test_type)
+    task_id = perform_test(language=language,code=code,url=url,test_type=test_type, access_token=access_token)
     result = {
         'task_id':task_id
     }

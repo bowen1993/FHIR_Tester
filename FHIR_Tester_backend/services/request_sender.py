@@ -1,7 +1,7 @@
 import requests
 import traceback
 
-def send_create_resource_request(resource_obj,url, access_token=None):
+def send_create_resource_request(resource_obj, url, access_token=None):
     print url
     try:
         if access_token and len(access_token) != 0:

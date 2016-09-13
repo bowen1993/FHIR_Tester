@@ -17,5 +17,6 @@ def create_pre_resources(url, basepath, access_token=None):
                     if not url.endswith('/'):
                         url += '/'
                     response = send_create_resource_request(resource_obj,'%s%s'%(url, resource_name), access_token)
+                    print response
                     create_result[resource_name] = response
     return create_result

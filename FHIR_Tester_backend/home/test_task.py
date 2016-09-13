@@ -33,13 +33,14 @@ def ana_pre_creation_result(raw_info):
     return processed_info
 
 class test_task:
-    def __init__(self, language="", code="", test_type=0, url=""):
+    def __init__(self, language="", code="", test_type=0, url="", access_token=None):
         self.test_type = test_type
         self.language = language
         self.code = code
         self.url = url
         self.task_name = form_taskname(language)
         self.result = ''
+        self.access_token = access_token
         self.status='created'
         self.is_finished = False
         #create database object
@@ -58,7 +59,8 @@ class test_task:
         if self.test_type == 0:
             #run standard test
             #create basic resources
-            pre_resource_raw = create_pre_resources(self.url,'resources')
+            print self.access_token
+            pre_resource_raw = create_pre_resources(self.url,'resources', self.access_token)
             pre_resource_info = ana_pre_creation_result(pre_resource_raw)
             #create random cases and send 
             #generate results

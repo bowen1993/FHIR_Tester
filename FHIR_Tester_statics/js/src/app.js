@@ -49,7 +49,8 @@ var app = app || {};
         handleTaskSubmit:function(submitType){
             //this.state.isLoading = !this.state.isLoading;
             //this.setState({isLoading:!this.state.isLoading});
-            var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url};
+            var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :'eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjE0NzM0NTA3NTgsImF1ZCI6WyI1NjZkNGNmNy00Zjc0LTRiNmQtOGIxNi1mZmIxZWUxZDBlMjMiXSwiaXNzIjoiaHR0cHM6XC9cL2F1dGhvcml6ZS1kc3R1Mi5zbWFydGhlYWx0aGl0Lm9yZ1wvIiwianRpIjoiNmYyNjc5MTAtYjY2OS00OWNkLTk2ZDMtOTAxMmMyMDUyM2E0IiwiaWF0IjoxNDczNDQ3MTU4fQ.PtzfAKKj_qbK5MaQrvSQDHKODhB31PKyWoyyBknAXClceKyHv6O49QPh-eyp3akx-VZilbzd7gD0CJHY7kmjcPTiB_RSIC16lX_BcU-_ZHDwiTTdChmKvLICW0t2qSx_yBdEAOigfqJawzRdyc6MuPpHVDf4h0hcNIPd-A97Qsk'};
+            console.log(post_data);
             $.ajax({
                 url:'http://localhost:8000/home/submit',
                 type:'POST',
