@@ -28,6 +28,17 @@ var app = app || {};
             );
         }
     });
+    app.TokenEditor = React.createClass({
+        handleChange:function(){
+            var new_token = this.refs.tokenInput.value;
+            this.props.updateToken(new_token);
+        },
+        render: function(){
+            return (
+                <input className="input-url" onChange={this.handleChange} ref="tokenInput" placeholder="Input Server Access Token" />
+            );
+        }
+    });
     app.UrlEditor = React.createClass({
         getInitialState: function(){
             return {
@@ -55,15 +66,28 @@ var app = app || {};
         }
     });
     app.ResultDisplay = React.createClass({
+        getInitialState:function(){
+            return {'level':-1, test_type:0, 'steps':[]}
+        },
+        displayResult:function(res_dict){
+            var test_type = res_dict.test_type
+            this.setState({'test_type':test_type})
+            if (test_type == 0){
+                this.setState({'level':res_dict.level});
+            }
+            this.setState({'steps':res_dict['steps']});
+        },
         render: function(){
             return (
                 <div className="result-container">
                     <div className="result-head"><span className="area-title area-title-black">Test Type: </span> <span>{this.props.testType}</span></div>
                     <div className="detail-result">
                         <div className="result-sum">
-                            <h3>Level: 1</h3>
+                            {this.state.test_type == 0 ? <h3>Level: {this.state.level}</h3> : null}
                         </div>
-                        <StepDisplay />
+                        {this.state.steps.map(function(step){
+                            return <StepDisplay stepInfo={step} />
+                        })}
                     </div>
                 </div>
             )
@@ -74,7 +98,8 @@ var app = app || {};
         getInitialState: function(){
             return {
                 is_img_hide:true,
-                is_modal_show:false
+                is_modal_show:false,
+                is_has_image:false
             }
         },
         handleTextClick:function(){
@@ -90,9 +115,12 @@ var app = app || {};
         handleShowModal(){
             this.setState({is_modal_show: true});
         },
+        showSteps: function(steps){
+
+        },
         render:function(){
             return (
-                <div className="step-brief step-brief-failed" onClick={this.handleTextClick}>
+                <div className="step-brief step-brief-success" onClick={this.handleTextClick}>
                     <div><span  className="step-brief-text">This is a step info</span></div>
                     <div hidden={this.state.is_img_hide} className="step-img-block">
                         <button onClick={this.handleShowFullImage} className="btn btn-primary">Full Image</button>

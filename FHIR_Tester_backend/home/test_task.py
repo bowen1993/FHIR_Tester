@@ -26,11 +26,6 @@ def form_taskname(salt):
     timestamp = datetime.now().isoformat()
     return hashlib.sha1(timestamp+salt).hexdigest()[:10]
 
-def ana_pre_creation_result(raw_info):
-    processed_info = {}
-    for key in raw_info:
-        processed_info[key] = 1
-    return processed_info
 
 class test_task:
     def __init__(self, language="", code="", test_type=0, url="", access_token=None):
@@ -58,12 +53,18 @@ class test_task:
         print self.url
         if self.test_type == 0:
             #run standard test
-            #create basic resources
-            print self.access_token
-            pre_resource_raw = create_pre_resources(self.url,'resources', self.access_token)
-            pre_resource_info = ana_pre_creation_result(pre_resource_raw)
-            #create random cases and send 
-            #generate results
+            test_result = do_standard_test(self.url, self.access_token)
+            print test_result
+            #case standard steps to database
+            with transaction.atomic():
+                #save steps
+                for step in test_result['steps']:
+                    print step
+                    new_step = task_steps(task_id=self.task_name, step_desc=step)
+                    new_step.save()
+                #save result
+                self.status = 'finished'
+                self.save_result()
         else:
             if self.is_finished:
                 return
@@ -155,6 +156,8 @@ class test_task:
                 task_obj = task.objects.get(task_id=self.task_name)
                 new_result_obj = result(task=task_obj,status=self.status)
                 new_result_obj.save()
+                task_obj.status = 'finished'
+                task_obj.save()
             except:
                 pass
     def get_id(self):

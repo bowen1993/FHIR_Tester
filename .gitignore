@@ -108,3 +108,5 @@ ENV/
 #support files
 resources/
 resources/*
+
+*.rdb

@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'djcelery',
     'kombu.transport.django',
     'home',
+    'channels',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -72,6 +73,16 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '3306',
        }
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
+        "ROUTING": "home.routing.channel_routing",
+    },
 }
 
 # Internationalization

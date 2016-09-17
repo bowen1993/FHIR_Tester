@@ -9,6 +9,7 @@ var app = app || {};
     var CodeEditor = app.CodeEditor; 
     var UrlEditor = app.UrlEditor;
     var ResultDisplay = app.ResultDisplay;
+    var TokenEditor = app.TokenEditor;
     app.type2str = function(test_type){
         var typeStr = '';
         switch (test_type)
@@ -37,7 +38,7 @@ var app = app || {};
         };
     var TesterApp = React.createClass({
         getInitialState: function() {
-            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false, testResult:{}};
+            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false, testResult:{}, access_token:''};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
@@ -46,10 +47,13 @@ var app = app || {};
         updateUrl:function(newUrl){
             this.setState({url:newUrl});
         },
+        updateAccessToken:function(newToken){
+            this.setState({access_token:newToken});
+        },
         handleTaskSubmit:function(submitType){
             //this.state.isLoading = !this.state.isLoading;
             //this.setState({isLoading:!this.state.isLoading});
-            var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :'eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjE0NzM0NTA3NTgsImF1ZCI6WyI1NjZkNGNmNy00Zjc0LTRiNmQtOGIxNi1mZmIxZWUxZDBlMjMiXSwiaXNzIjoiaHR0cHM6XC9cL2F1dGhvcml6ZS1kc3R1Mi5zbWFydGhlYWx0aGl0Lm9yZ1wvIiwianRpIjoiNmYyNjc5MTAtYjY2OS00OWNkLTk2ZDMtOTAxMmMyMDUyM2E0IiwiaWF0IjoxNDczNDQ3MTU4fQ.PtzfAKKj_qbK5MaQrvSQDHKODhB31PKyWoyyBknAXClceKyHv6O49QPh-eyp3akx-VZilbzd7gD0CJHY7kmjcPTiB_RSIC16lX_BcU-_ZHDwiTTdChmKvLICW0t2qSx_yBdEAOigfqJawzRdyc6MuPpHVDf4h0hcNIPd-A97Qsk'};
+            var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token};
             console.log(post_data);
             $.ajax({
                 url:'http://localhost:8000/home/submit',
@@ -58,15 +62,27 @@ var app = app || {};
                 dataType:'json',
                 cache:false,
                 success:function(data){
-                    console.log(data)
+                    console.log(data);
+                    var task_id = data.task_id;
+                    var ws_scheme = window.location.protocol == "https" ? "wss" : "ws";
+                    var tasksocket = new WebSocket(ws_scheme + '://localhost:8000/task/' + task_id);
+                    tasksocket.onmessage = function(message){
+                        var data = JSON.parse(message.data);
+                        console.log(data);
+                        window.comp.updateTestResult(data);
+                    };
+                    tasksocket.onopen = function(e){
+                        tasksocket.send(task_id);
+                    }
                 }
             });
-            var test_result = {
-                testType:app.type2str(submitType),
-                testResult:'Success',
-                resultDetail:'All Test Passed'
-            }
-            this.setState({testResult:test_result})
+            //connect with websocket
+        },
+        componentDidMount:function(){
+            window.comp = this;
+        },
+        updateTestResult:function(res){
+            this.setState({isResultReady:true, testResult:res});
         },
         render:function(){
             return (
@@ -78,13 +94,14 @@ var app = app || {};
                             <TestButton btn_name="Standard Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/> 
                         </div>
                         <UrlEditor updateUrl={this.updateUrl}/>
+                        <TokenEditor updateToken={this.updateAccessToken} />
                         <CodeEditor updateCode={this.updateCode} language="python"/>
                     </div>
                     <div className="result-area">
                         <div className="loading" hidden={!this.state.isLoading}>
                             <img src="../img/5.png" alt="loading" class="img-responsive loading-img" />
                         </div> 
-                    { !this.state.isLoading && this.state.isResultReady ? <ResultDisplay {...this.state.testResult}/> : null }
+                    { !this.state.isLoading && this.state.isResultReady ? <ResultDisplay ref="res_area"/> : null }
                     </div>
                 </div>
             );
