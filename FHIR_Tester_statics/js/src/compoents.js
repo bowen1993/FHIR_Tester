@@ -70,6 +70,7 @@ var app = app || {};
             return {'level':-1, test_type:0, 'steps':[]}
         },
         displayResult:function(res_dict){
+            console.log(res_dict);
             var test_type = res_dict.test_type
             this.setState({'test_type':test_type})
             if (test_type == 0){
@@ -102,8 +103,15 @@ var app = app || {};
                 is_has_image:false
             }
         },
+        componentDidMount:function(){
+            if(this.props.stepInfo.addi){
+                this.setState({is_has_image:true});
+            }
+        },
         handleTextClick:function(){
-            this.setState({is_img_hide:!this.state.is_img_hide});
+            if (this.state.is_has_image){
+                this.setState({is_img_hide:!this.state.is_img_hide});
+            }
         },
         handleShowFullImage:function(event){
             event.stopPropagation();
@@ -115,18 +123,15 @@ var app = app || {};
         handleShowModal(){
             this.setState({is_modal_show: true});
         },
-        showSteps: function(steps){
-
-        },
         render:function(){
             return (
                 <div className="step-brief step-brief-success" onClick={this.handleTextClick}>
-                    <div><span  className="step-brief-text">This is a step info</span></div>
-                    <div hidden={this.state.is_img_hide} className="step-img-block">
+                    <div><span  className="step-brief-text">{this.props.stepInfo.desc}</span></div>
+                    <div hidden={this.state.is_img_hide && !this.state.is_has_image} className="step-img-block">
                         <button onClick={this.handleShowFullImage} className="btn btn-primary">Full Image</button>
-                        <img className="img-responsive img-rounded step-img" src="../img/1.png" />
+                        <img className="img-responsive img-rounded step-img" src={this.props.stepInfo.addi} />
                     </div>
-                    {this.state.is_modal_show ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src="../img/1.png" />} /> : null}
+                    {this.state.is_modal_show && this.state.is_has_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={this.props.stepInfo.addi} />} /> : null}
                 </div>
             );
         }

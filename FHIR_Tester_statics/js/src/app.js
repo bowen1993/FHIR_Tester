@@ -55,6 +55,7 @@ var app = app || {};
             //this.setState({isLoading:!this.state.isLoading});
             var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token};
             console.log(post_data);
+            this.setState({isLoading:true});
             $.ajax({
                 url:'http://localhost:8000/home/submit',
                 type:'POST',
@@ -68,8 +69,10 @@ var app = app || {};
                     var tasksocket = new WebSocket(ws_scheme + '://localhost:8000/task/' + task_id);
                     tasksocket.onmessage = function(message){
                         var data = JSON.parse(message.data);
-                        console.log(data);
+                        //console.log(data);
+                        window.comp.setState({isLoading:false});
                         window.comp.updateTestResult(data);
+                        
                     };
                     tasksocket.onopen = function(e){
                         tasksocket.send(task_id);
@@ -83,6 +86,7 @@ var app = app || {};
         },
         updateTestResult:function(res){
             this.setState({isResultReady:true, testResult:res});
+            this.refs.res_area.displayResult(res);
         },
         render:function(){
             return (
@@ -98,9 +102,7 @@ var app = app || {};
                         <CodeEditor updateCode={this.updateCode} language="python"/>
                     </div>
                     <div className="result-area">
-                        <div className="loading" hidden={!this.state.isLoading}>
-                            <img src="../img/5.png" alt="loading" class="img-responsive loading-img" />
-                        </div> 
+                    {this.state.isLoading ? <div className="loading"><img src="../img/5.png" alt="loading" class="img-responsive loading-img" /></div>  : null}
                     { !this.state.isLoading && this.state.isResultReady ? <ResultDisplay ref="res_area"/> : null }
                     </div>
                 </div>
