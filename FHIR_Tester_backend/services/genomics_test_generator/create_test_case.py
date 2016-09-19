@@ -10,6 +10,7 @@ import string
 from datetime import datetime, date
 from type_generator import *
 
+customed_multi_list = []
 
 
 possibles = globals().copy()

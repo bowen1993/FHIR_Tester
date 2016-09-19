@@ -57,7 +57,7 @@ def ana_pre_creation_result(raw_info):
 def level0Test(url, access_token=None):
     #create basic observation
     spec_filename = '%sObservation.csv' % spec_basepath
-    all_cases = create_all_test_case4type(spec_filename, Observation)
+    all_cases = create_all_test_case4type(spec_filename, 'Observation')
     #send resource
     #do test with all objects
     isSuccessful = iter_all_cases(all_cases, url, access_token)
@@ -65,7 +65,7 @@ def level0Test(url, access_token=None):
 
 def level1Test(url, access_token):
     spec_filename = '%sObservation.csv' % spec_basepath
-    all_cases = create_all_test_case4type(spec_filename, Observation)
+    all_cases = create_all_test_case4type(spec_filename, 'Observation')
     right_cases = all_cases['right']
     #add extension specific for genetic profile
     #TODO extension generate
@@ -78,7 +78,8 @@ def do_standard_test(url, access_token=None):
         'steps':[]
     }
     level = -1
-    pre_resource_result = ana_pre_creation_result(create_pre_resources(url, 'resources', access_token))
+    create_res, id_dict = create_pre_resources(url, 'resources', access_token)
+    pre_resource_result = ana_pre_creation_result(create_res)
     print pre_resource_result
     for key in pre_resource_result:
         if pre_resource_result[key]:
@@ -86,12 +87,16 @@ def do_standard_test(url, access_token=None):
         else:
             test_result['steps'].append('%s can not be created, test terminated' % key)
             return test_result
-
-    level += level0Test(url, access_token)
-    test_result['steps'].append('level 0 test performed')
-    level += level1Test(url, access_token)
-    test_result['steps'].append('level 1 test performed')
+    level0TestRes = level0Test(url, access_token)
+    level += level0TestRes
+    test_result['steps'].append('level 0 test performed, %s' % ('success' if level0TestRes == 1 else 'Failded'))
+    if level0TestRes != 1:
+        return test_result
+    level1TestRes = level1Test(url, access_token)
+    level += level1TestRes
+    test_result['steps'].append('level 1 test performed, %s' % ('success' if level1TestRes == 1 else 'Failded'))
+    if level1TestRes != 1:
+        return test_result
     test_result['level'] = level
-    print test_result
-    return test_result
+    return test_result, id_dict
 

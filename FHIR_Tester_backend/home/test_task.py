@@ -37,6 +37,8 @@ class test_task:
         self.result = ''
         self.access_token = access_token
         self.status='created'
+        self.level = None
+        self.baseid_dict = {}
         self.is_finished = False
         #create database object
         with transaction.atomic():
@@ -53,7 +55,8 @@ class test_task:
         print self.url
         if self.test_type == 0:
             #run standard test
-            test_result = do_standard_test(self.url, self.access_token)
+            test_result, id_dict = do_standard_test(self.url, self.access_token)
+            self.baseid_dict = id_dict
             print test_result
             #case standard steps to database
             with transaction.atomic():
@@ -154,7 +157,7 @@ class test_task:
         with transaction.atomic():
             try:
                 task_obj = task.objects.get(task_id=self.task_name)
-                new_result_obj = result(task=task_obj,status=self.status)
+                new_result_obj = result(task=task_obj,status=self.status, level=self.level)
                 new_result_obj.save()
                 task_obj.status = 'finished'
                 task_obj.save()
