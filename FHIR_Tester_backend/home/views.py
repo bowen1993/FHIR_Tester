@@ -6,6 +6,7 @@ from django.template import RequestContext, loader
 import json
 from home.task_runner import perform_test
 # Create your views here.
+
 @csrf_exempt
 def submit_task(request):
     #get code, language, type
