@@ -33,12 +33,16 @@ def create_pre_resources(url, basepath, access_token=None):
                 response = send_create_resource_request(json.dumps(resource_obj),'%s%s'%(url, resource_name), access_token)
                 create_result[resource_name] = response
                 ids = get_resource_id_list(url, resource_name, access_token)
-                id_dict[resource_name] = ids
+                if ids:
+                    id_dict[resource_name] = ids
     return create_result, id_dict
 
 def get_resource_id_list(url, resource_name, access_token=None):
     entry_obj = send_fetch_resource_request(url, resource_name, access_token)
-    return fetch_resource_id_list(entry_obj)
+    if entry_obj:
+        return fetch_resource_id_list(entry_obj)
+    else:
+        return None
 
 def fetch_resource_id_list(entry_obj):
     id_list = map(lambda x: x['resource']['id'], entry_obj)

@@ -22,27 +22,42 @@ def create_all_test_case4type(resource_spec_filename,resource_type):
         case['resourceType'] = resource_type
         all_cases['right'].append(case)
     for case in wrong_cases:
-        case['resourceType'] = resource_type
+        case['case']['resourceType'] = resource_type
         all_cases['wrong'].append(case)
     #return all cases
     return all_cases
 
-def iter_all_cases(all_cases, url, access_token=None):
+def iter_all_cases(all_cases, url,id_dict, access_token=None):
     #test right cases
     isSuccessful = True
+    hint_info = ''
     for case in all_cases['right']:
-        response = send_create_resource_request(case, url, access_token)
+        case = set_reference(case,id_dict)
+        print case
+        response = send_create_resource_request(json.dumps(case), url, access_token)
         if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
             isSuccessful = isSuccessful and True
         else:
+            print response
+            hint_info += response
             isSuccessful = isSuccessful and False
-    for case in all_cases['wrong']:
-        response = send_create_resource_request(case, url, access_token)
+        if not isSuccessful:
+            return isSuccessful, hint_info
+    for case_with_info in all_cases['wrong']:
+        case = case_with_info['case']
+        response = send_create_resource_request(json.dumps(case), url, access_token)
         if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
+            print '-'*30
+            print 'wrong case error'
+            print case
+            hint_info += case_with_info['info']
             isSuccessful = isSuccessful and False
         else:
+            print response
             isSuccessful = isSuccessful and True
-    return isSuccessful
+        if not isSuccessful:
+            return isSuccessful, hint_info
+    return isSuccessful, hint_info
 
 def ana_pre_creation_result(raw_info):
     processed_info = {}
@@ -54,22 +69,24 @@ def ana_pre_creation_result(raw_info):
                 processed_info[key] = False
     return processed_info
 
-def level0Test(url, access_token=None):
+def level0Test(url,id_dict, access_token=None):
     #create basic observation
     spec_filename = '%sObservation.csv' % spec_basepath
     all_cases = create_all_test_case4type(spec_filename, 'Observation')
     #send resource
     #do test with all objects
-    isSuccessful = iter_all_cases(all_cases, url, access_token)
-    return 1 if isSuccessful else 0
+    if not url.endswith('/'):
+        url += '/'
+    return iter_all_cases(all_cases, '%s%s' % (url, 'Observation'),id_dict, access_token)
+    
 
-def level1Test(url, access_token):
+def level1Test(url,id_dict, access_token):
     spec_filename = '%sObservation.csv' % spec_basepath
     all_cases = create_all_test_case4type(spec_filename, 'Observation')
     right_cases = all_cases['right']
     #add extension specific for genetic profile
     #TODO extension generate
-    return 1
+    return True,''
 
 def do_standard_test(url, access_token=None):
     #create pre resources
@@ -79,6 +96,7 @@ def do_standard_test(url, access_token=None):
     }
     level = -1
     create_res, id_dict = create_pre_resources(url, 'resources', access_token)
+    print id_dict
     pre_resource_result = ana_pre_creation_result(create_res)
     print pre_resource_result
     for key in pre_resource_result:
@@ -87,16 +105,17 @@ def do_standard_test(url, access_token=None):
         else:
             test_result['steps'].append('%s can not be created, test terminated' % key)
             return test_result
-    level0TestRes = level0Test(url, access_token)
-    level += level0TestRes
-    test_result['steps'].append('level 0 test performed, %s' % ('success' if level0TestRes == 1 else 'Failded'))
-    if level0TestRes != 1:
-        return test_result
-    level1TestRes = level1Test(url, access_token)
-    level += level1TestRes
-    test_result['steps'].append('level 1 test performed, %s' % ('success' if level1TestRes == 1 else 'Failded'))
-    if level1TestRes != 1:
-        return test_result
+    level0TestRes, hint_info = level0Test(url,id_dict, access_token)
+    test_result['steps'].append('level 0 test performed, %s' % ('success' if level0TestRes == 1 else 'Failded, %s'%hint_info))
+    if not level0TestRes:
+        test_result['level'] = level
+        return test_result, id_dict
+    level += 1
+    level1TestRes, hint_info = level1Test(url,id_dict, access_token)
+    test_result['steps'].append('level 1 test performed, %s' % ('success' if level1TestRes == 1 else 'Failded, %s'%hint_info))
+    if not level1TestRes:
+        test_result['level'] = level
+        return test_result, id_dict
     test_result['level'] = level
     return test_result, id_dict
 

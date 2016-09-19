@@ -25,7 +25,7 @@ def send_fetch_resource_request(url, resource_name, access_token=None):
             r = requests.get('%s%s' % (url, resource_name))
         try:
             response_json = r.json()
-            if response_json['total'] != 0:
+            if response_json['total'] != 0 and 'entry' in response_json:
                 return response_json['entry']
             else:
                 return None

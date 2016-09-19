@@ -58,6 +58,7 @@ class test_task:
             test_result, id_dict = do_standard_test(self.url, self.access_token)
             self.baseid_dict = id_dict
             print test_result
+            self.level = test_result['level']
             #case standard steps to database
             with transaction.atomic():
                 #save steps
@@ -65,9 +66,9 @@ class test_task:
                     print step
                     new_step = task_steps(task_id=self.task_name, step_desc=step)
                     new_step.save()
-                #save result
-                self.status = 'finished'
-                self.save_result()
+            #save result
+            self.status = 'finished'
+            self.save_result()
         else:
             if self.is_finished:
                 return
@@ -154,6 +155,7 @@ class test_task:
         self.status="Program Error"
     def save_result(self):
         task_obj = None
+        print 'Saving result'
         with transaction.atomic():
             try:
                 task_obj = task.objects.get(task_id=self.task_name)
@@ -163,5 +165,6 @@ class test_task:
                 task_obj.save()
             except:
                 pass
+        print 'saved'
     def get_id(self):
         return self.task_name

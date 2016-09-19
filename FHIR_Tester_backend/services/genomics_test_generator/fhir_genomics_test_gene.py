@@ -137,7 +137,12 @@ def create_orthogonal_test_cases(element_test_cases):
                         }
                 else:
                     wrong_case[subkey] = element_right_cases[subkey]
-            wrong_cases.append(wrong_case)
+            #wrap wrong case
+            case_with_info = {
+                'case':wrong_case,
+                'info': '%s is in error, should not be accepted' % key
+            }
+            wrong_cases.append(case_with_info)
     all_cases = right_cases + wrong_cases
     total_cases = len(all_cases)
     return  right_cases, wrong_cases
