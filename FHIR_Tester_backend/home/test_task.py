@@ -28,9 +28,10 @@ def form_taskname(salt):
 
 
 class test_task:
-    def __init__(self, language="", code="", test_type=0, url="", access_token=None):
+    def __init__(self, language="", code="", test_type=0, url="", access_token=None, username=None):
         self.test_type = test_type
         self.language = language
+        self.username = username
         self.code = code
         self.url = url
         self.task_name = form_taskname(language)
@@ -42,7 +43,7 @@ class test_task:
         self.is_finished = False
         #create database object
         with transaction.atomic():
-            new_task = task(task_id=self.task_name,language=self.language,task_type=self.test_type, status=self.status,code=self.code)
+            new_task = task(task_id=self.task_name,language=self.language,task_type=self.test_type, status=self.status,code=self.code, user_id=self.username)
             try:
                 new_task.save()
             except:

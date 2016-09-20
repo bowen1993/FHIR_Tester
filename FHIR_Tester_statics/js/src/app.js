@@ -53,7 +53,8 @@ var app = app || {};
         handleTaskSubmit:function(submitType){
             //this.state.isLoading = !this.state.isLoading;
             //this.setState({isLoading:!this.state.isLoading});
-            var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token};
+            var token = $.cookie('fhir_token');
+            var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token, token:token};
             console.log(post_data);
             this.setState({isLoading:true});
             $.ajax({

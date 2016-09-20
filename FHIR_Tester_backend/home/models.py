@@ -1,4 +1,5 @@
 from django.db import models
+from account.models import User
 
 # Create your models here.
 
@@ -9,6 +10,8 @@ class task(models.Model):
     status = models.CharField(max_length=16)
     code = models.TextField(null=True)
     create_time = models.DateTimeField(auto_now_add=True)
+    user=models.ForeignKey(User, null=True)
+
 
 class result(models.Model):
     task = models.ForeignKey(task)

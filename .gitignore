@@ -110,3 +110,6 @@ resources/
 resources/*
 
 *.rdb
+
+*/migrations/
+migrations/
