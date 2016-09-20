@@ -35,7 +35,10 @@ def ws_connect(message):
 
 @channel_session
 def ws_receive(message):
-    task_id = message.content['text']
+    print message.content['text']
+    data = json.loads(message.content['text'])
+    task_id = data['task_id']
+    place = data['place']
     print task_id
     try:
         while True:
@@ -48,7 +51,11 @@ def ws_receive(message):
                     step_result = form_results(task_id)
                     step_result['test_type'] = task_obj.task_type
                     step_result['level'] = result_obj.level
-                    Group('task-%s'%task_id, channel_layer=message.channel_layer).send({'text':json.dumps(step_result)});
+                    res_data = {
+                        'step_result':step_result,
+                        'place':place
+                    }
+                    Group('task-%s'%task_id, channel_layer=message.channel_layer).send({'text':json.dumps(res_data)});
                     break
                 except result.DoesNotExist:
                     print 'waiting'

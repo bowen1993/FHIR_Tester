@@ -121,7 +121,7 @@
 
 .msg{
     position: fixed;
-    top:10px;
+    top:50px;
     right: 10px;
     width: 220px;
     height: 100px;
@@ -138,4 +138,22 @@
     color:#FFF;
     font-size: 1.2em;
     flex: 0 1 auto;
+}
+
+.btn-user{
+    background-color: rgba(129, 212, 250, 0.577);
+    color: #fff;
+    font-size: 1.1em;
+    margin-right: 10px;
+    line-height: 1.2em;
+    padding: 6px 12px;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-appearance: button;
+}
+
+.btn-user:hover, .btn-user:focus{
+    color: #aaa;
+    font-weight: bold;
 }

@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 import json
 from home.task_runner import perform_test
+from home.models import task
 from services import auth
 # Create your views here.
 
@@ -28,4 +29,24 @@ def submit_task(request):
     result = {
         'task_id':task_id
     }
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+@csrf_exempt
+def get_user_task_history(request):
+    req_json = json.loads(request.body)
+    token = req_json['token']
+    result = {
+        'isSuccessful': False
+    }
+    if token:
+        try:
+            username = auth.extract_username(token)
+            task_obj_list = task.objects.filter(user_id=username)
+            task_list = []
+            for task_obj in task_obj_list:
+                task_list.append(task_obj.task_id)
+            result['tasks'] = task_list
+            result['isSuccessful'] = True
+        except:
+            pass
     return HttpResponse(json.dumps(result), content_type="application/json")

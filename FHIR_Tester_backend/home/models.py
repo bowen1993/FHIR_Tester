@@ -20,5 +20,5 @@ class result(models.Model):
 
 class task_steps(models.Model):
     task = models.ForeignKey(task)
-    step_desc = models.CharField(max_length=256, null=True)
+    step_desc = models.TextField(null=True)
     additional_info = models.CharField(max_length=256, null=True)

@@ -65,7 +65,7 @@ var app = app || {};
             );
         }
     });
-    app.ResultDisplay = React.createClass({
+    var ResultDisplay = app.ResultDisplay = React.createClass({
         getInitialState:function(){
             return {'level':-1, test_type:0, 'steps':[]}
         },
@@ -94,6 +94,7 @@ var app = app || {};
             )
         }
     });
+
 
     var StepDisplay = app.StepDisplay = React.createClass({
         getInitialState: function(){
@@ -136,10 +137,91 @@ var app = app || {};
             );
         }
     });
+    app.UserBtnArea = React.createClass({
+        handleLogout:function(){
+            app.showMsg("Logout");
+        },
+        render:function(){
+            return (
+                <div className="user-op">
+                    <button className="btn btn-user" onClick={this.props.history_action}>History</button>
+                    <button className="btn btn-user">Search Task</button>
+                    <button className="btn btn-user">Change Password</button>
+                    <button className="btn btn-user" onClick={this.handleLogout}><span className="glyphicon glyphicon-off"></span></button>
+                </div>
+            );
+        }
+    });
     var FullImageArea = app.FullImageArea = React.createClass({
         render:function(){
             return(
                 <img src={this.props.img_src} className="img-responsive" />
+            );
+        }
+    });
+    var TaskItem = app.TaskItem = React.createClass({
+        handleClick:function(){
+            this.props.itemClicked(this.props.task_id);
+        },
+        render:function(){
+            return (
+                <div className="list-item" onClick={this.handleClick}>
+                    <span>Task ID:</span>{this.props.task_id}
+                </div>
+            );
+        }
+    });
+    var TaskList = app.TaskList = React.createClass({
+        render:function(){
+            return (
+                <div className="task-list">
+                    <h2>History Tasks</h2>
+                    <div className="list-content">
+                        {this.props.tasks.map(function(task_id){
+                            return <TaskItem itemClicked={this.props.fetchTaskDetail} task_id={task_id} />
+                        },this)}
+                    </div>
+                </div>
+                );
+        }
+    });
+    var HistoryViewer = app.HistoryViewer = React.createClass({
+        getInitialState:function(){
+            return {tasks:[]};
+        },
+        updateTestResult:function(res){
+            this.refs.res_area.displayResult(res);
+        },
+        componentDidMount:function(){
+            window.hist = this;
+            var postData = {
+                token:$.cookie('fhir_token')
+            };
+            var self = this;
+            console.log(postData);
+            $.ajax({
+                url:'http://localhost:8000/home/history',
+                type:'POST',
+                data:JSON.stringify(postData),
+                dataType:'json',
+                cache:false,
+                success:function(data){
+                    if( data.isSuccessful ){
+                        self.setState({tasks:data.tasks});
+                    }
+                }
+            });
+        },
+        getTaskDetail:function(task_id){
+            console.log(task_id);
+            app.setup_websocket(task_id,2)
+        },
+        render:function(){
+            return (
+                <div className="history-area">
+                    <TaskList fetchTaskDetail={this.getTaskDetail} tasks={this.state.tasks}/>
+                    <ResultDisplay ref="res_area"/>
+                </div>
             );
         }
     });

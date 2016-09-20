@@ -10,6 +10,9 @@ var app = app || {};
     var UrlEditor = app.UrlEditor;
     var ResultDisplay = app.ResultDisplay;
     var TokenEditor = app.TokenEditor;
+    var UserBtnArea = app.UserBtnArea;
+    var Modal = app.Modal;
+    var HistoryViewer = app.HistoryViewer;
     app.type2str = function(test_type){
         var typeStr = '';
         switch (test_type)
@@ -38,11 +41,14 @@ var app = app || {};
         };
     var TesterApp = React.createClass({
         getInitialState: function() {
-            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false, testResult:{}, access_token:''};
+            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false, testResult:{}, access_token:'', is_history_show:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
 
+        },
+        showHistoryView:function(){
+            this.setState({is_history_show:!this.state.is_history_show});
         },
         updateUrl:function(newUrl){
             this.setState({url:newUrl});
@@ -65,19 +71,19 @@ var app = app || {};
                 cache:false,
                 success:function(data){
                     console.log(data);
-                    var task_id = data.task_id;
-                    var ws_scheme = window.location.protocol == "https" ? "wss" : "ws";
-                    var tasksocket = new WebSocket(ws_scheme + '://localhost:8000/task/' + task_id);
-                    tasksocket.onmessage = function(message){
-                        var data = JSON.parse(message.data);
-                        //console.log(data);
-                        window.comp.setState({isLoading:false});
-                        window.comp.updateTestResult(data);
-                        
-                    };
-                    tasksocket.onopen = function(e){
-                        tasksocket.send(task_id);
-                    }
+                    app.setup_websocket(data.task_id, 1)
+                    // var task_id = data.task_id;
+                    // var ws_scheme = window.location.protocol == "https" ? "wss" : "ws";
+                    // var tasksocket = new WebSocket(ws_scheme + '://localhost:8000/task/' + task_id);
+                    // tasksocket.onmessage = function(message){
+                    //     var data = JSON.parse(message.data);
+                    //     //console.log(data);
+                    //     window.comp.setState({isLoading:false});
+                    //     window.comp.updateTestResult(data);
+                    // };
+                    // tasksocket.onopen = function(e){
+                    //     tasksocket.send(task_id, 1);
+                    // }
                 }
             });
             //connect with websocket
@@ -86,26 +92,31 @@ var app = app || {};
             window.comp = this;
         },
         updateTestResult:function(res){
-            this.setState({isResultReady:true, testResult:res});
+            this.setState({isResultReady:true, testResult:res, isLoading:false});
             this.refs.res_area.displayResult(res);
+        },
+        handleHideModal(){
+            this.setState({is_history_show:false});
         },
         render:function(){
             return (
                 <div className="box">
+                    <UserBtnArea history_action={this.showHistoryView}/>
                     <div className="test-input">
+                        <UrlEditor updateUrl={this.updateUrl}/>
+                        <TokenEditor updateToken={this.updateAccessToken} />
                         <div className="btnArea">
                             <TestButton btn_name="App Test" submitTestTask={this.handleTaskSubmit} btnType={app.APP_TEST}/>
                             <TestButton btn_name="Server Test" submitTestTask={this.handleTaskSubmit} btnType={app.SERVER_TEST}/>
                             <TestButton btn_name="Standard Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/> 
                         </div>
-                        <UrlEditor updateUrl={this.updateUrl}/>
-                        <TokenEditor updateToken={this.updateAccessToken} />
                         <CodeEditor updateCode={this.updateCode} language="python"/>
                     </div>
                     <div className="result-area">
                     {this.state.isLoading ? <div className="loading"><img src="../img/5.png" alt="loading" class="img-responsive loading-img" /></div>  : null}
                     { !this.state.isLoading && this.state.isResultReady ? <ResultDisplay ref="res_area"/> : null }
                     </div>
+                    {this.state.is_history_show ? <Modal handleHideModal={this.handleHideModal} title="History" content={<HistoryViewer />} /> : null}
                 </div>
             );
         }
