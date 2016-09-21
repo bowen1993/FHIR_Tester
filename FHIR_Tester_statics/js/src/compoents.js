@@ -104,6 +104,9 @@ var app = app || {};
         getInitialState:function(){
             return {'level':-1, test_type:0, 'steps':[]}
         },
+        emptyCurrentDisplay:function(){
+            this.setState({steps:[]});
+        },
         displayResult:function(res_dict){
             console.log(res_dict);
             var test_type = res_dict.test_type
@@ -248,6 +251,7 @@ var app = app || {};
             });
         },
         getTaskDetail:function(task_id){
+            this.refs.res_area.emptyCurrentDisplay();
             console.log(task_id);
             app.setup_websocket(task_id,2)
         },

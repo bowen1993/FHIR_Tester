@@ -17,6 +17,22 @@ def send_create_resource_request(resource_obj, url, access_token=None):
         traceback.print_exc()
         return 'Server Error'
 
+def send_read_resource_request(url, access_token):
+    print url
+    try:
+        if access_token and len(access_token) != 0:
+            r = requests.get(url, headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
+        else:
+            r = requests.get(url)
+        try:
+            response_json = r.json()
+            return response_json
+        except:
+            return r.text
+    except:
+        traceback.print_exc()
+        return 'Server Error'
+
 def send_fetch_resource_request(url, resource_name, access_token=None):
     try:
         if access_token and len(access_token) != 0:

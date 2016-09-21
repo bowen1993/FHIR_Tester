@@ -60,6 +60,7 @@ var app = app || {};
         handleTaskSubmit:function(submitType){
             //this.state.isLoading = !this.state.isLoading;
             //this.setState({isLoading:!this.state.isLoading});
+            this.refs.res_area.emptyCurrentDisplay();
             var token = $.cookie('fhir_token');
             if( this.state.isCustomedURL ){
                 var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token, token:token};

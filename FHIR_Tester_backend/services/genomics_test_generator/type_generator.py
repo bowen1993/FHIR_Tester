@@ -118,7 +118,6 @@ def create_quantity(customed_value=None, unit='oz', comparator='='):
     '''
     return {
         'value':customed_value if customed_value else create_decimal(),
-        'comparator':comparator,
         'unit':unit,
         'system':''
     }
