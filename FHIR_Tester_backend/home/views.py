@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 import json
 from home.task_runner import perform_test
-from home.models import task
+from home.models import task, server
 from services import auth
 # Create your views here.
 
@@ -29,6 +29,40 @@ def submit_task(request):
     result = {
         'task_id':task_id
     }
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+@csrf_exempt
+def add_new_server(request):
+    req_json = json.loads(request.body)
+    result = {
+        'isSuccessful': False
+    }
+    try:
+        server_name = req_json['name']
+        server_url = req_json['url']
+        access_token = None
+        if 'token' in req_json:
+            access_token = req_json['token']
+        new_server = server(server_name=server_name,server_url=server_url,access_token=access_token)
+        new_server.save()
+        result['isSuccessful'] = True
+    except:
+        pass
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+@csrf_exempt
+def get_all_servers(request):
+    result = {
+        'isSuccessful' : False
+    }
+    try:
+        server_list = server.objects.all()
+        result['servers'] = []
+        for server_obj in server_list:
+            result['servers'].append({'name':server_obj.server_name,'id':server_obj.server_id,'url':server_obj.server_url})
+        result['isSuccessful'] = True
+    except:
+        pass
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 @csrf_exempt

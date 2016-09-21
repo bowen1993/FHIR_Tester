@@ -13,6 +13,7 @@ var app = app || {};
     var UserBtnArea = app.UserBtnArea;
     var Modal = app.Modal;
     var HistoryViewer = app.HistoryViewer;
+    var ServerList = app.ServerList
     app.type2str = function(test_type){
         var typeStr = '';
         switch (test_type)
@@ -41,7 +42,7 @@ var app = app || {};
         };
     var TesterApp = React.createClass({
         getInitialState: function() {
-            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false, testResult:{}, access_token:'', is_history_show:false};
+            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false, testResult:{}, access_token:'', is_history_show:false, isEditting:false, isCustomedURL:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
@@ -98,19 +99,34 @@ var app = app || {};
         handleHideModal(){
             this.setState({is_history_show:false});
         },
+        toggleCustomedURL:function(){
+            this.setState({isCustomedURL:!this.state.isCustomedURL});
+        },
+        toggleEditting:function(){
+            this.setState({isEditting:!this.state.isEditting});
+        },
         render:function(){
             return (
                 <div className="box">
                     <UserBtnArea history_action={this.showHistoryView}/>
                     <div className="test-input">
-                        <UrlEditor updateUrl={this.updateUrl}/>
-                        <TokenEditor updateToken={this.updateAccessToken} />
+                        <ServerList />
                         <div className="btnArea">
                             <TestButton btn_name="App Test" submitTestTask={this.handleTaskSubmit} btnType={app.APP_TEST}/>
                             <TestButton btn_name="Server Test" submitTestTask={this.handleTaskSubmit} btnType={app.SERVER_TEST}/>
-                            <TestButton btn_name="Standard Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/> 
+                            <TestButton btn_name="Standard Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/>
                         </div>
-                        <CodeEditor updateCode={this.updateCode} language="python"/>
+                        <div className="btnArea">
+                            <label>
+                                <input type="checkbox" checked={this.state.isEditting} onChange={this.toggleEditting}/> Code Eidtor
+                            </label>
+                            <label>
+                                <input type="checkbox" checked={this.state.isCustomedURL} onChange={this.toggleCustomedURL}/> Customed URL
+                            </label>
+                        </div>
+                        {this.state.isCustomedURL ? <div><UrlEditor updateUrl={this.updateUrl}/><TokenEditor updateToken={this.updateAccessToken} /></div> : null}
+                        
+                        {this.state.isEditting ? <CodeEditor updateCode={this.updateCode} language="python"/> : null}
                     </div>
                     <div className="result-area">
                     {this.state.isLoading ? <div className="loading"><img src="../img/5.png" alt="loading" class="img-responsive loading-img" /></div>  : null}

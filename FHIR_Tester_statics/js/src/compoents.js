@@ -16,7 +16,7 @@ var app = app || {};
         },
         componentDidMount:function(){
             this.editor = ace.edit("codeeditor");
-            this.editor.setTheme("ace/theme/clouds_midnight");
+            this.editor.setTheme("ace/theme/clouds");
             this.editor.setOptions({
                 fontSize: "1.2em"
             });
@@ -65,6 +65,41 @@ var app = app || {};
             );
         }
     });
+    var ServerList = app.ServerList = React.createClass({
+        getInitialState:function(){
+            return {chosedServer:-1, currentDisplay:"Servers",servers:[]};
+        },
+        componentDidMount:function(){
+            //get server list
+            this.serverRequest = $.get('http://localhost:8000/home/servers', function (result) {
+                if( result.isSuccessful ){
+                    this.setState({servers:result.servers});
+                }
+            }.bind(this));
+        },
+         componentWillUnmount: function() {
+            this.serverRequest.abort();
+        },
+        onServerClick:function(event){
+
+            this.setState({currentDisplay:event.currentTarget.dataset.servername});
+        },
+        render:function(){
+            return (
+                    <div className="dropdown server-list">
+                        <button ref="menu_display" className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                            {this.state.currentDisplay}
+                            <span className="caret"></span>
+                        </button>
+                        <ul className="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            {this.state.servers.map(function(server){
+                                return <li role="presentation"><a data-serverName={server.name} data-serverid={server.id} onClick={this.onServerClick} role="menuitem" tabindex="-1" href="#">{server.name}</a></li>
+                            }.bind(this))}
+                        </ul>
+                    </div>
+            );
+        }
+    })
     var ResultDisplay = app.ResultDisplay = React.createClass({
         getInitialState:function(){
             return {'level':-1, test_type:0, 'steps':[]}
