@@ -7,6 +7,7 @@ import json
 from home.task_runner import perform_test
 from home.models import task, server
 from services import auth
+import traceback
 # Create your views here.
 
 @csrf_exempt
@@ -17,16 +18,32 @@ def submit_task(request):
     code = req_json['code']
     language = req_json['language']
     test_type = req_json['type']
-    access_token = req_json['access_token']
+    if 'chosen_server' in req_json:
+        #ser url and access token
+        try:
+            server_obj = server.objects.get(server_id=int(req_json['chosen_server']))
+            url = server_obj.server_url
+            access_token = server_obj.access_token
+        except:
+            traceback.print_exc()
+            result = {
+                'isSuccessful':False,
+                'error':"Invalid server"
+            }
+            return HttpResponse(json.dumps(result), content_type="application/json")
+    else:
+        access_token = req_json['access_token']
+        url = req_json['url']
     token = req_json['token']
     username = None
     if token:
         username = auth.extract_username(token)
     print access_token
-    url = req_json['url']
+    
     #return task id
     task_id = perform_test(language=language,code=code,url=url,test_type=test_type, access_token=access_token, username=username)
     result = {
+        'isSuccessful':True,
         'task_id':task_id
     }
     return HttpResponse(json.dumps(result), content_type="application/json")

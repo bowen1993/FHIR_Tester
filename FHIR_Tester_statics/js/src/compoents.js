@@ -81,7 +81,7 @@ var app = app || {};
             this.serverRequest.abort();
         },
         onServerClick:function(event){
-
+            this.props.updateServer(event.currentTarget.dataset.serverid);
             this.setState({currentDisplay:event.currentTarget.dataset.servername});
         },
         render:function(){

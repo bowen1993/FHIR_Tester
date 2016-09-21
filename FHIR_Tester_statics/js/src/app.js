@@ -42,7 +42,7 @@ var app = app || {};
         };
     var TesterApp = React.createClass({
         getInitialState: function() {
-            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false, testResult:{}, access_token:'', is_history_show:false, isEditting:false, isCustomedURL:false};
+            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
@@ -61,8 +61,18 @@ var app = app || {};
             //this.state.isLoading = !this.state.isLoading;
             //this.setState({isLoading:!this.state.isLoading});
             var token = $.cookie('fhir_token');
-            var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token, token:token};
+            if( this.state.isCustomedURL ){
+                var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token, token:token};
+            }else{
+                if( this.state.chosen_server == -1 ){
+                    app.showMsg("Please Choose a Server or Input one");
+                    return
+                }else{
+                    var post_data = {code:this.state.code,language:'python',type:submitType,chosen_server:this.state.chosen_server, token:token};
+                }
+            }
             console.log(post_data);
+            var self = this;
             this.setState({isLoading:true});
             $.ajax({
                 url:'http://localhost:8000/home/submit',
@@ -72,7 +82,13 @@ var app = app || {};
                 cache:false,
                 success:function(data){
                     console.log(data);
-                    app.setup_websocket(data.task_id, 1)
+                    if( data.isSuccessful ){
+                        app.setup_websocket(data.task_id, 1)
+                    }else{
+                        self.setState({isLoading:false});
+                        app.showMsg(data.error);
+                    }
+                    
                     // var task_id = data.task_id;
                     // var ws_scheme = window.location.protocol == "https" ? "wss" : "ws";
                     // var tasksocket = new WebSocket(ws_scheme + '://localhost:8000/task/' + task_id);
@@ -93,7 +109,7 @@ var app = app || {};
             window.comp = this;
         },
         updateTestResult:function(res){
-            this.setState({isResultReady:true, testResult:res, isLoading:false});
+            this.setState({isResultReady:true, isLoading:false});
             this.refs.res_area.displayResult(res);
         },
         handleHideModal(){
@@ -105,12 +121,15 @@ var app = app || {};
         toggleEditting:function(){
             this.setState({isEditting:!this.state.isEditting});
         },
+        updateChosenServer:function(server_id){
+            this.setState({chosen_server:server_id});
+        },
         render:function(){
             return (
                 <div className="box">
                     <UserBtnArea history_action={this.showHistoryView}/>
                     <div className="test-input">
-                        <ServerList />
+                        <ServerList updateServer={this.updateChosenServer}/>
                         <div className="btnArea">
                             <TestButton btn_name="App Test" submitTestTask={this.handleTaskSubmit} btnType={app.APP_TEST}/>
                             <TestButton btn_name="Server Test" submitTestTask={this.handleTaskSubmit} btnType={app.SERVER_TEST}/>
