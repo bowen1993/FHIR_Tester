@@ -101,3 +101,4 @@ def get_user_task_history(request):
         except:
             pass
     return HttpResponse(json.dumps(result), content_type="application/json")
+

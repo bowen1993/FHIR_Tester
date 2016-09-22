@@ -183,8 +183,8 @@ var app = app || {};
             return (
                 <div className="user-op">
                     <button className="btn btn-user" onClick={this.props.history_action}>History</button>
-                    <button className="btn btn-user">Search Task</button>
-                    <button className="btn btn-user">Change Password</button>
+                    <button className="btn btn-user" onClick={this.props.search_action}>Search Task</button>
+
                     <button className="btn btn-user" onClick={this.handleLogout}><span className="glyphicon glyphicon-off"></span></button>
                 </div>
             );
@@ -213,7 +213,7 @@ var app = app || {};
         render:function(){
             return (
                 <div className="task-list">
-                    <h2>History Tasks</h2>
+                    
                     <div className="list-content">
                         {this.props.tasks.map(function(task_id){
                             return <TaskItem itemClicked={this.props.fetchTaskDetail} task_id={task_id} />
@@ -221,6 +221,26 @@ var app = app || {};
                     </div>
                 </div>
                 );
+        }
+    });
+    var TaskSearchView = app.TaskSearchView = React.createClass({
+        getInitialState:function(){
+            return {keywords:'', tasks:[]}
+        },
+        onUserInput:function(){
+            this.setState({keywords:this.refs.keywordField})
+        },
+        render:function(){
+            return (
+                <div className="task-search-area">
+                    <input className="input-url" placeholder="Search Tasks..." refs="keywordField" onChange={this.onUserInput} />
+                    <button className="btn btn-success"><span className="glyphicon glyphicon-search"></span></button>
+                    <div className="history-area">
+                    <TaskList fetchTaskDetail={this.getTaskDetail} tasks={this.state.tasks}/>
+                    <ResultDisplay ref="res_area"/>
+                    </div>
+                </div>
+            )
         }
     });
     var HistoryViewer = app.HistoryViewer = React.createClass({

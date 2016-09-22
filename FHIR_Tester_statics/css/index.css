@@ -153,7 +153,9 @@ div.result-area{
     flex-flow: row;
 }
 
-.history-area div.result-container{
+
+
+.history-area div.result-container, .task-search-area div.result-container{
     width: 50%;
 
     flex:1 1 auto;

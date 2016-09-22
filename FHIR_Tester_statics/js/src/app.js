@@ -14,6 +14,7 @@ var app = app || {};
     var Modal = app.Modal;
     var HistoryViewer = app.HistoryViewer;
     var ServerList = app.ServerList
+    var TaskSearchView = app.TaskSearchView;
     app.type2str = function(test_type){
         var typeStr = '';
         switch (test_type)
@@ -42,7 +43,7 @@ var app = app || {};
         };
     var TesterApp = React.createClass({
         getInitialState: function() {
-            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false};
+            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
@@ -50,6 +51,9 @@ var app = app || {};
         },
         showHistoryView:function(){
             this.setState({is_history_show:!this.state.is_history_show});
+        },
+        showSearchView:function(){
+            this.setState({isSearchShow:!this.state.isSearchShow});
         },
         updateUrl:function(newUrl){
             this.setState({url:newUrl});
@@ -116,6 +120,9 @@ var app = app || {};
         handleHideModal(){
             this.setState({is_history_show:false});
         },
+        handleSearchHideModal(){
+            this.setState({isSearchShow:false});
+        },
         toggleCustomedURL:function(){
             this.setState({isCustomedURL:!this.state.isCustomedURL});
         },
@@ -128,7 +135,7 @@ var app = app || {};
         render:function(){
             return (
                 <div className="box">
-                    <UserBtnArea history_action={this.showHistoryView}/>
+                    <UserBtnArea history_action={this.showHistoryView} search_action={this.showSearchView}/>
                     <div className="test-input">
                         <ServerList updateServer={this.updateChosenServer}/>
                         <div className="btnArea">
@@ -153,6 +160,7 @@ var app = app || {};
                     { !this.state.isLoading && this.state.isResultReady ? <ResultDisplay ref="res_area"/> : null }
                     </div>
                     {this.state.is_history_show ? <Modal handleHideModal={this.handleHideModal} title="History" content={<HistoryViewer />} /> : null}
+                    {this.state.isSearchShow ? <Modal handleHideModal={this.handleSearchHideModal} title="History" content={<TaskSearchView />} /> : null}
                 </div>
             );
         }
