@@ -1,0 +1,21 @@
+{
+  "name": "fhir_tester",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "ideaworld <gbwlovehp@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/ideaworld/FHIR_Tester",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "^15.3.0"
+  }
+}

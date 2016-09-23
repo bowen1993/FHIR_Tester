@@ -1,0 +1,26 @@
+Element,Type,Control,Binding,Reference,Binding_Url,Binding_Value,Correct_System
+ DiagnosticRequest.authored,dateTime,0..1,,,,,
+ DiagnosticRequest.basedOn,Reference(Resource),0..*,,Resource,,,
+ DiagnosticRequest.code,CodeableConcept,1..1,Codes for tests/services that can be performed by diagnostic services.The codes SHOULD be taken from LOINC Diagnostic Request Codes,,http://hl7-fhir.github.io/valueset-diagnostic-requests.html,"{""code"":""13361-1"",""system"":""http://loinc.org""}",http://loinc.org
+ DiagnosticRequest.contained,Resource,0..*,,,,,
+ DiagnosticRequest.context,Reference(Encounter),0..1,,Encounter,,,
+ DiagnosticRequest.definition,Reference(Resource),0..*,,Resource,,,
+ DiagnosticRequest.id,id,0..1,,,,,
+ DiagnosticRequest.identifier,Identifier,0..*,,,,,
+ DiagnosticRequest.implicitRules,uri,0..1,,,,,
+ DiagnosticRequest.meta,Meta,0..1,,,,,
+ DiagnosticRequest.modifierExtension,Extension,0..*,,,,,
+ DiagnosticRequest.note,Annotation,0..*,,,,,
+ DiagnosticRequest.occurrence[x],dateTime,0..1,,,,,
+ DiagnosticRequest.performer,Reference(Practitioner),0..1,,Practitioner,,,
+ DiagnosticRequest.performerType,CodeableConcept,0..1,"Indicates specific responsibility of an individual within the care team, such as ""Primary physician"", ""Team coordinator"", ""Caregiver"", etc.For example codes, see Participant Roles",,http://hl7-fhir.github.io/valueset-participant-role.html,"{""code"":""375005"",""system"":""http://snomed.info/sct""}",http://snomed.info/sct
+ DiagnosticRequest.reason,CodeableConcept,0..*,"Diagnosis or problem codes justifying the reason for requesting the diagnostic investigation.For example codes, see Condition/Problem/Diagnosis Codes",,http://hl7-fhir.github.io/valueset-condition-code.html,"{""code"":""87788003"",""system"":""http://snomed.info/sct""}",http://snomed.info/sct
+ DiagnosticRequest.relevantHistory,Reference(Provenance),0..*,,Provenance,,,
+ DiagnosticRequest.replaces,Reference(Resource),0..*,,Resource,,,
+ DiagnosticRequest.requester,Reference(Device),0..1,,Device,,,
+ DiagnosticRequest.requisition,Identifier,0..1,,,,,
+ DiagnosticRequest.stage,CodeableConcept,1..1,The kind of diagnostic requestThe codes SHALL be taken from DiagnosticRequestStage; other codes may be used where these codes are not suitable,,http://hl7-fhir.github.io/valueset-diagnostic-request-stage.html,"{""code"":""plan"",""system"":""http://hl7.org/fhir/request-stage""}",http://hl7.org/fhir/request-stage
+ DiagnosticRequest.status,code,0..1,The status of a diagnostic order.The codes SHALL be taken from RequestStatus,,http://hl7-fhir.github.io/valueset-request-status.html,"{""code"":""draft"",""customed"":""status""}",http://hl7.org/fhir/request-status
+ DiagnosticRequest.subject,Reference(Patient),1..1,,Patient,,,
+ DiagnosticRequest.supportingInformation,Reference(Resource),0..*,,Resource,,,
+ DiagnosticRequest.text,Narrative,0..1 This element is affected by the following invariants: dom-1,,,,,
