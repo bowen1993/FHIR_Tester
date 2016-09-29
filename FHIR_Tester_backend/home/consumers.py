@@ -1,7 +1,7 @@
 import json
 from channels.sessions import channel_session
 from channels import Group
-from home.models import result, task, task_steps
+from home.models import result, task, task_steps, step_detail
 from django.db import transaction
 from time import sleep
 import traceback
@@ -15,8 +15,17 @@ def form_results(task_id):
     for step in task_step_list:
         step_info = {
             'desc':step.step_desc,
-            'addi':step.additional_info
+            'addi':step.additional_info,
+            'details':[]
         }
+        details = step_detail.objects.filter(step=step)
+        for detail in details:
+            new_detail = {
+                'desc':detail.detail_desc,
+                'status':detail.detail_status
+            }
+            step_info['details'].append(new_detail)
+
         res_dict['steps'].append(step_info)
     return res_dict
 
@@ -40,35 +49,48 @@ def ws_receive(message):
     task_id = data['task_id']
     place = data['place']
     print task_id
-    try:
-        while True:
+    max_waitting = 500
+    while True:
+        if max_waitting < 0:
+            Group('task-%s'%task_id, channel_layer=message.channel_layer).send({'text':'Task exceed time limit'})
+            break
+        curr_steps = []
+        try:
+            task_obj = task.objects.get(task_id=task_id)
+            #retrive current steps
             with transaction.atomic():
-                task_obj = task.objects.get(task_id=task_id)
-                try:
-                    result_obj = result.objects.get(task=task_obj)
-                    print 'sending'
-                    #return result and break
-                    step_result = form_results(task_id)
+                step_result = form_results(task_id)
+                if len(step_result['steps']) == 0 or set(curr_steps) == set(step_result):
+                    sleep(0.3)
+                else:
+                    curr_steps = step_result
                     step_result['test_type'] = task_obj.task_type
-                    step_result['level'] = result_obj.level
+                    step_result['level'] = -1
                     res_data = {
                         'step_result':step_result,
                         'place':place
                     }
-                    Group('task-%s'%task_id, channel_layer=message.channel_layer).send({'text':json.dumps(res_data)});
-                    break
-                except result.DoesNotExist:
-                    print 'waiting'
-                    #stop 0.2 seconds to wait for task runner
-                    sleep(0.2)
-    except:
-        traceback.print_exc()
-        res = {
-            'isSuccessful':False,
-            'msg': 'Error, task missing'
-        }
-        Group('task-%s'%task_id, channel_layer=message.channel_layer).send({'text':json.dumps(res)});
-    #wait for process to be finished
+                    Group('task-%s'%task_id, channel_layer=message.channel_layer).send({'text':json.dumps(res_data)})
+                    sleep(0.4)
+
+            #check result
+                result_obj = result.objects.get(task=task_obj)
+                print 'sending'
+                step_result = form_results(task_id)
+                step_result['test_type'] = task_obj.task_type
+                step_result['level'] = result_obj.level
+                res_data = {
+                    'step_result':step_result,
+                    'place':place
+                }
+                Group('task-%s'%task_id, channel_layer=message.channel_layer).send({'text':json.dumps(res_data)})
+                break
+        except task.DoesNotExist:
+            Group('task-%s'%task_id, channel_layer=message.channel_layer).send({'text':'Wrong task id'});
+            break
+        except result.DoesNotExist:
+            max_waitting -= 1
+            continue
     
 
 @channel_session

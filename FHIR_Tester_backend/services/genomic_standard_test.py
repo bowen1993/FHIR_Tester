@@ -3,6 +3,9 @@ from request_sender import *
 from services.create_resource import *
 import random
 
+from django.db import transaction
+from home.models import task, task_steps, step_detail
+
 resource_list = ['DiagnosticReport', 'FamilyMemberHistory', 'Sequence', 'DiagnosticRequest', 'Observation']
 spec_basepath = 'resources/spec/'
 resource_basepath = 'resources/json/'
@@ -82,40 +85,70 @@ def create_all_test_case4type(resource_spec_filename,resource_type):
     #return all cases
     return all_cases
 
-def iter_all_cases(all_cases, url,id_dict, access_token=None):
+def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=None):
     #test right cases
     isSuccessful = True
-    hint_info = ''
+    hint_infos = []
     for case in all_cases['right']:
+        hint = ''
         case = set_reference(case,id_dict)
-        print case
         response = send_create_resource_request(json.dumps(case), url, access_token)
         if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
             isSuccessful = isSuccessful and True
         else:
             print response
             if isinstance(response, str):
-                hint_info += response
+                hint += response
             elif isinstance(response, dict):
-                hint_info += response['issue'][0]['diagnostics']
+                hint += response['issue'][0]['diagnostics']
             isSuccessful = isSuccessful and False
         if not isSuccessful:
-            return isSuccessful, hint_info
-    # for case_with_info in all_cases['wrong']:
-    #     case = case_with_info['case']
-    #     response = send_create_resource_request(json.dumps(case), url, access_token)
-    #     if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
-    #         print '-'*30
-    #         print 'wrong case error'
-    #         print case
-    #         hint_info += case_with_info['info']
-    #         isSuccessful = isSuccessful and False
-    #     else:
-    #         print response
-    #         isSuccessful = isSuccessful and True
-    #     if not isSuccessful:
-    #         return isSuccessful, hint_info
-    return isSuccessful, hint_info
+            hint_infos.append({
+                'status': False,
+                'desc': hint
+            })
+            save_step_detail(step_obj, {
+                'status': False,
+                'desc': hint
+            })
+    if isSuccessful:
+        hint_infos.append({
+                'desc': '%s in correct format can be processed properly' % resource_type,
+                'status':True
+            })
+        save_step_detail(step_obj, {
+                'desc': '%s in correct format can be processed properly' % resource_type,
+                'status':True
+            })
+    isSuccessfulFalse = True
+    for case_with_info in all_cases['wrong']:
+        case = case_with_info['case']
+        hint = ''
+        response = send_create_resource_request(json.dumps(case), url, access_token)
+        if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
+            print '-'*30
+            print 'wrong case error'
+            print case
+            hint += case_with_info['info']
+            isSuccessfulFalse = isSuccessfulFalse and False
+        else:
+            print response
+            isSuccessfulFalse = isSuccessfulFalse and True
+        if not isSuccessfulFalse:
+            hint_infos.append({
+                'status': False,
+                'desc': hint
+            })
+            save_step_detail(step_obj, {
+                'status': False,
+                'desc': hint
+            })
+    if isSuccessfulFalse:
+        hint_infos.append({
+                'desc': '%s with error can be handled' % resource_type,
+                'status':True
+            })
+    return isSuccessful and isSuccessfulFalse, hint_infos
 
 def ana_pre_creation_result(raw_info):
     processed_info = {}
@@ -127,7 +160,7 @@ def ana_pre_creation_result(raw_info):
                 processed_info[key] = False
     return processed_info
 
-def level0Test(url,id_dict, access_token=None):
+def level0Test(url,id_dict,step_obj, access_token=None):
     #create basic observation
     spec_filename = '%sObservation.csv' % spec_basepath
     all_cases = create_all_test_case4type(spec_filename, 'Observation')
@@ -135,22 +168,24 @@ def level0Test(url,id_dict, access_token=None):
     #do test with all objects
     if not url.endswith('/'):
         url += '/'
-    return iter_all_cases(all_cases, '%s%s' % (url, 'Observation'),id_dict, access_token)
+    isSuccessful, hint_infos = iter_all_cases('Observation',step_obj, all_cases, '%s%s' % (url, 'Observation'),id_dict, access_token)
+    return isSuccessful, hint_infos
     
 
-def level1Test(url,id_dict, access_token):
+def level1Test(url,id_dict,step_obj, access_token):
     spec_filename = '%sObservation.csv' % spec_basepath
     all_cases = create_all_test_case4type(spec_filename, 'Observation')
     right_cases = all_cases['right']
     isSuccessful = True
-    hint_info = ''
+    hint_infos = []
     if not url.endswith('/'):
         url += '/'
     url += 'Observation'
     for case in right_cases:
         case = set_reference(case,id_dict)
         case['extension'] = genetic_observation_extension
-        print json.dumps(case)
+        # print json.dumps(case)
+        hint = ''
         response = send_create_resource_request(json.dumps(case), url, access_token)
         
         if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
@@ -158,21 +193,33 @@ def level1Test(url,id_dict, access_token):
         else:
             print response
             if isinstance(response, str):
-                hint_info += response
+                hint += response
             elif isinstance(response, dict):
-                hint_info += response['issue'][0]['diagnostics']
+                hint += response['issue'][0]['diagnostics']
             isSuccessful = isSuccessful and False
         if not isSuccessful:
-            return isSuccessful, hint_info
+            hint_infos.append({
+                'status': False,
+                'desc': hint
+            })
+            save_step_detail(step_obj, {
+                'status': False,
+                'desc': hint
+            })
+    if isSuccessful:
+        hint_infos.append({
+                'status': True,
+                'desc': 'Observation for genetic profile can be processed properly'
+            })
     #TODO extension generate
-    return isSuccessful,hint_info
+    return isSuccessful,hint_infos
 
-def level2Test(url, id_dict, access_token):
+def level2Test(url, id_dict,step_obj, access_token):
     spec_filename = '%sObservation.csv' % spec_basepath
     all_cases = create_all_test_case4type(spec_filename, 'Observation')
     right_cases = all_cases['right']
     isSuccessful = True
-    hint_info = ''
+    hint_infos = []
     if not url.endswith('/'):
         url += '/'
     url += 'Observation'
@@ -180,28 +227,40 @@ def level2Test(url, id_dict, access_token):
         case = set_reference(case,id_dict)
         #add gene and Variant extension
         case['extension'] = gene_variant_extension
-        print json.dumps(case)
+        hint = ''
+        # print json.dumps(case)
         response = send_create_resource_request(json.dumps(case), url, access_token)
         if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
             isSuccessful = isSuccessful and True
         else:
             print response
             if isinstance(response, str):
-                hint_info += response
+                hint += response
             elif isinstance(response, dict):
-                hint_info += response['issue'][0]['diagnostics']
+                hint += response['issue'][0]['diagnostics']
             isSuccessful = isSuccessful and False
         if not isSuccessful:
-            return isSuccessful, hint_info
-    #TODO extension generate
-    return isSuccessful,hint_info
+            hint_infos.append({
+                'status': False,
+                'desc': hint
+            })
+            save_step_detail(step_obj, {
+                'status': False,
+                'desc': hint
+            })
+    if isSuccessful:
+        hint_infos.append({
+                'status':True,
+                'desc':'Observation with Gene extension can be processed properly'
+            })
+    return isSuccessful,hint_infos
 
-def level3Test(url, id_dict, access_token):
+def level3Test(url, id_dict,step_obj, access_token):
     spec_filename = '%sSequence.csv' % spec_basepath
     all_cases = create_all_test_case4type(spec_filename, 'Sequence')
     if not url.endswith('/'):
         url += '/'
-    return iter_all_cases(all_cases, '%s%s' % (url, 'Sequence'),id_dict, access_token)
+    return iter_all_cases('Sequence',step_obj, all_cases, '%s%s' % (url, 'Sequence'),id_dict, access_token)
 
 def random_picker(pick_list):
     '''
@@ -216,13 +275,14 @@ def random_picker(pick_list):
     return pick_list[random.randint(low, high)]
 
 
-def level4Test(url, id_dict, access_token):
+def level4Test(url, id_dict,step_obj, access_token):
     if not url.endswith('/'):
         url += '/'
     isSuccessful = True
-    hint_info = ''
+    hint_infos = []
     for resource_name in resource_list:
         id_list = get_resource_id_list(url, resource_name, access_token)
+        hint = ''
         if id_list and len(id_list) > 0: 
             random_id = random_picker(id_list)
             response = send_read_resource_request("%s%s/%s" %(url,resource_name,random_id), access_token)
@@ -231,61 +291,134 @@ def level4Test(url, id_dict, access_token):
                     isSuccessful = isSuccessful and True
                 else:
                     isSuccessful = isSuccessful and False
-                    hint_info += response['issue'][0]['diagnostics']
+                    hint += response['issue'][0]['diagnostics']
             else:
                 isSuccessful = isSuccessful and False
-                hint_info += response
+                hint += response
         if not isSuccessful:
-            return isSuccessful, hint_info
-    return isSuccessful, hint_info
+            hint_infos.append({
+                'status':False,
+                'desc': '%s reading failed, %s' % (resource_name, hint)
+            })
+            save_step_detail(step_obj, {
+                'status': False,
+                'desc': hint
+            })
+    if isSuccessful:
+        hint_infos.append({
+                'status':True,
+                'desc':'FHIR Genomics Resources can be retrived'
+            })
+    return isSuccessful, hint_infos
 
-def do_standard_test(url, access_token=None):
+def save_step_detail(step_obj, detail_info):
+    with transaction.atomic():
+        new_step_detail = step_detail(step=step_obj)
+        new_step_detail.detail_desc = detail_info['desc']
+        new_step_detail.detail_status = detail_info['status']
+        try:
+            new_step_detail.save()
+        except:
+            pass
+
+def create_one_step(task_id, step_info, step_obj=None):
+    if step_obj:
+        with transaction.atomic():
+            try:
+                step_obj.delete()
+            except:
+                pass
+    with transaction.atomic():
+        new_task_step = task_steps(task_id=task_id, step_desc = step_info['desc'])
+        try:
+            new_task_step.save()
+        except:
+            print 'step can not be created'
+            return
+        for detail_info in step_info['details']:
+            new_step_detail = step_detail(step=new_task_step)
+            new_step_detail.detail_desc = detail_info['desc']
+            new_step_detail.detail_status = detail_info['status']
+            try:
+                new_step_detail.save()
+            except:
+                return new_task_step
+                break
+        return new_task_step
+
+def form_new_step_info(status, base_desc, details):
+    new_step = {
+        'status': status,
+        'desc': base_desc,
+        'details': details
+    }
+    return new_step
+
+def perform_a_test(test_method,step_obj ,url, id_dict, base_desc, access_token=None):
+    isSuccessful, hint_infos = test_method(url, id_dict, step_obj, access_token)
+    step_info = form_new_step_info(isSuccessful,'%s %s' % (base_desc, 'successfully' if isSuccessful else 'failed'), hint_infos)
+    return step_info
+
+def do_standard_test(task_id, url, access_token=None):
     #create pre resources
     test_result = {
         'level':-1,
         'steps':[]
     }
     level = -1
+    step_info = form_new_step_info(True, 'Setting up standard test......', [])
+    step_obj = create_one_step(task_id ,step_info)
     create_res, id_dict = create_pre_resources(url, 'resources', access_token)
-    print id_dict
+    # print id_dict
     pre_resource_result = ana_pre_creation_result(create_res)
-    print pre_resource_result
+    # print pre_resource_result
+    status = True
+    details = []
     for key in pre_resource_result:
+        status  = status and pre_resource_result[key]
+        detail_info = {'status': pre_resource_result[key]}
         if pre_resource_result[key]:
-            test_result['steps'].append('%s created successfully' % key)
+            detail_info['desc'] = '%s created successfully' % key
         else:
-            test_result['steps'].append('%s can not be created, test terminated' % key)
-            return test_result
-    level0TestRes, hint_info = level0Test(url,id_dict, access_token)
-    test_result['steps'].append('level 0 test performed, %s' % ('success' if level0TestRes else 'Failded, %s'%hint_info))
-    if not level0TestRes:
-        test_result['level'] = level
-        return test_result, id_dict
-    level += 1
-    level1TestRes, hint_info = level1Test(url,id_dict, access_token)
-    test_result['steps'].append('level 1 test performed, %s' % ('success' if level1TestRes else 'Failded, %s'%hint_info))
-    if not level1TestRes:
-        test_result['level'] = level
-        return test_result, id_dict
-    level += 1
-    level2TestRes, hint_info = level2Test(url,id_dict, access_token)
-    test_result['steps'].append('level 2 test performed, %s' % ('success' if level2TestRes else 'Failded, %s'%hint_info))
-    if not level2TestRes:
-        test_result['level'] = level
-        return test_result, id_dict
-    level += 1
-    level3TestRes, hint_info = level3Test(url,id_dict, access_token)
-    test_result['steps'].append('level 3 test performed, %s' % ('success' if level3TestRes else 'Failded, %s'%hint_info))
-    if not level3TestRes:
-        test_result['level'] = level
-        return test_result, id_dict
-    level += 1
-    level4TestRes, hint_info = level4Test(url,id_dict, access_token)
-    test_result['steps'].append('level 4 test performed, %s' % ('success' if level4TestRes else 'Failded, %s'%hint_info))
-    if not level4TestRes:
-        test_result['level'] = level
-        return test_result, id_dict
-    level += 1
-    test_result['level'] = level
-    return test_result, id_dict
+            detail_info['desc'] = '%s can not be created, test terminated' % key
+        details.append(detail_info)
+    step_info = form_new_step_info(status,'%s %s' % ('Setup', 'Successfully' if status else 'Failed'), details)
+    create_one_step(task_id ,step_info, step_obj)
+    #standard test begin
+    step_info = form_new_step_info(True, 'Level 0 test performing', [])
+    step_obj = create_one_step(task_id ,step_info)
+    step_info = perform_a_test(level0Test,step_obj, url, id_dict, 'Level 0 test', access_token)
+    create_one_step(task_id, step_info, step_obj)
+    if step_info['status']:
+        level += 1
+
+    step_info = form_new_step_info(True, 'Level 1 test performing', [])
+    step_obj = create_one_step(task_id ,step_info)
+    step_info = perform_a_test(level1Test,step_obj, url, id_dict, 'Level 1 test', access_token)
+    create_one_step(task_id, step_info, step_obj)
+    if step_info['status']:
+        level += 1
+
+    step_info = form_new_step_info(True, 'Level 2 test performing', [])
+    step_obj = create_one_step(task_id ,step_info)
+    step_info = perform_a_test(level2Test,step_obj, url, id_dict, 'Level 2 test', access_token)
+    create_one_step(task_id, step_info, step_obj)
+    if step_info['status']:
+        level += 1
+
+    step_info = form_new_step_info(True, 'Level 3 test performing', [])
+    step_obj = create_one_step(task_id ,step_info)
+    step_info = perform_a_test(level3Test,step_obj, url, id_dict, 'Level 3 test', access_token)
+    create_one_step(task_id, step_info, step_obj)
+    if step_info['status']:
+        level += 1
+
+    step_info = form_new_step_info(True, 'Level 4 test performing', [])
+    step_obj = create_one_step(task_id ,step_info)
+    step_info = perform_a_test(level4Test,step_obj, url, id_dict, 'Level 4 test', access_token)
+    create_one_step(task_id, step_info, step_obj)
+    if step_info['status']:
+        level += 1
+    
+    return level, id_dict
 

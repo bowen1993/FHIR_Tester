@@ -23,6 +23,11 @@ class task_steps(models.Model):
     step_desc = models.TextField(null=True)
     additional_info = models.CharField(max_length=256, null=True)
 
+class step_detail(models.Model):
+    step = models.ForeignKey(task_steps)
+    detail_desc = models.TextField(null=True)
+    detail_status = models.NullBooleanField(null=True)
+
 class server(models.Model):
     server_id = models.AutoField(primary_key=True)
     server_name = models.CharField(max_length=256)

@@ -34,7 +34,11 @@ def submit_task(request):
     else:
         access_token = req_json['access_token']
         url = req_json['url']
-    token = req_json['token']
+    token = None
+    try:
+        token = req_json['token']
+    except:
+        pass
     username = None
     if token:
         username = auth.extract_username(token)

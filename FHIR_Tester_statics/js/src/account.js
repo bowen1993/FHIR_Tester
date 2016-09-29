@@ -28,7 +28,7 @@ var app = app || {};
                     success:function(data){
                         if (data.isSuccessful){
                             $.cookie('fhir_token', data.token, { expires: 1, path: '/' });
-                            window.location.href = '/html/dashboard.html';
+                            window.location.href = '/dashboard.html';
                         }else{
                              $('.login-area').shake(5,10,100);
                             app.showMsg(data.error);

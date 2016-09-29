@@ -43,7 +43,7 @@ var app = app || {};
         };
     var TesterApp = React.createClass({
         getInitialState: function() {
-            return {code:"",url:"", isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false};
+            return {code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
@@ -64,6 +64,7 @@ var app = app || {};
         handleTaskSubmit:function(submitType){
             //this.state.isLoading = !this.state.isLoading;
             //this.setState({isLoading:!this.state.isLoading});
+
             this.refs.res_area.emptyCurrentDisplay();
             var token = $.cookie('fhir_token');
             if( this.state.isCustomedURL ){
@@ -145,10 +146,10 @@ var app = app || {};
                         </div>
                         <div className="btnArea">
                             <label>
-                                <input type="checkbox" checked={this.state.isEditting} onChange={this.toggleEditting}/> Code Eidtor
+                                <input type="checkbox" checked={this.state.isEditting} onChange={this.toggleEditting}/> Code Editor
                             </label>
                             <label>
-                                <input type="checkbox" checked={this.state.isCustomedURL} onChange={this.toggleCustomedURL}/> Customed URL
+                                <input type="checkbox" checked={this.state.isCustomedURL} onChange={this.toggleCustomedURL}/> Custome URL
                             </label>
                         </div>
                         {this.state.isCustomedURL ? <div><UrlEditor updateUrl={this.updateUrl}/><TokenEditor updateToken={this.updateAccessToken} /></div> : null}

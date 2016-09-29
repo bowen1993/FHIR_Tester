@@ -102,7 +102,7 @@ var app = app || {};
     })
     var ResultDisplay = app.ResultDisplay = React.createClass({
         getInitialState:function(){
-            return {'level':-1, test_type:0, 'steps':[]}
+            return {'level':-1,  test_type:'', 'steps':[]}
         },
         emptyCurrentDisplay:function(){
             this.setState({steps:[]});
@@ -110,7 +110,15 @@ var app = app || {};
         displayResult:function(res_dict){
             console.log(res_dict);
             var test_type = res_dict.test_type
-            this.setState({'test_type':test_type})
+            var test_type_str = ''
+            if( test_type == 0 ){
+                test_type_str = 'Genomics Standard Test'
+            }else if( test_type == 1 ){
+                test_type_str = 'Application Test'
+            }else{
+                test_type_str = 'Custom Server Test'
+            }
+            this.setState({'test_type':test_type_str})
             if (test_type == 0){
                 this.setState({'level':res_dict.level});
             }
@@ -119,7 +127,7 @@ var app = app || {};
         render: function(){
             return (
                 <div className="result-container">
-                    <div className="result-head"><span className="area-title area-title-black">Test Type: </span> <span>{this.props.testType}</span></div>
+                    <div className="result-head"><span className="area-title area-title-black">Test Type: {this.state.test_type}</span> <span></span></div>
                     <div className="detail-result">
                         <div className="result-sum">
                             {this.state.test_type == 0 ? <h3>Level: {this.state.level}</h3> : null}
@@ -139,8 +147,18 @@ var app = app || {};
             return {
                 is_img_hide:true,
                 is_modal_show:false,
-                is_has_image:false
+                is_has_image:false,
+                is_detail_showing:false,
+                detail_desc:''
             }
+        },
+        showDetail:function(desc){
+            if(this.state.detail_desc === desc){
+                this.setState({is_detail_showing:!this.state.is_detail_showing});
+            }else{
+                this.setState({detail_desc:desc, is_detail_showing:true});
+            }
+            
         },
         componentDidMount:function(){
             if(this.props.stepInfo.addi){
@@ -166,6 +184,17 @@ var app = app || {};
             return (
                 <div className="step-brief step-brief-success" onClick={this.handleTextClick}>
                     <div><span  className="step-brief-text">{this.props.stepInfo.desc}</span></div>
+                    <div className="step-detail-area">
+                        <div className="detail-hint-block">
+                            {this.props.stepInfo.details.map(function(detail){
+                                return <StepDetail status={detail.status} desc={detail.desc} showDetail={this.showDetail} />
+                            }, this)}
+                        </div>
+                        {this.state.is_detail_showing ? <div className="detail-desc-block">
+                            {this.state.detail_desc}
+                        </div> : null}
+                        
+                    </div>
                     <div hidden={this.state.is_img_hide && !this.state.is_has_image} className="step-img-block">
                         <button onClick={this.handleShowFullImage} className="btn btn-primary">Full Image</button>
                         <img className="img-responsive img-rounded step-img" src={this.props.stepInfo.addi} />
@@ -175,6 +204,19 @@ var app = app || {};
             );
         }
     });
+    var StepDetail = app.StepDetail = React.createClass({
+        classes:function(){
+            return 'btn' + this.props.status ? ' btn-success': ' btn-danger' + ' btn-circle';
+        },
+        onBtnClick:function(){
+            this.props.showDetail(this.props.desc);
+        },
+        render:function(){
+            return (
+                <button onClick={this.onBtnClick} className={this.props.status ? 'btn btn-circle btn-success': 'btn btn-circle btn-danger'}>{ this.props.status ? 'P' : 'F'}</button>
+            )
+        }
+    })
     app.UserBtnArea = React.createClass({
         handleLogout:function(){
             app.showMsg("Logout");
@@ -184,7 +226,6 @@ var app = app || {};
                 <div className="user-op">
                     <button className="btn btn-user" onClick={this.props.history_action}>History</button>
                     <button className="btn btn-user" onClick={this.props.search_action}>Search Task</button>
-
                     <button className="btn btn-user" onClick={this.handleLogout}><span className="glyphicon glyphicon-off"></span></button>
                 </div>
             );

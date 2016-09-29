@@ -56,17 +56,10 @@ class test_task:
         print self.url
         if self.test_type == 0:
             #run standard test
-            test_result, id_dict = do_standard_test(self.url, self.access_token)
+            level, id_dict = do_standard_test(self.task_name ,self.url, self.access_token)
             self.baseid_dict = id_dict
-            print test_result
-            self.level = test_result['level']
-            #case standard steps to database
-            with transaction.atomic():
-                #save steps
-                for step in test_result['steps']:
-                    print step
-                    new_step = task_steps(task_id=self.task_name, step_desc=step)
-                    new_step.save()
+            print level
+            self.level = level
             #save result
             self.status = 'finished'
             self.save_result()

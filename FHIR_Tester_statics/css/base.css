@@ -156,3 +156,33 @@
     color: #aaa;
     font-weight: bold;
 }
+
+.btn-circle{
+    width: 30px;
+    height: 30px;
+    font-size: 1em !important;
+    text-align: center !important;
+    margin:2px;
+    border-radius: 50% !important;
+}
+
+.step-detail-area{
+    width:90%;
+    margin:10px auto;
+}
+
+.detail-hint-block{
+    width:100%;
+}
+
+.detail-desc-block{
+    width:95%;
+    margin:20px auto;
+    min-height: 20px;
+    font-size: 1.2em;
+    color:#444;
+    background-color: rgba(220, 220, 220, 0.652);
+    padding:10px 20px;
+    border-left: 5px solid #aaa;
+
+}
