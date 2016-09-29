@@ -71,7 +71,7 @@ var app = app || {};
         },
         componentDidMount:function(){
             //get server list
-            this.serverRequest = $.get('http://localhost:8000/home/servers', function (result) {
+            this.serverRequest = $.get(app.host+ '/home/servers', function (result) {
                 if( result.isSuccessful ){
                     this.setState({servers:result.servers});
                 }
@@ -102,7 +102,7 @@ var app = app || {};
     })
     var ResultDisplay = app.ResultDisplay = React.createClass({
         getInitialState:function(){
-            return {'level':-1,  test_type:'', 'steps':[]}
+            return {'level':-1,test_type:null,  test_type_str:'', 'steps':[]}
         },
         emptyCurrentDisplay:function(){
             this.setState({steps:[]});
@@ -110,6 +110,7 @@ var app = app || {};
         displayResult:function(res_dict){
             console.log(res_dict);
             var test_type = res_dict.test_type
+            this.setState({test_type:test_type});
             var test_type_str = ''
             if( test_type == 0 ){
                 test_type_str = 'Genomics Standard Test'
@@ -118,7 +119,7 @@ var app = app || {};
             }else{
                 test_type_str = 'Custom Server Test'
             }
-            this.setState({'test_type':test_type_str})
+            this.setState({'test_type_str':test_type_str})
             if (test_type == 0){
                 this.setState({'level':res_dict.level});
             }
@@ -127,7 +128,7 @@ var app = app || {};
         render: function(){
             return (
                 <div className="result-container">
-                    <div className="result-head"><span className="area-title area-title-black">Test Type: {this.state.test_type}</span> <span></span></div>
+                    <div className="result-head"><span className="area-title area-title-black">Test Type: {this.state.test_type_str}</span> <span></span></div>
                     <div className="detail-result">
                         <div className="result-sum">
                             {this.state.test_type == 0 ? <h3>Level: {this.state.level}</h3> : null}
@@ -219,7 +220,8 @@ var app = app || {};
     })
     app.UserBtnArea = React.createClass({
         handleLogout:function(){
-            app.showMsg("Logout");
+            $.removeCookie('fhir_token', { path: '/' });
+            window.location.href = '/'
         },
         render:function(){
             return (
@@ -245,7 +247,8 @@ var app = app || {};
         render:function(){
             return (
                 <div className="list-item" onClick={this.handleClick}>
-                    <span>Task ID:</span>{this.props.task_id}
+                    <span>Task ID: </span>{this.props.task_id}
+                    <span className="pull-right"> Time: {this.props.task_time}</span>
                 </div>
             );
         }
@@ -256,8 +259,8 @@ var app = app || {};
                 <div className="task-list">
                     
                     <div className="list-content">
-                        {this.props.tasks.map(function(task_id){
-                            return <TaskItem itemClicked={this.props.fetchTaskDetail} task_id={task_id} />
+                        {this.props.tasks.map(function(task_info){
+                            return <TaskItem itemClicked={this.props.fetchTaskDetail} task_id={task_info.task_id} task_time={task_info.time} />
                         },this)}
                     </div>
                 </div>
@@ -268,14 +271,39 @@ var app = app || {};
         getInitialState:function(){
             return {keywords:'', tasks:[]}
         },
+        updateTestResult:function(res){
+            this.refs.res_area.displayResult(res);
+        },
+        componentDidMount:function(){
+            window.searchView = this;
+        },
         onUserInput:function(){
-            this.setState({keywords:this.refs.keywordField})
+            var self = this;
+            var postData = {
+                'keyword':this.refs.keywordField.value
+            }
+            $.ajax({
+                url:app.host+ '/home/search',
+                type:'POST',
+                data:JSON.stringify(postData),
+                dataType:'json',
+                cache:false,
+                success:function(data){
+                    if( data.isSuccessful ){
+                        self.setState({tasks:data.tasks});
+                    }
+                }
+            });
+        },
+        getTaskDetail:function(task_id){
+            this.refs.res_area.emptyCurrentDisplay();
+            console.log(task_id);
+            app.setup_websocket(task_id,3)
         },
         render:function(){
             return (
                 <div className="task-search-area">
-                    <input className="input-url" placeholder="Search Tasks..." refs="keywordField" onChange={this.onUserInput} />
-                    <button className="btn btn-success"><span className="glyphicon glyphicon-search"></span></button>
+                    <input className="input-url" placeholder="Search Tasks..." ref="keywordField" onChange={this.onUserInput} />
                     <div className="history-area">
                     <TaskList fetchTaskDetail={this.getTaskDetail} tasks={this.state.tasks}/>
                     <ResultDisplay ref="res_area"/>
@@ -299,7 +327,7 @@ var app = app || {};
             var self = this;
             console.log(postData);
             $.ajax({
-                url:'http://localhost:8000/home/history',
+                url:app.host+ '/home/history',
                 type:'POST',
                 data:JSON.stringify(postData),
                 dataType:'json',

@@ -6,6 +6,7 @@ from django.template import RequestContext, loader
 import json
 from home.task_runner import perform_test
 from home.models import task, server
+from home.search import search_basedon_id
 from services import auth
 import traceback
 # Create your views here.
@@ -99,10 +100,25 @@ def get_user_task_history(request):
             task_obj_list = task.objects.filter(user_id=username)
             task_list = []
             for task_obj in task_obj_list:
-                task_list.append(task_obj.task_id)
+                task_id = task_obj.task_id
+                task_time = task_obj.create_time
+                task_list.append({
+                    'task_id':task_id,
+                    'time':task_time.strftime("%Y-%m-%d")
+                })
             result['tasks'] = task_list
             result['isSuccessful'] = True
         except:
             pass
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+@csrf_exempt
+def search_task(request):
+    req_json = json.loads(request.body)
+    keyword = req_json['keyword']
+    result = {
+        'isSuccessful': True
+    }
+    result['tasks'] = search_basedon_id(keyword)
     return HttpResponse(json.dumps(result), content_type="application/json")
 

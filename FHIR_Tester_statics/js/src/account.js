@@ -20,7 +20,7 @@ var app = app || {};
                     'password':this.state.password
                 };
                 $.ajax({
-                    url:'http://localhost:8000/account/login',
+                    url:app.host+ '/account/login',
                     type:'POST',
                     data:JSON.stringify(post_data),
                     dataType:'json',
@@ -49,7 +49,7 @@ var app = app || {};
                 };
                 console.log('re')
                 $.ajax({
-                    url:'http://localhost:8000/account/register',
+                    url:app.host+ '/account/register',
                     type:'POST',
                     data:JSON.stringify(post_data),
                     dataType:'json',
@@ -79,10 +79,10 @@ var app = app || {};
                 <div className="index-content">
                     <h2>{this.state.isRegister ? 'Create FHIR Tester Account' : 'Sign in to FHIR Tester'}</h2>
                     {this.state.isRegister ? <RegisterWindow register_action={this.handleRegister} updateUsername={this.updateUsername} updatePassword={this.updatePassword} updateRepassword={this.updateRepassword} /> : <LoginWindow login_action={this.handleLogin} updateUsername={this.updateUsername} updatePassword={this.updatePassword}/>}
-                    <a href="javascript:void()" onClick={this.hanldeSwitch}>
+                    <a className="action-link" href="javascript:void()" onClick={this.hanldeSwitch}>
                     {this.state.isRegister ? 'Sign in with an exist account' : 'Create a new account'}
                     </a>
-                    <a href="javascript:void()">Continue without account</a>
+                    <a className="action-link" href="/dashboard.html">Continue without account</a>
                 </div>
             );
         }

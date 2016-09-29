@@ -81,7 +81,7 @@ var app = app || {};
             var self = this;
             this.setState({isLoading:true});
             $.ajax({
-                url:'http://localhost:8000/home/submit',
+                url:app.host+ '/home/submit',
                 type:'POST',
                 data:JSON.stringify(post_data),
                 dataType:'json',
