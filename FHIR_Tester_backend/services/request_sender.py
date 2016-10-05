@@ -10,12 +10,12 @@ def send_create_resource_request(resource_obj, url, access_token=None):
             r = requests.post(url,data=resource_obj)
         try:
             response_json = r.json()
-            return response_json
+            return response_json, r.request.headers, r.headers
         except:
-            return r.text
+            return r.text, r.request.headers, r.headers
     except:
         traceback.print_exc()
-        return 'Server Error'
+        return 'Server Error', r.request.headers, None
 
 def send_read_resource_request(url, access_token):
     print url
@@ -26,12 +26,12 @@ def send_read_resource_request(url, access_token):
             r = requests.get(url)
         try:
             response_json = r.json()
-            return response_json
+            return response_json, r.request.headers, r.headers
         except:
-            return r.text
+            return r.text, r.request.headers, r.headers
     except:
         traceback.print_exc()
-        return 'Server Error'
+        return 'Server Error', r.request.headers, None
 
 def send_fetch_resource_request(url, resource_name, access_token=None):
     try:

@@ -22,7 +22,11 @@ def form_results(task_id):
         for detail in details:
             new_detail = {
                 'desc':detail.detail_desc,
-                'status':detail.detail_status
+                'status':detail.detail_status,
+                'req_header':detail.http_request,
+                'req_resource':detail.request_resource,
+                'res_header':detail.http_response,
+                'response_message':detail.response_message
             }
             step_info['details'].append(new_detail)
 

@@ -25,8 +25,13 @@ class task_steps(models.Model):
 
 class step_detail(models.Model):
     step = models.ForeignKey(task_steps)
+    resource_name = models.CharField(max_length=64, null=True)
     detail_desc = models.TextField(null=True)
     detail_status = models.NullBooleanField(null=True)
+    http_request = models.TextField(null=True)
+    request_resource = models.TextField(null=True)
+    http_response = models.TextField(null=True)
+    response_message = models.TextField(null=True)
 
 class server(models.Model):
     server_id = models.AutoField(primary_key=True)

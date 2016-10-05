@@ -1,6 +1,10 @@
+
 var app = app || {};
 
+
 (function(){
+    
+
     app.TestButton = React.createClass({
         handleClick: function() {
             this.props.submitTestTask(this.props.btnType);
@@ -134,14 +138,65 @@ var app = app || {};
                             {this.state.test_type == 0 ? <h3>Level: {this.state.level}</h3> : null}
                         </div>
                         {this.state.steps.map(function(step){
-                            return <StepDisplay stepInfo={step} />
-                        })}
+                            return <StepDisplay showFullyDetail={this.props.showFullyDetail} stepInfo={step} />
+                        },this)}
                     </div>
                 </div>
             )
         }
     });
 
+    var HTTPDetail = app.HTTPDetail = React.createClass({
+        render:function(){
+            return(
+                <div className="http-area detail-result">
+                    <div className="http-content">
+                    {this.props.detail.req_header != null ? <h4>HTTP Request Header</h4>
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.req_header), null, 2) }</pre> :
+                        null
+                    }    
+                    </div>
+                    <div className="http-content">
+                    {this.props.detail.res_header != null ? 
+                        <h4>HTTP Response Header</h4>
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.res_header), null, 2) }</pre> :
+                        null
+                    }
+                    </div>
+                    <div className="http-content">
+                    {this.props.detail.response_message != null ?
+                        <h4>Response Message</h4>
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.response_message), null, 2) }</pre> : 
+                        null
+                    }
+                    </div>
+                    <div className="http-content">
+                    {this.props.detail.req_resource != null ?
+                        <h4>Test Resource</h4>
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.req_resource), null, 2) }</pre> :
+                        null
+                    }
+                    </div>
+                </div>
+            );
+        }
+    });
+
+    var FullyDetail = app.FullyDetail = React.createClass({
+        render:function(){
+            return (
+                <div className="result-container">
+                    <div className="result-head"><span className="area-title area-title-black">Test case detail </span>
+                    {this.props.detail.status ? <span className="success-bar">Success</span> : <span className="fail-bar">Fail</span>} 
+                    </div>
+                    <div className="detail-desc-block">
+                            {this.props.detail.desc}
+                    </div>
+                    <HTTPDetail detail={this.props.detail}/>
+                </div>
+            );
+        }
+    });
 
     var StepDisplay = app.StepDisplay = React.createClass({
         getInitialState: function(){
@@ -153,13 +208,13 @@ var app = app || {};
                 detail_desc:''
             }
         },
-        showDetail:function(desc){
-            if(this.state.detail_desc === desc){
+        showDetail:function(detail){
+            if(this.state.detail_desc === detail.desc){
                 this.setState({is_detail_showing:!this.state.is_detail_showing});
             }else{
-                this.setState({detail_desc:desc, is_detail_showing:true});
+                this.setState({detail_desc:detail.desc, is_detail_showing:true});
             }
-            
+            this.props.showFullyDetail(detail) 
         },
         componentDidMount:function(){
             if(this.props.stepInfo.addi){
@@ -188,7 +243,7 @@ var app = app || {};
                     <div className="step-detail-area">
                         <div className="detail-hint-block">
                             {this.props.stepInfo.details.map(function(detail){
-                                return <StepDetail status={detail.status} desc={detail.desc} showDetail={this.showDetail} />
+                                return <StepDetail fully_detail={detail} status={detail.status} desc={detail.desc} showDetail={this.showDetail} />
                             }, this)}
                         </div>
                         {this.state.is_detail_showing ? <div className="detail-desc-block">
@@ -210,7 +265,7 @@ var app = app || {};
             return 'btn' + this.props.status ? ' btn-success': ' btn-danger' + ' btn-circle';
         },
         onBtnClick:function(){
-            this.props.showDetail(this.props.desc);
+            this.props.showDetail(this.props.fully_detail);
         },
         render:function(){
             return (

@@ -184,5 +184,16 @@
     background-color: rgba(220, 220, 220, 0.652);
     padding:10px 20px;
     border-left: 5px solid #aaa;
+}
 
+span.success-bar{
+    background-color: rgba(100, 221, 23, 1);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+span.fail-bar{
+    background-color: rgba(183, 28, 28, 1);
+    padding: 10px;
+    border-radius: 5px;
 }

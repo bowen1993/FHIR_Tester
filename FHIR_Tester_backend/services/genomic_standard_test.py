@@ -2,6 +2,7 @@ from genomics_test_generator import fhir_genomics_test_gene
 from request_sender import *
 from services.create_resource import *
 import random
+import json
 
 from django.db import transaction
 from home.models import task, task_steps, step_detail
@@ -92,24 +93,27 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
     for case in all_cases['right']:
         hint = ''
         case = set_reference(case,id_dict)
-        response = send_create_resource_request(json.dumps(case), url, access_token)
+        response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
         if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
             isSuccessful = isSuccessful and True
         else:
-            print response
             if isinstance(response, str):
                 hint += response
             elif isinstance(response, dict):
                 hint += response['issue'][0]['diagnostics']
             isSuccessful = isSuccessful and False
-        if not isSuccessful:
             hint_infos.append({
                 'status': False,
-                'desc': hint
+                'desc': hint,
             })
             save_step_detail(step_obj, {
                 'status': False,
-                'desc': hint
+                'desc': 'Resource %s can not be processed. %s' %(resource_name, hint),
+                'req_header':req_header,
+                'res_header': res_header,
+                'response':response,
+                'resource':case,
+                'resource_name':resource_type
             })
     if isSuccessful:
         hint_infos.append({
@@ -118,21 +122,22 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
             })
         save_step_detail(step_obj, {
                 'desc': '%s in correct format can be processed properly' % resource_type,
-                'status':True
+                'status':True,
+                'req_header':None,
+                'res_header': None,
+                'response':None,
+                'resource':None,
+                'resource_name':resource_type
             })
     isSuccessfulFalse = True
     for case_with_info in all_cases['wrong']:
         case = case_with_info['case']
         hint = ''
-        response = send_create_resource_request(json.dumps(case), url, access_token)
+        response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
         if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
-            print '-'*30
-            print 'wrong case error'
-            print case
             hint += case_with_info['info']
             isSuccessfulFalse = isSuccessfulFalse and False
         else:
-            print response
             isSuccessfulFalse = isSuccessfulFalse and True
         if not isSuccessfulFalse:
             hint_infos.append({
@@ -141,12 +146,26 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
             })
             save_step_detail(step_obj, {
                 'status': False,
-                'desc': hint
+                'desc': hint,
+                'req_header':req_header,
+                'res_header': res_header,
+                'response':response,
+                'resource':case,
+                'resource_name':resource_type
             })
     if isSuccessfulFalse:
         hint_infos.append({
                 'desc': '%s with error can be handled' % resource_type,
                 'status':True
+            })
+        save_step_detail(step_obj, {
+                'desc': '%s in incorrect format can be processed properly' % resource_type,
+                'status':True,
+                'req_header':None,
+                'res_header': None,
+                'response':None,
+                'resource':None,
+                'resource_name':resource_type
             })
     return isSuccessful and isSuccessfulFalse, hint_infos
 
@@ -186,12 +205,11 @@ def level1Test(url,id_dict,step_obj, access_token):
         case['extension'] = genetic_observation_extension
         # print json.dumps(case)
         hint = ''
-        response = send_create_resource_request(json.dumps(case), url, access_token)
+        response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
         
         if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
             isSuccessful = isSuccessful and True
         else:
-            print response
             if isinstance(response, str):
                 hint += response
             elif isinstance(response, dict):
@@ -204,12 +222,26 @@ def level1Test(url,id_dict,step_obj, access_token):
             })
             save_step_detail(step_obj, {
                 'status': False,
-                'desc': hint
+                'desc': hint,
+                'req_header':req_header,
+                'res_header': res_header,
+                'response':response,
+                'resource':case,
+                'resource_name':'Observation'
             })
     if isSuccessful:
         hint_infos.append({
                 'status': True,
                 'desc': 'Observation for genetic profile can be processed properly'
+            })
+        save_step_detail(step_obj, {
+                'desc': 'Observation for genetic profile can be processed properly',
+                'status':True,
+                'req_header':None,
+                'res_header': None,
+                'response':None,
+                'resource':None,
+                'resource_name':'Observation'
             })
     #TODO extension generate
     return isSuccessful,hint_infos
@@ -229,11 +261,10 @@ def level2Test(url, id_dict,step_obj, access_token):
         case['extension'] = gene_variant_extension
         hint = ''
         # print json.dumps(case)
-        response = send_create_resource_request(json.dumps(case), url, access_token)
+        response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
         if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
             isSuccessful = isSuccessful and True
         else:
-            print response
             if isinstance(response, str):
                 hint += response
             elif isinstance(response, dict):
@@ -246,12 +277,26 @@ def level2Test(url, id_dict,step_obj, access_token):
             })
             save_step_detail(step_obj, {
                 'status': False,
-                'desc': hint
+                'desc': hint,
+                'req_header':req_header,
+                'res_header': res_header,
+                'response':response,
+                'resource':case,
+                'resource_name':'Observation'
             })
     if isSuccessful:
         hint_infos.append({
                 'status':True,
                 'desc':'Observation with Gene extension can be processed properly'
+            })
+        save_step_detail(step_obj, {
+                'desc': 'Observation with Gene extension can be processed properly',
+                'status':True,
+                'req_header':None,
+                'res_header': None,
+                'response':None,
+                'resource':None,
+                'resource_name':'Observation'
             })
     return isSuccessful,hint_infos
 
@@ -285,7 +330,7 @@ def level4Test(url, id_dict,step_obj, access_token):
         hint = ''
         if id_list and len(id_list) > 0: 
             random_id = random_picker(id_list)
-            response = send_read_resource_request("%s%s/%s" %(url,resource_name,random_id), access_token)
+            response, req_header, res_header = send_read_resource_request("%s%s/%s" %(url,resource_name,random_id), access_token)
             if isinstance(response, dict):
                 if response['resourceType'] == resource_name:
                     isSuccessful = isSuccessful and True
@@ -302,12 +347,26 @@ def level4Test(url, id_dict,step_obj, access_token):
             })
             save_step_detail(step_obj, {
                 'status': False,
-                'desc': hint
+                'resource_name':resource_name,
+                'desc': '%s reading failed, %s' % (resource_name, hint),
+                'req_header':req_header,
+                'res_header': res_header,
+                'response':response,
+                'resource':case
             })
     if isSuccessful:
         hint_infos.append({
                 'status':True,
                 'desc':'FHIR Genomics Resources can be retrived'
+            })
+        save_step_detail(step_obj, {
+                'desc': 'FHIR Genomics Resources can be retrived',
+                'status':True,
+                'req_header':None,
+                'res_header': None,
+                'response':None,
+                'resource':None,
+                'resource_name':None
             })
     return isSuccessful, hint_infos
 
@@ -316,35 +375,35 @@ def save_step_detail(step_obj, detail_info):
         new_step_detail = step_detail(step=step_obj)
         new_step_detail.detail_desc = detail_info['desc']
         new_step_detail.detail_status = detail_info['status']
+        new_step_detail.http_request = json.dumps(dict(detail_info['req_header'])) if detail_info['req_header'] else None
+        new_step_detail.http_response = json.dumps(dict(detail_info['res_header'])) if detail_info['res_header'] else None
+        new_step_detail.request_resource = json.dumps(dict(detail_info['resource'])) if detail_info['resource'] else None
+        new_step_detail.response_message = json.dumps(dict(detail_info['response'])) if detail_info['response'] else None
+        new_step_detail.resource_name = detail_info['resource_name']
         try:
             new_step_detail.save()
         except:
-            pass
+            print 'live create failed'
 
 def create_one_step(task_id, step_info, step_obj=None):
     if step_obj:
         with transaction.atomic():
             try:
-                step_obj.delete()
+                step_obj.step_desc = step_info['desc']
+                step_obj.save()
+                return step_obj
             except:
+                return None
                 pass
-    with transaction.atomic():
-        new_task_step = task_steps(task_id=task_id, step_desc = step_info['desc'])
-        try:
-            new_task_step.save()
-        except:
-            print 'step can not be created'
-            return
-        for detail_info in step_info['details']:
-            new_step_detail = step_detail(step=new_task_step)
-            new_step_detail.detail_desc = detail_info['desc']
-            new_step_detail.detail_status = detail_info['status']
+    else:
+        with transaction.atomic():
+            new_task_step = task_steps(task_id=task_id, step_desc = step_info['desc'])
             try:
-                new_step_detail.save()
+                new_task_step.save()
             except:
-                return new_task_step
-                break
-        return new_task_step
+                print 'step can not be created'
+                return None
+            return new_task_step
 
 def form_new_step_info(status, base_desc, details):
     new_step = {

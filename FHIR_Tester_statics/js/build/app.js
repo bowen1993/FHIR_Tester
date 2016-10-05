@@ -15,6 +15,7 @@ var app = app || {};
     var HistoryViewer = app.HistoryViewer;
     var ServerList = app.ServerList
     var TaskSearchView = app.TaskSearchView;
+    var FullyDetail = app.FullyDetail;
     app.type2str = function(test_type){
         var typeStr = '';
         switch (test_type)
@@ -43,7 +44,7 @@ var app = app || {};
         };
     var TesterApp = React.createClass({displayName: "TesterApp",
         getInitialState: function() {
-            return {code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false};
+            return {code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
@@ -68,7 +69,7 @@ var app = app || {};
             this.refs.res_area.emptyCurrentDisplay();
             var token = $.cookie('fhir_token');
             if( this.state.isCustomedURL ){
-                var post_data = {code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token, token:token};
+                var post_data = {curr_detail:null,code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token, token:token};
             }else{
                 if( this.state.chosen_server == -1 ){
                     app.showMsg("Please Choose a Server or Input one");
@@ -124,6 +125,13 @@ var app = app || {};
         handleSearchHideModal(){
             this.setState({isSearchShow:false});
         },
+        showFullyDetail:function(detail){
+            if( this.state.curr_detail === detail ){
+                this.setState({isDetailShow:!this.state.isDetailShow})
+            }else{
+                this.setState({isDetailShow:true, curr_detail:detail})
+            }
+        },
         toggleCustomedURL:function(){
             this.setState({isCustomedURL:!this.state.isCustomedURL});
         },
@@ -153,12 +161,12 @@ var app = app || {};
                             )
                         ), 
                         this.state.isCustomedURL ? React.createElement("div", null, React.createElement(UrlEditor, {updateUrl: this.updateUrl}), React.createElement(TokenEditor, {updateToken: this.updateAccessToken})) : null, 
-                        
+                        this.state.isLoading ? React.createElement("div", {className: "loading"}, React.createElement("img", {src: "../img/5.png", alt: "loading", class: "img-responsive loading-img"}))  : null, 
+                        !this.state.isLoading && this.state.isResultReady ? React.createElement(ResultDisplay, {showFullyDetail: this.showFullyDetail, ref: "res_area"}) : null, 
                         this.state.isEditting ? React.createElement(CodeEditor, {updateCode: this.updateCode, language: "python"}) : null
                     ), 
                     React.createElement("div", {className: "result-area"}, 
-                    this.state.isLoading ? React.createElement("div", {className: "loading"}, React.createElement("img", {src: "../img/5.png", alt: "loading", class: "img-responsive loading-img"}))  : null, 
-                     !this.state.isLoading && this.state.isResultReady ? React.createElement(ResultDisplay, {ref: "res_area"}) : null
+                         this.state.isDetailShow ? React.createElement(FullyDetail, {detail: this.state.curr_detail}) : null
                     ), 
                     this.state.is_history_show ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "History", content: React.createElement(HistoryViewer, null)}) : null, 
                     this.state.isSearchShow ? React.createElement(Modal, {handleHideModal: this.handleSearchHideModal, title: "History", content: React.createElement(TaskSearchView, null)}) : null
