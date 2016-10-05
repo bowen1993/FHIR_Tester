@@ -150,14 +150,14 @@ var app = app || {};
                         <div className="btnArea">
                             <TestButton btn_name="App Test" submitTestTask={this.handleTaskSubmit} btnType={app.APP_TEST}/>
                             <TestButton btn_name="Server Test" submitTestTask={this.handleTaskSubmit} btnType={app.SERVER_TEST}/>
-                            <TestButton btn_name="Standard Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/>
+                            <TestButton btn_name="Level Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/>
                         </div>
                         <div className="btnArea">
                             <label>
                                 <input type="checkbox" checked={this.state.isEditting} onChange={this.toggleEditting}/> Code Editor
                             </label>
                             <label>
-                                <input type="checkbox" checked={this.state.isCustomedURL} onChange={this.toggleCustomedURL}/> Custome URL
+                                <input type="checkbox" checked={this.state.isCustomedURL} onChange={this.toggleCustomedURL}/> Custom URL
                             </label>
                         </div>
                         {this.state.isCustomedURL ? <div><UrlEditor updateUrl={this.updateUrl}/><TokenEditor updateToken={this.updateAccessToken} /></div> : null}
