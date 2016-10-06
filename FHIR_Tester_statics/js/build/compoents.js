@@ -150,22 +150,35 @@ var app = app || {};
         render:function(){
             return(
                 React.createElement("div", {className: "http-area detail-result"}, 
-                    React.createElement("div", {className: "http-content"}, 
+                    
+                    this.props.detail.req_header != null ? 
+                        React.createElement("div", {className: "http-content"}, 
                         React.createElement("h4", null, "HTTP Request Header"), 
-                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.req_header), null, 2) )
-                    ), 
-                    React.createElement("div", {className: "http-content"}, 
+                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.req_header), null, 2) ), " "):
+                        null, 
+                    
+                    
+                    
+                    this.props.detail.res_header != null ? 
+                        React.createElement("div", {className: "http-content"}, 
                         React.createElement("h4", null, "HTTP Response Header"), 
-                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.res_header), null, 2) )
-                    ), 
-                    React.createElement("div", {className: "http-content"}, 
+                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.res_header), null, 2) )) :
+                        null, 
+                    
+                    this.props.detail.response_message != null ?
+                        React.createElement("div", {className: "http-content"}, 
                         React.createElement("h4", null, "Response Message"), 
-                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.response_message), null, 2) )
-                    ), 
-                    React.createElement("div", {className: "http-content"}, 
+                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.response_message), null, 2) ), " "): 
+                        null, 
+                    
+
+                    this.props.detail.req_resource != null ?
+                        React.createElement("div", {className: "http-content"}, 
                         React.createElement("h4", null, "Test Resource"), 
-                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.req_resource), null, 2) )
-                    )
+                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.req_resource), null, 2) )) :
+                        null
+                    
+
                 )
             );
         }
@@ -395,6 +408,44 @@ var app = app || {};
                     React.createElement(ResultDisplay, {ref: "res_area"})
                 )
             );
+        }
+    });
+    var ReportView = app.ReportView = React.createClass({displayName: "ReportView",
+        getCellStatus:function(status){
+                if( status ){
+                    return 'success'
+                }else{
+                    return 'danger'
+                }
+        },
+        render:function(){
+            return(
+                React.createElement("div", {className: "report-area"}, 
+                    React.createElement("div", {className: "brief-info"}, 
+                        React.createElement("h4", null, "Test Type: ", this.props.report.test_type), 
+                        React.createElement("h4", null, "Target Server: ", this.props.report.server), 
+                        React.createElement("h4", null, "Level: ", this.props.report.level)
+                    ), 
+                    React.createElement("div", {className: "table-info"}, 
+                    React.createElement("h3", null, "Details"), 
+                        React.createElement("table", {className: "table table-bordered"}, 
+                        React.createElement("tbody", null, 
+                        this.props.report.infos.map(function(info){
+                            return (
+                                React.createElement("tr", null, 
+                                    React.createElement("td", null, info.name), 
+                                    info.detail_infos.map(function(detail){
+                                        return React.createElement("td", {className: this.getCellStatus(detail.status)}, detail.resource)
+                                    },this), 
+                                    React.createElement("td", {className: this.getCellStatus(info.status)}, " ", info.name, " ", info.status ? 'Passed' : 'Failed')
+                                )
+                            );
+                        },this)
+                        )
+                        )
+                    )
+                )
+            )
         }
     });
     var Modal = app.Modal = React.createClass({displayName: "Modal",

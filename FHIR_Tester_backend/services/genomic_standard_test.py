@@ -328,16 +328,20 @@ def level4Test(url, id_dict,step_obj, access_token):
     for resource_name in resource_list:
         id_list = get_resource_id_list(url, resource_name, access_token)
         hint = ''
+        flag = True
         if id_list and len(id_list) > 0: 
             random_id = random_picker(id_list)
             response, req_header, res_header = send_read_resource_request("%s%s/%s" %(url,resource_name,random_id), access_token)
             if isinstance(response, dict):
                 if response['resourceType'] == resource_name:
                     isSuccessful = isSuccessful and True
+                    flag = True
                 else:
+                    flag = False
                     isSuccessful = isSuccessful and False
                     hint += response['issue'][0]['diagnostics']
             else:
+                flag = False
                 isSuccessful = isSuccessful and False
                 hint += response
         if not isSuccessful:
@@ -345,29 +349,29 @@ def level4Test(url, id_dict,step_obj, access_token):
                 'status':False,
                 'desc': '%s reading failed, %s' % (resource_name, hint)
             })
-            save_step_detail(step_obj, {
-                'status': False,
-                'resource_name':resource_name,
-                'desc': '%s reading failed, %s' % (resource_name, hint),
-                'req_header':req_header,
-                'res_header': res_header,
-                'response':response,
-                'resource':case
-            })
+        save_step_detail(step_obj, {
+            'status': flag,
+            'resource_name':resource_name,
+            'desc': '%s reading %s, %s' % (resource_name, ('Success' if flag else 'Fail') ,hint),
+            'req_header':req_header,
+            'res_header': res_header,
+            'response':response,
+            'resource':None
+        })
     if isSuccessful:
         hint_infos.append({
                 'status':True,
                 'desc':'FHIR Genomics Resources can be retrived'
             })
-        save_step_detail(step_obj, {
-                'desc': 'FHIR Genomics Resources can be retrived',
-                'status':True,
-                'req_header':None,
-                'res_header': None,
-                'response':None,
-                'resource':None,
-                'resource_name':None
-            })
+        # save_step_detail(step_obj, {
+        #         'desc': 'FHIR Genomics Resources can be retrived',
+        #         'status':True,
+        #         'req_header':None,
+        #         'res_header': None,
+        #         'response':None,
+        #         'resource':None,
+        #         'resource_name':None
+        #     })
     return isSuccessful, hint_infos
 
 def save_step_detail(step_obj, detail_info):
@@ -397,7 +401,7 @@ def create_one_step(task_id, step_info, step_obj=None):
                 pass
     else:
         with transaction.atomic():
-            new_task_step = task_steps(task_id=task_id, step_desc = step_info['desc'])
+            new_task_step = task_steps(task_id=task_id, step_desc = step_info['desc'], name=step_info['name'])
             try:
                 new_task_step.save()
             except:
@@ -405,17 +409,18 @@ def create_one_step(task_id, step_info, step_obj=None):
                 return None
             return new_task_step
 
-def form_new_step_info(status, base_desc, details):
+def form_new_step_info(status, base_desc, details,name):
     new_step = {
         'status': status,
         'desc': base_desc,
-        'details': details
+        'details': details,
+        'name':name
     }
     return new_step
 
-def perform_a_test(test_method,step_obj ,url, id_dict, base_desc, access_token=None):
+def perform_a_test(test_method,step_obj ,url, id_dict, base_desc,name=None, access_token=None):
     isSuccessful, hint_infos = test_method(url, id_dict, step_obj, access_token)
-    step_info = form_new_step_info(isSuccessful,'%s %s' % (base_desc, 'successfully' if isSuccessful else 'failed'), hint_infos)
+    step_info = form_new_step_info(isSuccessful,'%s %s' % (base_desc, 'successfully' if isSuccessful else 'failed'), hint_infos, name)
     return step_info
 
 def do_standard_test(task_id, url, access_token=None):
@@ -425,7 +430,7 @@ def do_standard_test(task_id, url, access_token=None):
         'steps':[]
     }
     level = -1
-    step_info = form_new_step_info(True, 'Setting up standard test......', [])
+    step_info = form_new_step_info(True, 'Setting up standard test......', [], 'Setup')
     step_obj = create_one_step(task_id ,step_info)
     create_res, id_dict = create_pre_resources(url, 'resources', access_token)
     # print id_dict
@@ -441,42 +446,48 @@ def do_standard_test(task_id, url, access_token=None):
         else:
             detail_info['desc'] = '%s can not be created, test terminated' % key
         details.append(detail_info)
-    step_info = form_new_step_info(status,'%s %s' % ('Setup', 'Successfully' if status else 'Failed'), details)
+    step_info = form_new_step_info(status,'%s %s' % ('Setup', 'Successfully' if status else 'Failed'), details, 'Setup')
     create_one_step(task_id ,step_info, step_obj)
     #standard test begin
-    step_info = form_new_step_info(True, 'Level 0 test performing', [])
+    flag = True
+    step_info = form_new_step_info(True, 'Level 0 test performing', [], 'Level 0')
     step_obj = create_one_step(task_id ,step_info)
-    step_info = perform_a_test(level0Test,step_obj, url, id_dict, 'Level 0 test', access_token)
+    step_info = perform_a_test(level0Test,step_obj, url, id_dict, 'Level 0 test', 'Level 0', access_token)
     create_one_step(task_id, step_info, step_obj)
-    if step_info['status']:
+    flag = flag and step_info['status']
+    if flag:
         level += 1
 
-    step_info = form_new_step_info(True, 'Level 1 test performing', [])
+    step_info = form_new_step_info(True, 'Level 1 test performing', [],'Level 1')
     step_obj = create_one_step(task_id ,step_info)
-    step_info = perform_a_test(level1Test,step_obj, url, id_dict, 'Level 1 test', access_token)
+    step_info = perform_a_test(level1Test,step_obj, url, id_dict, 'Level 1 test', 'Level 1', access_token)
     create_one_step(task_id, step_info, step_obj)
-    if step_info['status']:
+    flag = flag and step_info['status']
+    if flag:
         level += 1
 
-    step_info = form_new_step_info(True, 'Level 2 test performing', [])
+    step_info = form_new_step_info(True, 'Level 2 test performing', [],'Level 2')
     step_obj = create_one_step(task_id ,step_info)
-    step_info = perform_a_test(level2Test,step_obj, url, id_dict, 'Level 2 test', access_token)
+    step_info = perform_a_test(level2Test,step_obj, url, id_dict, 'Level 2 test','Level 2', access_token)
     create_one_step(task_id, step_info, step_obj)
-    if step_info['status']:
+    flag = flag and step_info['status']
+    if flag:
         level += 1
 
-    step_info = form_new_step_info(True, 'Level 3 test performing', [])
+    step_info = form_new_step_info(True, 'Level 3 test performing', [],'Level 3')
     step_obj = create_one_step(task_id ,step_info)
-    step_info = perform_a_test(level3Test,step_obj, url, id_dict, 'Level 3 test', access_token)
+    step_info = perform_a_test(level3Test,step_obj, url, id_dict, 'Level 3 test','Level 3', access_token)
     create_one_step(task_id, step_info, step_obj)
-    if step_info['status']:
+    flag = flag and step_info['status']
+    if flag:
         level += 1
 
-    step_info = form_new_step_info(True, 'Level 4 test performing', [])
+    step_info = form_new_step_info(True, 'Level 4 test performing', [],'Level 4')
     step_obj = create_one_step(task_id ,step_info)
-    step_info = perform_a_test(level4Test,step_obj, url, id_dict, 'Level 4 test', access_token)
+    step_info = perform_a_test(level4Test,step_obj, url, id_dict, 'Level 4 test','Level 4', access_token)
     create_one_step(task_id, step_info, step_obj)
-    if step_info['status']:
+    flag = flag and step_info['status']
+    if flag:
         level += 1
     
     return level, id_dict

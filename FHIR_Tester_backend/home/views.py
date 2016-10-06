@@ -46,7 +46,10 @@ def submit_task(request):
     print access_token
     
     #return task id
-    task_id = perform_test(language=language,code=code,url=url,test_type=test_type, access_token=access_token, username=username)
+    if 'chosen_server' in req_json:
+        task_id = perform_test(language=language,code=code,url=url,test_type=test_type,server_id=req_json['chosen_server'], access_token=access_token, username=username)
+    else:
+        task_id = perform_test(language=language,code=code,url=url,test_type=test_type,server_id=None, access_token=access_token, username=username)
     result = {
         'isSuccessful':True,
         'task_id':task_id

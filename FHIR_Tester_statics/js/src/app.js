@@ -16,6 +16,7 @@ var app = app || {};
     var ServerList = app.ServerList
     var TaskSearchView = app.TaskSearchView;
     var FullyDetail = app.FullyDetail;
+    var ReportView = app.ReportView
     app.type2str = function(test_type){
         var typeStr = '';
         switch (test_type)
@@ -44,7 +45,7 @@ var app = app || {};
         };
     var TesterApp = React.createClass({
         getInitialState: function() {
-            return {code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false};
+            return {isReportReady:false,test_report:{},code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false, isReportShow:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
@@ -55,6 +56,9 @@ var app = app || {};
         },
         showSearchView:function(){
             this.setState({isSearchShow:!this.state.isSearchShow});
+        },
+        showReportView:function(report_info){
+            this.setState({isReportShow:true, test_report:report_info,isReportReady:true});
         },
         updateUrl:function(newUrl){
             this.setState({url:newUrl});
@@ -125,6 +129,9 @@ var app = app || {};
         handleSearchHideModal(){
             this.setState({isSearchShow:false});
         },
+        handleHideReportModal(){
+            this.setState({isReportShow:false});
+        },
         showFullyDetail:function(detail){
             if( this.state.curr_detail === detail ){
                 this.setState({isDetailShow:!this.state.isDetailShow})
@@ -141,6 +148,9 @@ var app = app || {};
         updateChosenServer:function(server_id){
             this.setState({chosen_server:server_id});
         },
+        toggle_report:function(){
+            this.setState({isReportShow:!this.state.isReportShow});
+        },
         render:function(){
             return (
                 <div className="box">
@@ -151,6 +161,7 @@ var app = app || {};
                             <TestButton btn_name="App Test" submitTestTask={this.handleTaskSubmit} btnType={app.APP_TEST}/>
                             <TestButton btn_name="Server Test" submitTestTask={this.handleTaskSubmit} btnType={app.SERVER_TEST}/>
                             <TestButton btn_name="Level Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/>
+                            {this.state.isReportReady ? <button className="btn btn-primary" onClick={this.toggle_report}>Report</button> : null }
                         </div>
                         <div className="btnArea">
                             <label>
@@ -169,7 +180,8 @@ var app = app || {};
                         { this.state.isDetailShow ? <FullyDetail detail={this.state.curr_detail}/> : null }
                     </div>
                     {this.state.is_history_show ? <Modal handleHideModal={this.handleHideModal} title="History" content={<HistoryViewer />} /> : null}
-                    {this.state.isSearchShow ? <Modal handleHideModal={this.handleSearchHideModal} title="History" content={<TaskSearchView />} /> : null}
+                    {this.state.isSearchShow ? <Modal handleHideModal={this.handleSearchHideModal} title="Search Task" content={<TaskSearchView />} /> : null}
+                    {this.state.isReportShow ? <Modal handleHideModal={this.handleHideReportModal} title="Test Report" content={<ReportView report={this.state.test_report}/>} /> : null}
                 </div>
             );
         }

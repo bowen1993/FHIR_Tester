@@ -17,6 +17,9 @@ var app = app || {};
             }else if(data.place == 3){
                 window.searchView.updateTestResult(data.step_result);
             }
+            if(data.isFinal){
+                window.comp.showReportView(data.test_report);
+            }
             
         }
         tasksocket.onopen = function(e){

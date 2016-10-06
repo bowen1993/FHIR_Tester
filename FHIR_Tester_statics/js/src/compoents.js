@@ -150,33 +150,35 @@ var app = app || {};
         render:function(){
             return(
                 <div className="http-area detail-result">
-                    <div className="http-content">
-                    {this.props.detail.req_header != null ? <h4>HTTP Request Header</h4>
-                        <pre>{JSON.stringify(JSON.parse(this.props.detail.req_header), null, 2) }</pre> :
+                    
+                    {this.props.detail.req_header != null ? 
+                        <div className="http-content">
+                        <h4>HTTP Request Header</h4> 
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.req_header), null, 2) }</pre> </div>:
                         null
                     }    
-                    </div>
-                    <div className="http-content">
+                    
+                    
                     {this.props.detail.res_header != null ? 
+                        <div className="http-content">
                         <h4>HTTP Response Header</h4>
-                        <pre>{JSON.stringify(JSON.parse(this.props.detail.res_header), null, 2) }</pre> :
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.res_header), null, 2) }</pre></div> :
                         null
                     }
-                    </div>
-                    <div className="http-content">
                     {this.props.detail.response_message != null ?
+                        <div className="http-content">
                         <h4>Response Message</h4>
-                        <pre>{JSON.stringify(JSON.parse(this.props.detail.response_message), null, 2) }</pre> : 
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.response_message), null, 2) }</pre> </div>: 
                         null
                     }
-                    </div>
-                    <div className="http-content">
+
                     {this.props.detail.req_resource != null ?
+                        <div className="http-content">
                         <h4>Test Resource</h4>
-                        <pre>{JSON.stringify(JSON.parse(this.props.detail.req_resource), null, 2) }</pre> :
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.req_resource), null, 2) }</pre></div> :
                         null
                     }
-                    </div>
+
                 </div>
             );
         }
@@ -406,6 +408,44 @@ var app = app || {};
                     <ResultDisplay ref="res_area"/>
                 </div>
             );
+        }
+    });
+    var ReportView = app.ReportView = React.createClass({
+        getCellStatus:function(status){
+                if( status ){
+                    return 'success'
+                }else{
+                    return 'danger'
+                }
+        },
+        render:function(){
+            return(
+                <div className="report-area">
+                    <div className="brief-info">
+                        <h4>Test Type: {this.props.report.test_type}</h4>
+                        <h4>Target Server: {this.props.report.server}</h4>
+                        <h4>Level: {this.props.report.level}</h4>
+                    </div>
+                    <div className="table-info">
+                    <h3>Details</h3>
+                        <table className="table table-bordered">
+                        <tbody>
+                        {this.props.report.infos.map(function(info){
+                            return (
+                                <tr>
+                                    <td>{info.name}</td>
+                                    {info.detail_infos.map(function(detail){
+                                        return <td className={this.getCellStatus(detail.status)}>{detail.resource}</td>
+                                    },this)}
+                                    <td className={this.getCellStatus(info.status)}> {info.name} {info.status ? 'Passed' : 'Failed'}</td>
+                                </tr>
+                            );
+                        },this)}
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            )
         }
     });
     var Modal = app.Modal = React.createClass({

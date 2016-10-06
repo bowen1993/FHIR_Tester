@@ -33,6 +33,37 @@ def form_results(task_id):
         res_dict['steps'].append(step_info)
     return res_dict
 
+def form_detil_report(step_obj):
+    details = step_detail.objects.filter(step=step_obj)
+    status_dict = {}
+    res = []
+    for detail in details:
+        if detail.resource_name not in status_dict:
+            status_dict[detail.resource_name] = detail.detail_status
+        else:
+            status_dict[detail.resource_name] = status_dict[detail.resource_name] and detail.detail_status
+    for key in status_dict:
+        res.append({'resource':key, 'status':status_dict[key]})
+    return res
+def form_test_report(task_id):
+    res = {
+        'infos':[]
+    }
+    try:
+        task_obj = task.objects.get(task_id=task_id)
+        res['server'] = task_obj.target_server.server_name
+        steps = task_steps.objects.filter(task=task_obj)
+        for step_obj in steps:
+            info = {
+                'name':step_obj.name,
+                'detail_infos':form_detil_report(step_obj),
+                'status': True if 'success' in step_obj.step_desc.lower() else False
+            }
+            res['infos'].append(info)
+    except task.DoesNotExist:
+        res['error'] = 'Invalid Task'
+    return res
+
 
 @channel_session
 def ws_connect(message):
@@ -72,7 +103,8 @@ def ws_receive(message):
                     step_result['level'] = -1
                     res_data = {
                         'step_result':step_result,
-                        'place':place
+                        'place':place,
+                        'isFinal':False
                     }
                     Group('task-%s'%task_id, channel_layer=message.channel_layer).send({'text':json.dumps(res_data)})
                     sleep(0.4)
@@ -81,11 +113,16 @@ def ws_receive(message):
                 result_obj = result.objects.get(task=task_obj)
                 print 'sending'
                 step_result = form_results(task_id)
+                test_report = form_test_report(task_id)
+                test_report['level'] = result_obj.level
+                test_report['test_type'] = task_obj.task_type
                 step_result['test_type'] = task_obj.task_type
                 step_result['level'] = result_obj.level
                 res_data = {
                     'step_result':step_result,
-                    'place':place
+                    'place':place,
+                    'test_report':test_report,
+                    'isFinal':True
                 }
                 Group('task-%s'%task_id, channel_layer=message.channel_layer).send({'text':json.dumps(res_data)})
                 break

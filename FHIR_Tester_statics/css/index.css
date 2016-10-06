@@ -153,6 +153,13 @@ div.result-area{
     flex-flow: row;
 }
 
+.report-area{
+    width: 90%;
+    height:100%;
+    margin:10px auto;
+    overflow: auto;
+}
+
 
 
 .history-area div.result-container, .task-search-area div.result-container{

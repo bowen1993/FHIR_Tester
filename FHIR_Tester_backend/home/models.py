@@ -3,8 +3,15 @@ from account.models import User
 
 # Create your models here.
 
+class server(models.Model):
+    server_id = models.AutoField(primary_key=True)
+    server_name = models.CharField(max_length=256)
+    server_url = models.URLField(max_length=256)
+    access_token = models.TextField(null=True)
+
 class task(models.Model):
     task_id = models.CharField(max_length=10, primary_key=True)
+    target_server = models.ForeignKey(server, null=True)
     language = models.CharField(max_length=16)
     task_type = models.CharField(max_length=16)
     status = models.CharField(max_length=16)
@@ -22,6 +29,7 @@ class task_steps(models.Model):
     task = models.ForeignKey(task)
     step_desc = models.TextField(null=True)
     additional_info = models.CharField(max_length=256, null=True)
+    name = models.CharField(max_length=16, null=True)
 
 class step_detail(models.Model):
     step = models.ForeignKey(task_steps)
@@ -33,8 +41,3 @@ class step_detail(models.Model):
     http_response = models.TextField(null=True)
     response_message = models.TextField(null=True)
 
-class server(models.Model):
-    server_id = models.AutoField(primary_key=True)
-    server_name = models.CharField(max_length=256)
-    server_url = models.URLField(max_length=256)
-    access_token = models.TextField(null=True)

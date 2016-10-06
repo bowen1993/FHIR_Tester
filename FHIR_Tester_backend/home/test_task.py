@@ -28,12 +28,13 @@ def form_taskname(salt):
 
 
 class test_task:
-    def __init__(self, language="", code="", test_type=0, url="", access_token=None, username=None):
+    def __init__(self, language="", code="", test_type=0, url="",server_id=None, access_token=None, username=None):
         self.test_type = test_type
         self.language = language
         self.username = username
         self.code = code
         self.url = url
+        self.server_id=server_id
         self.task_name = form_taskname(language)
         self.result = ''
         self.access_token = access_token
@@ -43,7 +44,7 @@ class test_task:
         self.is_finished = False
         #create database object
         with transaction.atomic():
-            new_task = task(task_id=self.task_name,language=self.language,task_type=self.test_type, status=self.status,code=self.code, user_id=self.username)
+            new_task = task(task_id=self.task_name,language=self.language,task_type=self.test_type, status=self.status,code=self.code, user_id=self.username, target_server_id=server_id)
             try:
                 new_task.save()
             except:
@@ -113,7 +114,7 @@ class test_task:
             trimline = line[:-1]
             with transaction.atomic():
                 try:
-                    new_task_step = task_steps(task_id=self.task_name,additional_info=trimline)
+                    new_task_step = task_steps(task_id=self.task_name,desc=trimline)
                     new_task_step.save()
                 except:
                     print 'Save step error, task: %s' % self.task_name
