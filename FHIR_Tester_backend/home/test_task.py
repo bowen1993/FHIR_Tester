@@ -8,6 +8,7 @@ from home import Runner
 from home.models import task, result, task_steps
 from services.create_resource import *
 from services.genomic_standard_test import *
+from services.fhir_step_test import *
 
 
 def random_string_generate(length):
@@ -28,10 +29,11 @@ def form_taskname(salt):
 
 
 class test_task:
-    def __init__(self, language="", code="", test_type=0, url="",server_id=None, access_token=None, username=None):
+    def __init__(self, resources = [], language="", code="", test_type=0, url="",server_id=None, access_token=None, username=None):
         self.test_type = test_type
         self.language = language
         self.username = username
+        self.resources = resources
         self.code = code
         self.url = url
         self.server_id=server_id
@@ -62,6 +64,11 @@ class test_task:
             print level
             self.level = level
             #save result
+            self.status = 'finished'
+            self.save_result()
+        elif self.test_type == 3:
+            id_dict = test_resources(self.resources, self.task_name, self.url, self.access_token)
+            self.baseid_dict = id_dict
             self.status = 'finished'
             self.save_result()
         else:

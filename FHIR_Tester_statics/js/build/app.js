@@ -5,6 +5,7 @@ var app = app || {};
     app.APP_TEST = 1;
     app.STANDARD_TEST = 0;
     app.SERVER_TEST = 2;
+    app.FHIR_TEST = 3;
     var TestButton  = app.TestButton;  
     var CodeEditor = app.CodeEditor; 
     var UrlEditor = app.UrlEditor;
@@ -16,7 +17,8 @@ var app = app || {};
     var ServerList = app.ServerList
     var TaskSearchView = app.TaskSearchView;
     var FullyDetail = app.FullyDetail;
-    var ReportView = app.ReportView
+    var ReportView = app.ReportView;
+    var SideMenuButton = app.SideMenuButton;
     app.type2str = function(test_type){
         var typeStr = '';
         switch (test_type)
@@ -45,11 +47,10 @@ var app = app || {};
         };
     var TesterApp = React.createClass({displayName: "TesterApp",
         getInitialState: function() {
-            return {isReportReady:false,test_report:{},code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false, isReportShow:false};
+            return {resources:[],isReportReady:false,test_report:{},code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false, isReportShow:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
-
         },
         showHistoryView:function(){
             this.setState({is_history_show:!this.state.is_history_show});
@@ -99,7 +100,6 @@ var app = app || {};
                         self.setState({isLoading:false});
                         app.showMsg(data.error);
                     }
-                    
                     // var task_id = data.task_id;
                     // var ws_scheme = window.location.protocol == "https" ? "wss" : "ws";
                     // var tasksocket = new WebSocket(ws_scheme + '://localhost:8000/task/' + task_id);
@@ -118,6 +118,12 @@ var app = app || {};
         },
         componentDidMount:function(){
             window.comp = this;
+            $.get(app.host+ '/home/resources', function (result) {
+                if( result.isSuccessful ){
+                    console.log(result.names)
+                    this.setState({resources:result.names});
+                }
+            }.bind(this));
         },
         updateTestResult:function(res){
             this.setState({isResultReady:true, isLoading:false});
@@ -161,6 +167,7 @@ var app = app || {};
                             React.createElement(TestButton, {btn_name: "App Test", submitTestTask: this.handleTaskSubmit, btnType: app.APP_TEST}), 
                             React.createElement(TestButton, {btn_name: "Server Test", submitTestTask: this.handleTaskSubmit, btnType: app.SERVER_TEST}), 
                             React.createElement(TestButton, {btn_name: "Level Test", submitTestTask: this.handleTaskSubmit, btnType: app.STANDARD_TEST}), 
+                            React.createElement(SideMenuButton, {resources: this.state.resources}), 
                             this.state.isReportReady ? React.createElement("button", {className: "btn btn-primary", onClick: this.toggle_report}, "Report") : null
                         ), 
                         React.createElement("div", {className: "btnArea"}, 

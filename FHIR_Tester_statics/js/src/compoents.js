@@ -3,9 +3,37 @@ var app = app || {};
 
 
 (function(){
-    
-
-    app.TestButton = React.createClass({
+    var SideMenuButton = app.SideMenuButton = React.createClass({
+        getInitialState(){
+            return {resources:[]};
+        },
+        componentDidMount:function(){
+            
+        },
+        render:function(){
+            return (
+                <div className="btn-group">
+                    <button type="button" className="btn btn-primary">FHIR Test</button>
+                    <button type="button" className="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        Options <span className="caret"></span>
+                        <span className="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul className="dropdown-menu customed-menu" role="menu">
+                    {this.props.resources.map(function(resource){
+                        return (
+                        <li>
+                            <label>
+                                <input type="checkbox" checked={resource.checked}/> {resource.name}
+                            </label>
+                        </li>
+                        );
+                    },this)}
+                    </ul>
+                </div>
+            );
+        }
+    });
+    var TestButton = app.TestButton = React.createClass({
         handleClick: function() {
             this.props.submitTestTask(this.props.btnType);
         },
@@ -28,7 +56,7 @@ var app = app || {};
         },
         render:function(){
             return (
-                <div id="codeeditor" onKeyUp={this.handleType}></div>
+                <div id="codeeditor" onKeyUp={this.handleType} ></div>
             );
         }
     });

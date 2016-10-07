@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^addServer$', views.add_new_server),
     url(r'^servers$', views.get_all_servers),
     url(r'^search$', views.search_task),
+    url(r'^resources$', views.get_resources),
 ]

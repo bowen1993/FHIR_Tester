@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 import json
 from home.task_runner import perform_test
-from home.models import task, server
+from home.models import task, server, resource
 from home.search import search_basedon_id
 from services import auth
 import traceback
@@ -19,6 +19,10 @@ def submit_task(request):
     code = req_json['code']
     language = req_json['language']
     test_type = req_json['type']
+    if test_type == 3:
+        resource_list = req_json['resources']
+    else:
+        resource_list = []
     if 'chosen_server' in req_json:
         #ser url and access token
         try:
@@ -47,13 +51,28 @@ def submit_task(request):
     
     #return task id
     if 'chosen_server' in req_json:
-        task_id = perform_test(language=language,code=code,url=url,test_type=test_type,server_id=req_json['chosen_server'], access_token=access_token, username=username)
+        task_id = perform_test(language=language,code=code,url=url,test_type=test_type,server_id=req_json['chosen_server'], resource_list=resource_list, access_token=access_token, username=username)
     else:
-        task_id = perform_test(language=language,code=code,url=url,test_type=test_type,server_id=None, access_token=access_token, username=username)
+        task_id = perform_test(language=language,code=code,url=url,test_type=test_type,server_id=None, resource_list=resource_list, access_token=access_token, username=username)
     result = {
         'isSuccessful':True,
         'task_id':task_id
     }
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+@csrf_exempt
+def get_resources(request):
+    result = {
+        'isSuccessful':False,
+        'names':[]
+    }
+    try:
+        resources = resource.objects.all()
+        for resource_obj in resources:
+            result['names'].append({'name':resource_obj.name,'checked':True})
+        result['isSuccessful'] = True
+    except:
+        pass
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 @csrf_exempt
@@ -93,7 +112,12 @@ def get_all_servers(request):
 @csrf_exempt
 def get_user_task_history(request):
     req_json = json.loads(request.body)
-    token = req_json['token']
+    try:
+        token = req_json['token']
+    except:
+        return {
+                'isSuccessful': False
+            }
     result = {
         'isSuccessful': False
     }

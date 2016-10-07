@@ -23,10 +23,6 @@
     color: #fff;
 }
 
-.btn-test:hover{
-    line-height: 2em;
-}
-
 .btn-test:hover .btn-test-text{
     font-weight: bold;
     color: #fff;
@@ -196,4 +192,15 @@ span.fail-bar{
     background-color: rgba(183, 28, 28, 1);
     padding: 10px;
     border-radius: 5px;
+}
+
+ul.customed-menu{
+    border-radius: 0px;
+    padding: 10px;
+}
+
+ul.customed-menu li{
+    text-align: left;
+    width: 90%;
+    margin: 10px auto;
 }

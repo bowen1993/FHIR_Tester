@@ -9,6 +9,9 @@ class server(models.Model):
     server_url = models.URLField(max_length=256)
     access_token = models.TextField(null=True)
 
+class resource(models.Model):
+    name = models.CharField(max_length=128)
+
 class task(models.Model):
     task_id = models.CharField(max_length=10, primary_key=True)
     target_server = models.ForeignKey(server, null=True)

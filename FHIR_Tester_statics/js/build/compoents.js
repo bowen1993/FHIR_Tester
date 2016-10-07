@@ -3,9 +3,37 @@ var app = app || {};
 
 
 (function(){
-    
-
-    app.TestButton = React.createClass({displayName: "TestButton",
+    var SideMenuButton = app.SideMenuButton = React.createClass({displayName: "SideMenuButton",
+        getInitialState(){
+            return {resources:[]};
+        },
+        componentDidMount:function(){
+            
+        },
+        render:function(){
+            return (
+                React.createElement("div", {className: "btn-group"}, 
+                    React.createElement("button", {type: "button", className: "btn btn-primary"}, "FHIR Test"), 
+                    React.createElement("button", {type: "button", className: "btn btn-primary dropdown-toggle", "data-toggle": "dropdown"}, 
+                        "Options ", React.createElement("span", {className: "caret"}), 
+                        React.createElement("span", {className: "sr-only"}, "Toggle Dropdown")
+                    ), 
+                    React.createElement("ul", {className: "dropdown-menu customed-menu", role: "menu"}, 
+                    this.props.resources.map(function(resource){
+                        return (
+                        React.createElement("li", null, 
+                            React.createElement("label", null, 
+                                React.createElement("input", {type: "checkbox", checked: resource.checked}), " ", resource.name
+                            )
+                        )
+                        );
+                    },this)
+                    )
+                )
+            );
+        }
+    });
+    var TestButton = app.TestButton = React.createClass({displayName: "TestButton",
         handleClick: function() {
             this.props.submitTestTask(this.props.btnType);
         },
