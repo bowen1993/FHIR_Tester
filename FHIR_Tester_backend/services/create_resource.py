@@ -3,7 +3,7 @@ from services.genomics_test_generator.fhir_genomics_test_gene import *
 import os
 import json
 
-base_resource_list = ['Patient','Device','Encounter','ImagingStudy','Media', 'Observation', 'Practitioner', 'Provenance','Specimen']
+base_resource_list = ['Patient','Device','Encounter','ImagingStudy','Media', 'Observation', 'Practitioner', 'Provenance','Specimen', 'DiagnosticRequest']
 
 def create_pre_resources(url, basepath, access_token=None):
     #walk through all resource files
@@ -24,6 +24,13 @@ def create_pre_resources(url, basepath, access_token=None):
                     else:
                         filepath_dict[resource_name] = [fullFilename]
         for resource_name in base_resource_list:
+            if not url.endswith('/'):
+                    url += '/'
+            ids = get_resource_id_list(url, resource_name, access_token)
+            if ids:
+                id_dict[resource_name] = ids
+                print '%s exists, passing' % resource_name
+                continue
             for fullFilename in filepath_dict[resource_name]:
                 resource_file = open(fullFilename, 'r')
                 resource_obj = json.loads(resource_file.read())

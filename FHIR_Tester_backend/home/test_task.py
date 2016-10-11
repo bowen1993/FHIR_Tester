@@ -119,9 +119,12 @@ class test_task:
         output = open(output_filename, 'r')
         for line in output.xreadlines():
             trimline = line[:-1]
+            infos = trimline.split(':')
+            while len(infos) < 3:
+                infos.append('')
             with transaction.atomic():
                 try:
-                    new_task_step = task_steps(task_id=self.task_name,desc=trimline)
+                    new_task_step = task_steps(task_id=self.task_name,step_desc='%s %s' % (infos[1], infos[2]), name=infos[0])
                     new_task_step.save()
                 except:
                     print 'Save step error, task: %s' % self.task_name

@@ -3,6 +3,7 @@ from request_sender import *
 from services.create_resource import *
 import random
 import json
+import traceback
 
 from django.db import transaction
 from home.models import task, task_steps, step_detail
@@ -108,7 +109,7 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
             })
             save_step_detail(step_obj, {
                 'status': False,
-                'desc': 'Resource %s can not be processed. %s' %(resource_name, hint),
+                'desc': 'Resource %s can not be processed. %s' %(resource_type, hint),
                 'req_header':req_header,
                 'res_header': res_header,
                 'response':response,
@@ -405,6 +406,7 @@ def create_one_step(task_id, step_info, step_obj=None):
             try:
                 new_task_step.save()
             except:
+                traceback.print_exc()
                 print 'step can not be created'
                 return None
             return new_task_step

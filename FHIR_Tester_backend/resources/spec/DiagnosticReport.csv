@@ -22,7 +22,7 @@ Element,Type,Control,Binding,Reference,Binding_Url,Binding_Value,Correct_System
  DiagnosticReport.modifierExtension,Extension,0..*,,,,,
  DiagnosticReport.performer,Reference(Practitioner),1..*,,Practitioner,,,
  DiagnosticReport.presentedForm,Attachment,0..*,,,,,
- DiagnosticReport.request,Reference(DiagnosticRequest),0..*,,DiagnosticOrder,,,
+ DiagnosticReport.request,Reference(DiagnosticRequest),0..*,,DiagnosticRequest,,,
  DiagnosticReport.result,Reference(Observation),0..*,,Observation,,,
  DiagnosticReport.specimen,Reference(Specimen),0..*,,Specimen,,,
  DiagnosticReport.status,code,1..1,The status of the diagnostic report as a whole.The codes SHALL be taken from DiagnosticReportStatus,,http://hl7-fhir.github.io/valueset-diagnostic-report-status.html,"{""code"":""final"", ""customed"":""status""}",http://hl7.org/fhir/diagnostic-report-status

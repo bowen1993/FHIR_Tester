@@ -8,22 +8,41 @@ var app = app || {};
             return {resources:[]};
         },
         componentDidMount:function(){
-            
+            $.get(app.host+ '/home/resources', function (result) {
+                if( result.isSuccessful ){
+                    this.setState({resources:result.names});
+                }
+            }.bind(this));
+        },
+        onResourceChange:function(){
+            var resource_state = []; 
+            for ( var i = 0; i < this.state.resources.length; i++ ){
+                var resource_name = this.state.resources[i].name
+                resource_state.push({
+                    name:resource_name,
+                    checked:this.refs[resource_name].checked
+                });
+            }
+            this.setState({resources:resource_state});
+            // this.props.updateResource(resource_state);
+        },
+        handleClick:function(){
+            this.props.submitTestTask(app.FHIR_TEST,this.state.resources);
         },
         render:function(){
             return (
                 <div className="btn-group">
-                    <button type="button" className="btn btn-primary">FHIR Test</button>
+                    <button type="button" onClick={this.handleClick} className="btn btn-primary">FHIR Test</button>
                     <button type="button" className="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                         Options <span className="caret"></span>
                         <span className="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul className="dropdown-menu customed-menu" role="menu">
-                    {this.props.resources.map(function(resource){
+                    {this.state.resources.map(function(resource){
                         return (
                         <li>
                             <label>
-                                <input type="checkbox" checked={resource.checked}/> {resource.name}
+                                <input ref={resource.name} onChange={this.onResourceChange} type="checkbox" checked={resource.checked}/> {resource.name}
                             </label>
                         </li>
                         );

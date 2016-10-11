@@ -1,0 +1,158 @@
+{
+  "resourceType": "DiagnosticRequest",
+  "id": "139588",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2016-09-16T01:32:37.941-04:00"
+  },
+  "language": "en-US",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">tEplYKes/7TmjjQHfdIOhg==</div>"
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "type": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0203",
+            "code": "PRN",
+            "display": "WUY+lamewfVB4KKBztfbgg==",
+            "userSelected": true
+          }
+        ],
+        "text": "Nvg5++IijMKBoxyUAhguLA=="
+      },
+      "system": "http://projectcrucible.org/+cimDxDb0LXGpcRNUO9HCw==",
+      "value": "0T3+LLIENUH5blelyLt1+g==",
+      "period": {
+        "start": "2016-09-16T01:33:53.128Z",
+        "end": "2016-09-16T01:33:53.128Z"
+      },
+      "assigner": {
+        "display": "Organization VOP3ewd3RaEbMfGQWd++MQ=="
+      }
+    }
+  ],
+  "definition": [
+    {
+      "display": "Resource hPl9RqatJpruQUr8/W6aoA=="
+    }
+  ],
+  "basedOn": [
+    {
+      "display": "Resource iwQN5+DZolUBCCRnNoQ3Ew=="
+    }
+  ],
+  "replaces": [
+    {
+      "display": "Resource RvtAfncfqyruhm6Cyk6tcg=="
+    }
+  ],
+  "requisition": {
+    "use": "temp",
+    "type": {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/v2/0203",
+          "code": "MCN",
+          "display": "FYYWQzdiDiygPVurTy3syw==",
+          "userSelected": true
+        }
+      ],
+      "text": "6v3jfdq2ENYFC6x2pciQ8A=="
+    },
+    "system": "http://projectcrucible.org/f/7Th/bDJ2RI58lfFOVg5g==",
+    "value": "yi6eMByzR6ER56rrRNqr+w==",
+    "period": {
+      "start": "2016-09-16T01:33:53.129Z",
+      "end": "2016-09-16T01:33:53.129Z"
+    },
+    "assigner": {
+      "display": "Organization Gg7FG4oL+l0T7XrZYTFLqQ=="
+    }
+  },
+  "status": "entered-in-error",
+  "stage": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/request-stage",
+        "code": "encoded",
+        "display": "1VI35UEMs/BCauNstEmnug==",
+        "userSelected": true
+      }
+    ],
+    "text": "8I68JpqoQzfIr1Mev0sgmg=="
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "17014-2",
+        "display": "v8nhBSNAxoE6hVu8Gs8L5g==",
+        "userSelected": false
+      }
+    ],
+    "text": "O2yCJ4UFnA3NHdoGMZoklQ=="
+  },
+  "subject": {
+    "display": "Location OGhOpufgvg+He09Z54wWbQ=="
+  },
+  "context": {
+    "display": "Encounter 9svpCqF2k9NQ8ykDWXFvAQ=="
+  },
+  "occurrencePeriod": {
+    "start": "2016-09-16T01:33:53.129Z",
+    "end": "2016-09-16T01:33:53.129Z"
+  },
+  "authored": "2016-09-16T01:33:53.129Z",
+  "requester": {
+    "display": "Practitioner +Ne5UdxHtju1ga7utg0dCQ=="
+  },
+  "performerType": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "116153009",
+        "display": "chjpbkVTbT2sPPMI/L7uIg==",
+        "userSelected": false
+      }
+    ],
+    "text": "pI7Xvd9/aqRoqs2xNFZV9w=="
+  },
+  "performer": {
+    "display": "Device MyiXHDO+hvspSasYvNJibw=="
+  },
+  "reason": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "display": "zE6T1KAaJOhcM4LkAJQhuA==",
+          "userSelected": false
+        }
+      ],
+      "text": "WzJk7bJL0k0nVY2Vx/iDXA=="
+    }
+  ],
+  "supportingInformation": [
+    {
+      "display": "Resource sDxFLq+JqdT9CsprlhmYwA=="
+    }
+  ],
+  "note": [
+    {
+      "authorReference": {
+        "display": "Practitioner 4027SQglfqpoipQfAAamAg=="
+      },
+      "time": "2016-09-16T01:33:53.130Z",
+      "text": "5EnhvQimbFu9+9Cqjr9Csg=="
+    }
+  ],
+  "relevantHistory": [
+    {
+      "display": "Provenance 7ZdTxN0EEWAwHoO5HjM5ig=="
+    }
+  ]
+}

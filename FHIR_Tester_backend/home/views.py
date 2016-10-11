@@ -19,10 +19,15 @@ def submit_task(request):
     code = req_json['code']
     language = req_json['language']
     test_type = req_json['type']
+    resource_list = []
     if test_type == 3:
-        resource_list = req_json['resources']
-    else:
-        resource_list = []
+        resource_state = req_json['resources']
+        print resource_state
+        for item in resource_state:
+            if item['checked']:
+                resource_list.append(item['name'])
+    print resource_list
+        
     if 'chosen_server' in req_json:
         #ser url and access token
         try:

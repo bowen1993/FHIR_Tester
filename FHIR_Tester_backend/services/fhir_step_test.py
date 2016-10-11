@@ -12,6 +12,7 @@ spec_basepath = 'resources/spec/'
 resource_basepath = 'resources/json/'
 
 def test_a_resource(resource_name, url,id_dict,step_obj, access_token=None):
+    print resource_name
     spec_filename = '%s%s.csv' % (spec_basepath, resource_name)
     all_cases = create_all_test_case4type(spec_filename, resource_name)
     #send resource
@@ -43,6 +44,7 @@ def setup(task_id, url, access_token=None):
             detail_info['desc'] = '%s can not be created, test terminated' % key
         details.append(detail_info)
     step_info = form_new_step_info(status,'%s %s' % ('Setup', 'Successfully' if status else 'Failed'), details, 'Setup')
+    create_one_step(task_id ,step_info,step_obj)
     return id_dict
 
 def test_resources(resource_list, task_id, url, access_token=None):

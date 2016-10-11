@@ -67,10 +67,10 @@ var app = app || {};
         updateAccessToken:function(newToken){
             this.setState({access_token:newToken});
         },
-        handleTaskSubmit:function(submitType){
+        handleTaskSubmit:function(submitType, resource=[]){
             //this.state.isLoading = !this.state.isLoading;
             //this.setState({isLoading:!this.state.isLoading});
-
+            // console.log(resource);
             this.refs.res_area.emptyCurrentDisplay();
             var token = $.cookie('fhir_token');
             if( this.state.isCustomedURL ){
@@ -83,6 +83,8 @@ var app = app || {};
                     var post_data = {code:this.state.code,language:'python',type:submitType,chosen_server:this.state.chosen_server, token:token};
                 }
             }
+            post_data['resources'] = resource;
+            console.log(post_data['resources']);
             console.log(post_data);
             var self = this;
             this.setState({isLoading:true});
@@ -118,12 +120,7 @@ var app = app || {};
         },
         componentDidMount:function(){
             window.comp = this;
-            $.get(app.host+ '/home/resources', function (result) {
-                if( result.isSuccessful ){
-                    console.log(result.names)
-                    this.setState({resources:result.names});
-                }
-            }.bind(this));
+            
         },
         updateTestResult:function(res){
             this.setState({isResultReady:true, isLoading:false});
@@ -157,6 +154,9 @@ var app = app || {};
         toggle_report:function(){
             this.setState({isReportShow:!this.state.isReportShow});
         },
+        updateResourceState:function(resource, callback){
+            this.setState({resources:resource});
+        },
         render:function(){
             return (
                 React.createElement("div", {className: "box"}, 
@@ -167,7 +167,7 @@ var app = app || {};
                             React.createElement(TestButton, {btn_name: "App Test", submitTestTask: this.handleTaskSubmit, btnType: app.APP_TEST}), 
                             React.createElement(TestButton, {btn_name: "Server Test", submitTestTask: this.handleTaskSubmit, btnType: app.SERVER_TEST}), 
                             React.createElement(TestButton, {btn_name: "Level Test", submitTestTask: this.handleTaskSubmit, btnType: app.STANDARD_TEST}), 
-                            React.createElement(SideMenuButton, {resources: this.state.resources}), 
+                            React.createElement(SideMenuButton, {updateResource: this.updateResourceState, submitTestTask: this.handleTaskSubmit}), 
                             this.state.isReportReady ? React.createElement("button", {className: "btn btn-primary", onClick: this.toggle_report}, "Report") : null
                         ), 
                         React.createElement("div", {className: "btnArea"}, 

@@ -23,6 +23,8 @@ def create_reference(reference_type=None):
     @return reference object
     @rtype:dict
     '''
+    if reference_type == 'Resource':
+        reference_type = 'Patient'
     reference_str = "%s/%s" % (reference_type if reference_type else random_string_generate(3), "1")
     return {'reference':reference_str}
 
