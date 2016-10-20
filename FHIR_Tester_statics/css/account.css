@@ -3,7 +3,7 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
-    background: linear-gradient(to bottom, #082b4f, #6ba2d0);
+    background: linear-gradient(to bottom, #082b4f, #082b4f 40%, #bbdefb);
     font-family:"Helvetica Neue","Helvetica","Arial","Verdana","sans-serif";
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -50,7 +50,7 @@ div#main{
     margin: 0 auto;
     border: thin solid #aaa;
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.8);
     display: flex;
     flex-flow: column;
     align-items: center;

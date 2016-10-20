@@ -181,7 +181,7 @@ var app = app || {};
                         this.state.isCustomedURL ? React.createElement("div", null, React.createElement(UrlEditor, {updateUrl: this.updateUrl}), React.createElement(TokenEditor, {updateToken: this.updateAccessToken})) : null, 
                         this.state.isLoading ? React.createElement("div", {className: "loading"}, React.createElement("img", {src: "../img/5.png", alt: "loading", class: "img-responsive loading-img"}))  : null, 
                         !this.state.isLoading && this.state.isResultReady ? React.createElement(ResultDisplay, {showFullyDetail: this.showFullyDetail, ref: "res_area"}) : null, 
-                        this.state.isEditting ? React.createElement(CodeEditor, {updateCode: this.updateCode, language: "python"}) : null
+                        this.state.isEditting ? React.createElement(CodeEditor, {frame: document, updateCode: this.updateCode, language: "python"}) : null
                     ), 
                     React.createElement("div", {className: "result-area"}, 
                          this.state.isDetailShow ? React.createElement(FullyDetail, {detail: this.state.curr_detail}) : null

@@ -181,7 +181,7 @@ var app = app || {};
                         {this.state.isCustomedURL ? <div><UrlEditor updateUrl={this.updateUrl}/><TokenEditor updateToken={this.updateAccessToken} /></div> : null}
                         {this.state.isLoading ? <div className="loading"><img src="../img/5.png" alt="loading" class="img-responsive loading-img" /></div>  : null}
                         {!this.state.isLoading && this.state.isResultReady ? <ResultDisplay showFullyDetail={this.showFullyDetail} ref="res_area"/> : null }
-                        {this.state.isEditting ? <CodeEditor updateCode={this.updateCode} language="python"/> : null}
+                        {this.state.isEditting ? <CodeEditor frame={document} updateCode={this.updateCode} language="python"/> : null}
                     </div>
                     <div className="result-area">
                         { this.state.isDetailShow ? <FullyDetail detail={this.state.curr_detail}/> : null }

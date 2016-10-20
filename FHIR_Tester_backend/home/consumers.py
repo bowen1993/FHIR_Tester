@@ -15,7 +15,7 @@ def form_results(task_id):
     for step in task_step_list:
         step_info = {
             'desc':step.step_desc,
-            'addi':step.additional_info,
+            'addi':step.additional_file,
             'details':[]
         }
         details = step_detail.objects.filter(step=step)

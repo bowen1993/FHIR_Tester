@@ -62,8 +62,41 @@ var app = app || {};
         }
     });
     app.CodeEditor = React.createClass({
+        getInitialState:function(){
+            return {isDragging:true}
+        },
         handleType:function(){
             this.props.updateCode(this.editor.session.getValue());
+        },
+        stopFrameListeners: function(frame) {
+            frame = frame || this.props.frame;
+            frame.removeEventListener("dragenter", this._handleFrameDrag);
+            frame.removeEventListener("dragleave", this._handleFrameDrag);
+            frame.removeEventListener("drop", this._handleFrameDrop);
+        },
+        startFrameListeners: function(frame) {
+            frame = frame || this.props.frame;
+            frame.addEventListener("dragenter", this._handleFrameDrag);
+            frame.addEventListener("dragleave", this._handleFrameDrag);
+            frame.addEventListener("drop", this._handleFrameDrop);
+        },
+        _handleWindowDragOverOrDrop: function(event) {
+            event.preventDefault();
+        },
+        _handleFrameDrag: function (event) {
+            // We are listening for events on the 'frame', so every time the user drags over any element in the frame's tree,
+            // the event bubbles up to the frame. By keeping count of how many "dragenters" we get, we can tell if they are still
+            // "draggingOverFrame" (b/c you get one "dragenter" initially, and one "dragenter"/one "dragleave" for every bubble)
+            
+        },
+
+        _handleFrameDrop: function(event) {
+           
+        },
+        componentWillMount: function() {
+            this.startFrameListeners();
+            window.addEventListener("dragover", this._handleWindowDragOverOrDrop);
+            window.addEventListener("drop", this._handleWindowDragOverOrDrop);
         },
         componentDidMount:function(){
             this.editor = ace.edit("codeeditor");
@@ -73,9 +106,20 @@ var app = app || {};
             });
             this.editor.session.setMode("ace/mode/"+this.props.language);
         },
+        componentWillUnmount: function() {
+            this.stopFrameListeners();
+            window.removeEventListener("dragover", this._handleWindowDragOverOrDrop);
+            window.removeEventListener("drop", this._handleWindowDragOverOrDrop);
+        },
+        handleDrop:function(event){
+            event.preventDefault();
+            var files = (event.dataTransfer) ? event.dataTransfer.files : (event.frame) ? event.frame.files : undefined;
+            console.log(files);
+        },
         render:function(){
             return (
-                <div id="codeeditor" onKeyUp={this.handleType} ></div>
+                <div id="codeeditor" onDrop={this.handleDrop} onKeyUp={this.handleType} >
+                </div>
             );
         }
     });
@@ -275,6 +319,11 @@ var app = app || {};
                 this.setState({is_img_hide:!this.state.is_img_hide});
             }
         },
+        componentWillReceiveProps:function(nextProps){
+            if (nextProps.stepInfo.addi.length != 0){
+                this.setState({is_has_image:true})
+            }
+        },
         handleShowFullImage:function(event){
             event.stopPropagation();
             this.setState({is_modal_show:true});
@@ -302,9 +351,9 @@ var app = app || {};
                     </div>
                     <div hidden={this.state.is_img_hide && !this.state.is_has_image} className="step-img-block">
                         <button onClick={this.handleShowFullImage} className="btn btn-primary">Full Image</button>
-                        <img className="img-responsive img-rounded step-img" src={this.props.stepInfo.addi} />
+                        <img className="img-responsive img-rounded step-img" src={app.host + this.props.stepInfo.addi} />
                     </div>
-                    {this.state.is_modal_show && this.state.is_has_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={this.props.stepInfo.addi} />} /> : null}
+                    {this.state.is_modal_show && this.state.is_has_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={app.host + this.props.stepInfo.addi} />} /> : null}
                 </div>
             );
         }

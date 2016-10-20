@@ -9,6 +9,7 @@ from home.models import task, result, task_steps
 from services.create_resource import *
 from services.genomic_standard_test import *
 from services.fhir_step_test import *
+from services.monkey_test import do_monkey_test
 
 
 def random_string_generate(length):
@@ -71,7 +72,7 @@ class test_task:
             self.baseid_dict = id_dict
             self.status = 'finished'
             self.save_result()
-        else:
+        elif self.test_type == 2:
             if self.is_finished:
                 return
             #write code to file
@@ -114,6 +115,12 @@ class test_task:
                     task_obj.save()
             except:
                 print 'Save result error, task: %s' % self.task_name
+        elif self.test_type == 1:
+            if self.is_finished:
+                return
+            do_monkey_test(self.code, self.task_name)
+            self.status='finished'
+            self.save_result()
         print 'finished'
     def save_steps(self, output_filename):
         output = open(output_filename, 'r')

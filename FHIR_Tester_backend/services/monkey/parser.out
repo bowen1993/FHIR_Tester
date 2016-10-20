@@ -1,0 +1,2016 @@
+Created by PLY version 3.8 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    Empty
+    True
+    EQUAL
+    Page
+    False
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> program compound_action actions
+Rule 2     program -> compound_action actions
+Rule 3     program -> program actions
+Rule 4     program -> actions
+Rule 5     program -> error
+Rule 6     actions -> actions action
+Rule 7     actions -> action
+Rule 8     action -> Auth STRING STRING NEWLINE
+Rule 9     action -> movement BOOL NEWLINE
+Rule 10    action -> movement NEWLINE
+Rule 11    action -> movement target STRING BOOL NEWLINE
+Rule 12    action -> movement target STRING NEWLINE
+Rule 13    action -> movement target BOOL NEWLINE
+Rule 14    action -> movement target NEWLINE
+Rule 15    action -> movement STRING NEWLINE
+Rule 16    action -> Judge target STRING NEWLINE
+Rule 17    action -> Judge target Not STRING NEWLINE
+Rule 18    action -> NEWLINE
+Rule 19    action -> error NEWLINE
+Rule 20    movement -> Prefer
+Rule 21    movement -> Patient
+Rule 22    movement -> Visit
+Rule 23    movement -> Blind
+Rule 24    movement -> Click
+Rule 25    movement -> Input
+Rule 26    movement -> Choose
+Rule 27    movement -> Back
+Rule 28    movement -> Forward
+Rule 29    movement -> Accept
+Rule 30    movement -> Auth
+Rule 31    movement -> Dismiss
+Rule 32    movement -> Press
+Rule 33    movement -> Switch
+Rule 34    movement -> Enter
+Rule 35    movement -> error
+Rule 36    compound_action -> repeat_block
+Rule 37    compound_action -> task_block
+Rule 38    repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE
+Rule 39    repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE
+Rule 40    task_block -> Task ID NEWLINE actions End
+Rule 41    task_block -> Task ID NEWLINE compound_action End
+Rule 42    target -> STRING STRING
+Rule 43    target -> STRING
+
+Terminals, with rules where they appear
+
+Accept               : 29
+Auth                 : 8 30
+BOOL                 : 9 11 13
+Back                 : 27
+Blind                : 23
+Choose               : 26
+Click                : 24
+Dismiss              : 31
+EQUAL                : 
+Empty                : 
+End                  : 38 39 40 41
+Enter                : 34
+False                : 
+Forward              : 28
+ID                   : 40 41
+Input                : 25
+Judge                : 16 17
+NEWLINE              : 8 9 10 11 12 13 14 15 16 17 18 19 38 38 39 39 40 41
+NUMBER               : 38 39
+Not                  : 17
+Page                 : 
+Patient              : 21
+Prefer               : 20
+Press                : 32
+Repeat               : 38 39
+STRING               : 8 8 11 12 15 16 17 42 42 43
+Switch               : 33
+Task                 : 40 41
+True                 : 
+Visit                : 22
+error                : 5 19 35
+
+Nonterminals, with rules where they appear
+
+action               : 6 7
+actions              : 1 2 3 4 6 38 40
+compound_action      : 1 2 39 41
+movement             : 9 10 11 12 13 14 15
+program              : 1 3 0
+repeat_block         : 36
+target               : 11 12 13 14 16 17
+task_block           : 37
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . program compound_action actions
+    (2) program -> . compound_action actions
+    (3) program -> . program actions
+    (4) program -> . actions
+    (5) program -> . error
+    (36) compound_action -> . repeat_block
+    (37) compound_action -> . task_block
+    (6) actions -> . actions action
+    (7) actions -> . action
+    (38) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
+    (39) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
+    (40) task_block -> . Task ID NEWLINE actions End
+    (41) task_block -> . Task ID NEWLINE compound_action End
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+    error           shift and go to state 25
+    Repeat          shift and go to state 8
+    Task            shift and go to state 15
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+    task_block                     shift and go to state 1
+    repeat_block                   shift and go to state 21
+    compound_action                shift and go to state 2
+    actions                        shift and go to state 4
+    program                        shift and go to state 13
+    action                         shift and go to state 26
+    movement                       shift and go to state 14
+
+state 1
+
+    (37) compound_action -> task_block .
+
+    End             reduce using rule 37 (compound_action -> task_block .)
+    Auth            reduce using rule 37 (compound_action -> task_block .)
+    Judge           reduce using rule 37 (compound_action -> task_block .)
+    NEWLINE         reduce using rule 37 (compound_action -> task_block .)
+    error           reduce using rule 37 (compound_action -> task_block .)
+    Prefer          reduce using rule 37 (compound_action -> task_block .)
+    Patient         reduce using rule 37 (compound_action -> task_block .)
+    Visit           reduce using rule 37 (compound_action -> task_block .)
+    Blind           reduce using rule 37 (compound_action -> task_block .)
+    Click           reduce using rule 37 (compound_action -> task_block .)
+    Input           reduce using rule 37 (compound_action -> task_block .)
+    Choose          reduce using rule 37 (compound_action -> task_block .)
+    Back            reduce using rule 37 (compound_action -> task_block .)
+    Forward         reduce using rule 37 (compound_action -> task_block .)
+    Accept          reduce using rule 37 (compound_action -> task_block .)
+    Dismiss         reduce using rule 37 (compound_action -> task_block .)
+    Press           reduce using rule 37 (compound_action -> task_block .)
+    Switch          reduce using rule 37 (compound_action -> task_block .)
+    Enter           reduce using rule 37 (compound_action -> task_block .)
+
+
+state 2
+
+    (2) program -> compound_action . actions
+    (6) actions -> . actions action
+    (7) actions -> . action
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+    action                         shift and go to state 26
+    actions                        shift and go to state 28
+    movement                       shift and go to state 14
+
+state 3
+
+    (22) movement -> Visit .
+
+    BOOL            reduce using rule 22 (movement -> Visit .)
+    NEWLINE         reduce using rule 22 (movement -> Visit .)
+    STRING          reduce using rule 22 (movement -> Visit .)
+
+
+state 4
+
+    (4) program -> actions .
+    (6) actions -> actions . action
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+  ! shift/reduce conflict for Auth resolved as shift
+  ! shift/reduce conflict for Judge resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for error resolved as shift
+  ! shift/reduce conflict for Prefer resolved as shift
+  ! shift/reduce conflict for Patient resolved as shift
+  ! shift/reduce conflict for Visit resolved as shift
+  ! shift/reduce conflict for Blind resolved as shift
+  ! shift/reduce conflict for Click resolved as shift
+  ! shift/reduce conflict for Input resolved as shift
+  ! shift/reduce conflict for Choose resolved as shift
+  ! shift/reduce conflict for Back resolved as shift
+  ! shift/reduce conflict for Forward resolved as shift
+  ! shift/reduce conflict for Accept resolved as shift
+  ! shift/reduce conflict for Dismiss resolved as shift
+  ! shift/reduce conflict for Press resolved as shift
+  ! shift/reduce conflict for Switch resolved as shift
+  ! shift/reduce conflict for Enter resolved as shift
+    Repeat          reduce using rule 4 (program -> actions .)
+    Task            reduce using rule 4 (program -> actions .)
+    $end            reduce using rule 4 (program -> actions .)
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+  ! Auth            [ reduce using rule 4 (program -> actions .) ]
+  ! Judge           [ reduce using rule 4 (program -> actions .) ]
+  ! NEWLINE         [ reduce using rule 4 (program -> actions .) ]
+  ! error           [ reduce using rule 4 (program -> actions .) ]
+  ! Prefer          [ reduce using rule 4 (program -> actions .) ]
+  ! Patient         [ reduce using rule 4 (program -> actions .) ]
+  ! Visit           [ reduce using rule 4 (program -> actions .) ]
+  ! Blind           [ reduce using rule 4 (program -> actions .) ]
+  ! Click           [ reduce using rule 4 (program -> actions .) ]
+  ! Input           [ reduce using rule 4 (program -> actions .) ]
+  ! Choose          [ reduce using rule 4 (program -> actions .) ]
+  ! Back            [ reduce using rule 4 (program -> actions .) ]
+  ! Forward         [ reduce using rule 4 (program -> actions .) ]
+  ! Accept          [ reduce using rule 4 (program -> actions .) ]
+  ! Dismiss         [ reduce using rule 4 (program -> actions .) ]
+  ! Press           [ reduce using rule 4 (program -> actions .) ]
+  ! Switch          [ reduce using rule 4 (program -> actions .) ]
+  ! Enter           [ reduce using rule 4 (program -> actions .) ]
+
+    action                         shift and go to state 30
+    movement                       shift and go to state 14
+
+state 5
+
+    (26) movement -> Choose .
+
+    BOOL            reduce using rule 26 (movement -> Choose .)
+    NEWLINE         reduce using rule 26 (movement -> Choose .)
+    STRING          reduce using rule 26 (movement -> Choose .)
+
+
+state 6
+
+    (28) movement -> Forward .
+
+    BOOL            reduce using rule 28 (movement -> Forward .)
+    NEWLINE         reduce using rule 28 (movement -> Forward .)
+    STRING          reduce using rule 28 (movement -> Forward .)
+
+
+state 7
+
+    (25) movement -> Input .
+
+    BOOL            reduce using rule 25 (movement -> Input .)
+    NEWLINE         reduce using rule 25 (movement -> Input .)
+    STRING          reduce using rule 25 (movement -> Input .)
+
+
+state 8
+
+    (38) repeat_block -> Repeat . NUMBER NEWLINE actions End NEWLINE
+    (39) repeat_block -> Repeat . NUMBER NEWLINE compound_action End NEWLINE
+
+    NUMBER          shift and go to state 31
+
+
+state 9
+
+    (21) movement -> Patient .
+
+    BOOL            reduce using rule 21 (movement -> Patient .)
+    NEWLINE         reduce using rule 21 (movement -> Patient .)
+    STRING          reduce using rule 21 (movement -> Patient .)
+
+
+state 10
+
+    (18) action -> NEWLINE .
+
+    Auth            reduce using rule 18 (action -> NEWLINE .)
+    Judge           reduce using rule 18 (action -> NEWLINE .)
+    NEWLINE         reduce using rule 18 (action -> NEWLINE .)
+    error           reduce using rule 18 (action -> NEWLINE .)
+    Prefer          reduce using rule 18 (action -> NEWLINE .)
+    Patient         reduce using rule 18 (action -> NEWLINE .)
+    Visit           reduce using rule 18 (action -> NEWLINE .)
+    Blind           reduce using rule 18 (action -> NEWLINE .)
+    Click           reduce using rule 18 (action -> NEWLINE .)
+    Input           reduce using rule 18 (action -> NEWLINE .)
+    Choose          reduce using rule 18 (action -> NEWLINE .)
+    Back            reduce using rule 18 (action -> NEWLINE .)
+    Forward         reduce using rule 18 (action -> NEWLINE .)
+    Accept          reduce using rule 18 (action -> NEWLINE .)
+    Dismiss         reduce using rule 18 (action -> NEWLINE .)
+    Press           reduce using rule 18 (action -> NEWLINE .)
+    Switch          reduce using rule 18 (action -> NEWLINE .)
+    Enter           reduce using rule 18 (action -> NEWLINE .)
+    Repeat          reduce using rule 18 (action -> NEWLINE .)
+    Task            reduce using rule 18 (action -> NEWLINE .)
+    $end            reduce using rule 18 (action -> NEWLINE .)
+    End             reduce using rule 18 (action -> NEWLINE .)
+
+
+state 11
+
+    (8) action -> Auth . STRING STRING NEWLINE
+    (30) movement -> Auth .
+
+  ! shift/reduce conflict for STRING resolved as shift
+    STRING          shift and go to state 32
+    BOOL            reduce using rule 30 (movement -> Auth .)
+    NEWLINE         reduce using rule 30 (movement -> Auth .)
+
+  ! STRING          [ reduce using rule 30 (movement -> Auth .) ]
+
+
+state 12
+
+    (32) movement -> Press .
+
+    BOOL            reduce using rule 32 (movement -> Press .)
+    NEWLINE         reduce using rule 32 (movement -> Press .)
+    STRING          reduce using rule 32 (movement -> Press .)
+
+
+state 13
+
+    (0) S' -> program .
+    (1) program -> program . compound_action actions
+    (3) program -> program . actions
+    (36) compound_action -> . repeat_block
+    (37) compound_action -> . task_block
+    (6) actions -> . actions action
+    (7) actions -> . action
+    (38) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
+    (39) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
+    (40) task_block -> . Task ID NEWLINE actions End
+    (41) task_block -> . Task ID NEWLINE compound_action End
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+    Repeat          shift and go to state 8
+    Task            shift and go to state 15
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+    task_block                     shift and go to state 1
+    repeat_block                   shift and go to state 21
+    compound_action                shift and go to state 33
+    actions                        shift and go to state 34
+    action                         shift and go to state 26
+    movement                       shift and go to state 14
+
+state 14
+
+    (9) action -> movement . BOOL NEWLINE
+    (10) action -> movement . NEWLINE
+    (11) action -> movement . target STRING BOOL NEWLINE
+    (12) action -> movement . target STRING NEWLINE
+    (13) action -> movement . target BOOL NEWLINE
+    (14) action -> movement . target NEWLINE
+    (15) action -> movement . STRING NEWLINE
+    (42) target -> . STRING STRING
+    (43) target -> . STRING
+
+    BOOL            shift and go to state 37
+    NEWLINE         shift and go to state 36
+    STRING          shift and go to state 35
+
+    target                         shift and go to state 38
+
+state 15
+
+    (40) task_block -> Task . ID NEWLINE actions End
+    (41) task_block -> Task . ID NEWLINE compound_action End
+
+    ID              shift and go to state 39
+
+
+state 16
+
+    (16) action -> Judge . target STRING NEWLINE
+    (17) action -> Judge . target Not STRING NEWLINE
+    (42) target -> . STRING STRING
+    (43) target -> . STRING
+
+    STRING          shift and go to state 41
+
+    target                         shift and go to state 40
+
+state 17
+
+    (33) movement -> Switch .
+
+    BOOL            reduce using rule 33 (movement -> Switch .)
+    NEWLINE         reduce using rule 33 (movement -> Switch .)
+    STRING          reduce using rule 33 (movement -> Switch .)
+
+
+state 18
+
+    (34) movement -> Enter .
+
+    BOOL            reduce using rule 34 (movement -> Enter .)
+    NEWLINE         reduce using rule 34 (movement -> Enter .)
+    STRING          reduce using rule 34 (movement -> Enter .)
+
+
+state 19
+
+    (23) movement -> Blind .
+
+    BOOL            reduce using rule 23 (movement -> Blind .)
+    NEWLINE         reduce using rule 23 (movement -> Blind .)
+    STRING          reduce using rule 23 (movement -> Blind .)
+
+
+state 20
+
+    (31) movement -> Dismiss .
+
+    BOOL            reduce using rule 31 (movement -> Dismiss .)
+    NEWLINE         reduce using rule 31 (movement -> Dismiss .)
+    STRING          reduce using rule 31 (movement -> Dismiss .)
+
+
+state 21
+
+    (36) compound_action -> repeat_block .
+
+    End             reduce using rule 36 (compound_action -> repeat_block .)
+    Auth            reduce using rule 36 (compound_action -> repeat_block .)
+    Judge           reduce using rule 36 (compound_action -> repeat_block .)
+    NEWLINE         reduce using rule 36 (compound_action -> repeat_block .)
+    error           reduce using rule 36 (compound_action -> repeat_block .)
+    Prefer          reduce using rule 36 (compound_action -> repeat_block .)
+    Patient         reduce using rule 36 (compound_action -> repeat_block .)
+    Visit           reduce using rule 36 (compound_action -> repeat_block .)
+    Blind           reduce using rule 36 (compound_action -> repeat_block .)
+    Click           reduce using rule 36 (compound_action -> repeat_block .)
+    Input           reduce using rule 36 (compound_action -> repeat_block .)
+    Choose          reduce using rule 36 (compound_action -> repeat_block .)
+    Back            reduce using rule 36 (compound_action -> repeat_block .)
+    Forward         reduce using rule 36 (compound_action -> repeat_block .)
+    Accept          reduce using rule 36 (compound_action -> repeat_block .)
+    Dismiss         reduce using rule 36 (compound_action -> repeat_block .)
+    Press           reduce using rule 36 (compound_action -> repeat_block .)
+    Switch          reduce using rule 36 (compound_action -> repeat_block .)
+    Enter           reduce using rule 36 (compound_action -> repeat_block .)
+
+
+state 22
+
+    (20) movement -> Prefer .
+
+    BOOL            reduce using rule 20 (movement -> Prefer .)
+    NEWLINE         reduce using rule 20 (movement -> Prefer .)
+    STRING          reduce using rule 20 (movement -> Prefer .)
+
+
+state 23
+
+    (27) movement -> Back .
+
+    BOOL            reduce using rule 27 (movement -> Back .)
+    NEWLINE         reduce using rule 27 (movement -> Back .)
+    STRING          reduce using rule 27 (movement -> Back .)
+
+
+state 24
+
+    (29) movement -> Accept .
+
+    BOOL            reduce using rule 29 (movement -> Accept .)
+    NEWLINE         reduce using rule 29 (movement -> Accept .)
+    STRING          reduce using rule 29 (movement -> Accept .)
+
+
+state 25
+
+    (5) program -> error .
+    (19) action -> error . NEWLINE
+    (35) movement -> error .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    Repeat          reduce using rule 5 (program -> error .)
+    Task            reduce using rule 5 (program -> error .)
+    Auth            reduce using rule 5 (program -> error .)
+    Judge           reduce using rule 5 (program -> error .)
+    error           reduce using rule 5 (program -> error .)
+    Prefer          reduce using rule 5 (program -> error .)
+    Patient         reduce using rule 5 (program -> error .)
+    Visit           reduce using rule 5 (program -> error .)
+    Blind           reduce using rule 5 (program -> error .)
+    Click           reduce using rule 5 (program -> error .)
+    Input           reduce using rule 5 (program -> error .)
+    Choose          reduce using rule 5 (program -> error .)
+    Back            reduce using rule 5 (program -> error .)
+    Forward         reduce using rule 5 (program -> error .)
+    Accept          reduce using rule 5 (program -> error .)
+    Dismiss         reduce using rule 5 (program -> error .)
+    Press           reduce using rule 5 (program -> error .)
+    Switch          reduce using rule 5 (program -> error .)
+    Enter           reduce using rule 5 (program -> error .)
+    $end            reduce using rule 5 (program -> error .)
+    NEWLINE         shift and go to state 42
+    BOOL            reduce using rule 35 (movement -> error .)
+    STRING          reduce using rule 35 (movement -> error .)
+
+  ! NEWLINE         [ reduce using rule 5 (program -> error .) ]
+  ! NEWLINE         [ reduce using rule 35 (movement -> error .) ]
+
+
+state 26
+
+    (7) actions -> action .
+
+    Auth            reduce using rule 7 (actions -> action .)
+    Judge           reduce using rule 7 (actions -> action .)
+    NEWLINE         reduce using rule 7 (actions -> action .)
+    error           reduce using rule 7 (actions -> action .)
+    Prefer          reduce using rule 7 (actions -> action .)
+    Patient         reduce using rule 7 (actions -> action .)
+    Visit           reduce using rule 7 (actions -> action .)
+    Blind           reduce using rule 7 (actions -> action .)
+    Click           reduce using rule 7 (actions -> action .)
+    Input           reduce using rule 7 (actions -> action .)
+    Choose          reduce using rule 7 (actions -> action .)
+    Back            reduce using rule 7 (actions -> action .)
+    Forward         reduce using rule 7 (actions -> action .)
+    Accept          reduce using rule 7 (actions -> action .)
+    Dismiss         reduce using rule 7 (actions -> action .)
+    Press           reduce using rule 7 (actions -> action .)
+    Switch          reduce using rule 7 (actions -> action .)
+    Enter           reduce using rule 7 (actions -> action .)
+    Repeat          reduce using rule 7 (actions -> action .)
+    Task            reduce using rule 7 (actions -> action .)
+    $end            reduce using rule 7 (actions -> action .)
+    End             reduce using rule 7 (actions -> action .)
+
+
+state 27
+
+    (24) movement -> Click .
+
+    BOOL            reduce using rule 24 (movement -> Click .)
+    NEWLINE         reduce using rule 24 (movement -> Click .)
+    STRING          reduce using rule 24 (movement -> Click .)
+
+
+state 28
+
+    (2) program -> compound_action actions .
+    (6) actions -> actions . action
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+  ! shift/reduce conflict for Auth resolved as shift
+  ! shift/reduce conflict for Judge resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for error resolved as shift
+  ! shift/reduce conflict for Prefer resolved as shift
+  ! shift/reduce conflict for Patient resolved as shift
+  ! shift/reduce conflict for Visit resolved as shift
+  ! shift/reduce conflict for Blind resolved as shift
+  ! shift/reduce conflict for Click resolved as shift
+  ! shift/reduce conflict for Input resolved as shift
+  ! shift/reduce conflict for Choose resolved as shift
+  ! shift/reduce conflict for Back resolved as shift
+  ! shift/reduce conflict for Forward resolved as shift
+  ! shift/reduce conflict for Accept resolved as shift
+  ! shift/reduce conflict for Dismiss resolved as shift
+  ! shift/reduce conflict for Press resolved as shift
+  ! shift/reduce conflict for Switch resolved as shift
+  ! shift/reduce conflict for Enter resolved as shift
+    Repeat          reduce using rule 2 (program -> compound_action actions .)
+    Task            reduce using rule 2 (program -> compound_action actions .)
+    $end            reduce using rule 2 (program -> compound_action actions .)
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+  ! Auth            [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Judge           [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! NEWLINE         [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! error           [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Prefer          [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Patient         [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Visit           [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Blind           [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Click           [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Input           [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Choose          [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Back            [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Forward         [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Accept          [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Dismiss         [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Press           [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Switch          [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! Enter           [ reduce using rule 2 (program -> compound_action actions .) ]
+
+    action                         shift and go to state 30
+    movement                       shift and go to state 14
+
+state 29
+
+    (19) action -> error . NEWLINE
+    (35) movement -> error .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 42
+    BOOL            reduce using rule 35 (movement -> error .)
+    STRING          reduce using rule 35 (movement -> error .)
+
+  ! NEWLINE         [ reduce using rule 35 (movement -> error .) ]
+
+
+state 30
+
+    (6) actions -> actions action .
+
+    Auth            reduce using rule 6 (actions -> actions action .)
+    Judge           reduce using rule 6 (actions -> actions action .)
+    NEWLINE         reduce using rule 6 (actions -> actions action .)
+    error           reduce using rule 6 (actions -> actions action .)
+    Prefer          reduce using rule 6 (actions -> actions action .)
+    Patient         reduce using rule 6 (actions -> actions action .)
+    Visit           reduce using rule 6 (actions -> actions action .)
+    Blind           reduce using rule 6 (actions -> actions action .)
+    Click           reduce using rule 6 (actions -> actions action .)
+    Input           reduce using rule 6 (actions -> actions action .)
+    Choose          reduce using rule 6 (actions -> actions action .)
+    Back            reduce using rule 6 (actions -> actions action .)
+    Forward         reduce using rule 6 (actions -> actions action .)
+    Accept          reduce using rule 6 (actions -> actions action .)
+    Dismiss         reduce using rule 6 (actions -> actions action .)
+    Press           reduce using rule 6 (actions -> actions action .)
+    Switch          reduce using rule 6 (actions -> actions action .)
+    Enter           reduce using rule 6 (actions -> actions action .)
+    Repeat          reduce using rule 6 (actions -> actions action .)
+    Task            reduce using rule 6 (actions -> actions action .)
+    $end            reduce using rule 6 (actions -> actions action .)
+    End             reduce using rule 6 (actions -> actions action .)
+
+
+state 31
+
+    (38) repeat_block -> Repeat NUMBER . NEWLINE actions End NEWLINE
+    (39) repeat_block -> Repeat NUMBER . NEWLINE compound_action End NEWLINE
+
+    NEWLINE         shift and go to state 43
+
+
+state 32
+
+    (8) action -> Auth STRING . STRING NEWLINE
+
+    STRING          shift and go to state 44
+
+
+state 33
+
+    (1) program -> program compound_action . actions
+    (6) actions -> . actions action
+    (7) actions -> . action
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+    actions                        shift and go to state 45
+    action                         shift and go to state 26
+    movement                       shift and go to state 14
+
+state 34
+
+    (3) program -> program actions .
+    (6) actions -> actions . action
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+  ! shift/reduce conflict for Auth resolved as shift
+  ! shift/reduce conflict for Judge resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for error resolved as shift
+  ! shift/reduce conflict for Prefer resolved as shift
+  ! shift/reduce conflict for Patient resolved as shift
+  ! shift/reduce conflict for Visit resolved as shift
+  ! shift/reduce conflict for Blind resolved as shift
+  ! shift/reduce conflict for Click resolved as shift
+  ! shift/reduce conflict for Input resolved as shift
+  ! shift/reduce conflict for Choose resolved as shift
+  ! shift/reduce conflict for Back resolved as shift
+  ! shift/reduce conflict for Forward resolved as shift
+  ! shift/reduce conflict for Accept resolved as shift
+  ! shift/reduce conflict for Dismiss resolved as shift
+  ! shift/reduce conflict for Press resolved as shift
+  ! shift/reduce conflict for Switch resolved as shift
+  ! shift/reduce conflict for Enter resolved as shift
+    Repeat          reduce using rule 3 (program -> program actions .)
+    Task            reduce using rule 3 (program -> program actions .)
+    $end            reduce using rule 3 (program -> program actions .)
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+  ! Auth            [ reduce using rule 3 (program -> program actions .) ]
+  ! Judge           [ reduce using rule 3 (program -> program actions .) ]
+  ! NEWLINE         [ reduce using rule 3 (program -> program actions .) ]
+  ! error           [ reduce using rule 3 (program -> program actions .) ]
+  ! Prefer          [ reduce using rule 3 (program -> program actions .) ]
+  ! Patient         [ reduce using rule 3 (program -> program actions .) ]
+  ! Visit           [ reduce using rule 3 (program -> program actions .) ]
+  ! Blind           [ reduce using rule 3 (program -> program actions .) ]
+  ! Click           [ reduce using rule 3 (program -> program actions .) ]
+  ! Input           [ reduce using rule 3 (program -> program actions .) ]
+  ! Choose          [ reduce using rule 3 (program -> program actions .) ]
+  ! Back            [ reduce using rule 3 (program -> program actions .) ]
+  ! Forward         [ reduce using rule 3 (program -> program actions .) ]
+  ! Accept          [ reduce using rule 3 (program -> program actions .) ]
+  ! Dismiss         [ reduce using rule 3 (program -> program actions .) ]
+  ! Press           [ reduce using rule 3 (program -> program actions .) ]
+  ! Switch          [ reduce using rule 3 (program -> program actions .) ]
+  ! Enter           [ reduce using rule 3 (program -> program actions .) ]
+
+    action                         shift and go to state 30
+    movement                       shift and go to state 14
+
+state 35
+
+    (15) action -> movement STRING . NEWLINE
+    (42) target -> STRING . STRING
+    (43) target -> STRING .
+
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 46
+    STRING          shift and go to state 47
+    BOOL            reduce using rule 43 (target -> STRING .)
+
+  ! STRING          [ reduce using rule 43 (target -> STRING .) ]
+  ! NEWLINE         [ reduce using rule 43 (target -> STRING .) ]
+
+
+state 36
+
+    (10) action -> movement NEWLINE .
+
+    Auth            reduce using rule 10 (action -> movement NEWLINE .)
+    Judge           reduce using rule 10 (action -> movement NEWLINE .)
+    NEWLINE         reduce using rule 10 (action -> movement NEWLINE .)
+    error           reduce using rule 10 (action -> movement NEWLINE .)
+    Prefer          reduce using rule 10 (action -> movement NEWLINE .)
+    Patient         reduce using rule 10 (action -> movement NEWLINE .)
+    Visit           reduce using rule 10 (action -> movement NEWLINE .)
+    Blind           reduce using rule 10 (action -> movement NEWLINE .)
+    Click           reduce using rule 10 (action -> movement NEWLINE .)
+    Input           reduce using rule 10 (action -> movement NEWLINE .)
+    Choose          reduce using rule 10 (action -> movement NEWLINE .)
+    Back            reduce using rule 10 (action -> movement NEWLINE .)
+    Forward         reduce using rule 10 (action -> movement NEWLINE .)
+    Accept          reduce using rule 10 (action -> movement NEWLINE .)
+    Dismiss         reduce using rule 10 (action -> movement NEWLINE .)
+    Press           reduce using rule 10 (action -> movement NEWLINE .)
+    Switch          reduce using rule 10 (action -> movement NEWLINE .)
+    Enter           reduce using rule 10 (action -> movement NEWLINE .)
+    Repeat          reduce using rule 10 (action -> movement NEWLINE .)
+    Task            reduce using rule 10 (action -> movement NEWLINE .)
+    $end            reduce using rule 10 (action -> movement NEWLINE .)
+    End             reduce using rule 10 (action -> movement NEWLINE .)
+
+
+state 37
+
+    (9) action -> movement BOOL . NEWLINE
+
+    NEWLINE         shift and go to state 48
+
+
+state 38
+
+    (11) action -> movement target . STRING BOOL NEWLINE
+    (12) action -> movement target . STRING NEWLINE
+    (13) action -> movement target . BOOL NEWLINE
+    (14) action -> movement target . NEWLINE
+
+    STRING          shift and go to state 49
+    BOOL            shift and go to state 51
+    NEWLINE         shift and go to state 50
+
+
+state 39
+
+    (40) task_block -> Task ID . NEWLINE actions End
+    (41) task_block -> Task ID . NEWLINE compound_action End
+
+    NEWLINE         shift and go to state 52
+
+
+state 40
+
+    (16) action -> Judge target . STRING NEWLINE
+    (17) action -> Judge target . Not STRING NEWLINE
+
+    STRING          shift and go to state 54
+    Not             shift and go to state 53
+
+
+state 41
+
+    (42) target -> STRING . STRING
+    (43) target -> STRING .
+
+  ! shift/reduce conflict for STRING resolved as shift
+    STRING          shift and go to state 47
+    Not             reduce using rule 43 (target -> STRING .)
+
+  ! STRING          [ reduce using rule 43 (target -> STRING .) ]
+
+
+state 42
+
+    (19) action -> error NEWLINE .
+
+    Auth            reduce using rule 19 (action -> error NEWLINE .)
+    Judge           reduce using rule 19 (action -> error NEWLINE .)
+    NEWLINE         reduce using rule 19 (action -> error NEWLINE .)
+    error           reduce using rule 19 (action -> error NEWLINE .)
+    Prefer          reduce using rule 19 (action -> error NEWLINE .)
+    Patient         reduce using rule 19 (action -> error NEWLINE .)
+    Visit           reduce using rule 19 (action -> error NEWLINE .)
+    Blind           reduce using rule 19 (action -> error NEWLINE .)
+    Click           reduce using rule 19 (action -> error NEWLINE .)
+    Input           reduce using rule 19 (action -> error NEWLINE .)
+    Choose          reduce using rule 19 (action -> error NEWLINE .)
+    Back            reduce using rule 19 (action -> error NEWLINE .)
+    Forward         reduce using rule 19 (action -> error NEWLINE .)
+    Accept          reduce using rule 19 (action -> error NEWLINE .)
+    Dismiss         reduce using rule 19 (action -> error NEWLINE .)
+    Press           reduce using rule 19 (action -> error NEWLINE .)
+    Switch          reduce using rule 19 (action -> error NEWLINE .)
+    Enter           reduce using rule 19 (action -> error NEWLINE .)
+    Repeat          reduce using rule 19 (action -> error NEWLINE .)
+    Task            reduce using rule 19 (action -> error NEWLINE .)
+    $end            reduce using rule 19 (action -> error NEWLINE .)
+    End             reduce using rule 19 (action -> error NEWLINE .)
+
+
+state 43
+
+    (38) repeat_block -> Repeat NUMBER NEWLINE . actions End NEWLINE
+    (39) repeat_block -> Repeat NUMBER NEWLINE . compound_action End NEWLINE
+    (6) actions -> . actions action
+    (7) actions -> . action
+    (36) compound_action -> . repeat_block
+    (37) compound_action -> . task_block
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (38) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
+    (39) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
+    (40) task_block -> . Task ID NEWLINE actions End
+    (41) task_block -> . Task ID NEWLINE compound_action End
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Repeat          shift and go to state 8
+    Task            shift and go to state 15
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+    task_block                     shift and go to state 1
+    repeat_block                   shift and go to state 21
+    compound_action                shift and go to state 55
+    actions                        shift and go to state 56
+    action                         shift and go to state 26
+    movement                       shift and go to state 14
+
+state 44
+
+    (8) action -> Auth STRING STRING . NEWLINE
+
+    NEWLINE         shift and go to state 57
+
+
+state 45
+
+    (1) program -> program compound_action actions .
+    (6) actions -> actions . action
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+  ! shift/reduce conflict for Auth resolved as shift
+  ! shift/reduce conflict for Judge resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for error resolved as shift
+  ! shift/reduce conflict for Prefer resolved as shift
+  ! shift/reduce conflict for Patient resolved as shift
+  ! shift/reduce conflict for Visit resolved as shift
+  ! shift/reduce conflict for Blind resolved as shift
+  ! shift/reduce conflict for Click resolved as shift
+  ! shift/reduce conflict for Input resolved as shift
+  ! shift/reduce conflict for Choose resolved as shift
+  ! shift/reduce conflict for Back resolved as shift
+  ! shift/reduce conflict for Forward resolved as shift
+  ! shift/reduce conflict for Accept resolved as shift
+  ! shift/reduce conflict for Dismiss resolved as shift
+  ! shift/reduce conflict for Press resolved as shift
+  ! shift/reduce conflict for Switch resolved as shift
+  ! shift/reduce conflict for Enter resolved as shift
+    Repeat          reduce using rule 1 (program -> program compound_action actions .)
+    Task            reduce using rule 1 (program -> program compound_action actions .)
+    $end            reduce using rule 1 (program -> program compound_action actions .)
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+  ! Auth            [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Judge           [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! NEWLINE         [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! error           [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Prefer          [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Patient         [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Visit           [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Blind           [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Click           [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Input           [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Choose          [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Back            [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Forward         [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Accept          [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Dismiss         [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Press           [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Switch          [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! Enter           [ reduce using rule 1 (program -> program compound_action actions .) ]
+
+    action                         shift and go to state 30
+    movement                       shift and go to state 14
+
+state 46
+
+    (15) action -> movement STRING NEWLINE .
+
+    Auth            reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Judge           reduce using rule 15 (action -> movement STRING NEWLINE .)
+    NEWLINE         reduce using rule 15 (action -> movement STRING NEWLINE .)
+    error           reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Prefer          reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Patient         reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Visit           reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Blind           reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Click           reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Input           reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Choose          reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Back            reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Forward         reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Accept          reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Dismiss         reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Press           reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Switch          reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Enter           reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Repeat          reduce using rule 15 (action -> movement STRING NEWLINE .)
+    Task            reduce using rule 15 (action -> movement STRING NEWLINE .)
+    $end            reduce using rule 15 (action -> movement STRING NEWLINE .)
+    End             reduce using rule 15 (action -> movement STRING NEWLINE .)
+
+
+state 47
+
+    (42) target -> STRING STRING .
+
+    STRING          reduce using rule 42 (target -> STRING STRING .)
+    Not             reduce using rule 42 (target -> STRING STRING .)
+    BOOL            reduce using rule 42 (target -> STRING STRING .)
+    NEWLINE         reduce using rule 42 (target -> STRING STRING .)
+
+
+state 48
+
+    (9) action -> movement BOOL NEWLINE .
+
+    Auth            reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Judge           reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    NEWLINE         reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    error           reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Prefer          reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Patient         reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Visit           reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Blind           reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Click           reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Input           reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Choose          reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Back            reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Forward         reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Accept          reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Dismiss         reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Press           reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Switch          reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Enter           reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Repeat          reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    Task            reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    $end            reduce using rule 9 (action -> movement BOOL NEWLINE .)
+    End             reduce using rule 9 (action -> movement BOOL NEWLINE .)
+
+
+state 49
+
+    (11) action -> movement target STRING . BOOL NEWLINE
+    (12) action -> movement target STRING . NEWLINE
+
+    BOOL            shift and go to state 59
+    NEWLINE         shift and go to state 58
+
+
+state 50
+
+    (14) action -> movement target NEWLINE .
+
+    Auth            reduce using rule 14 (action -> movement target NEWLINE .)
+    Judge           reduce using rule 14 (action -> movement target NEWLINE .)
+    NEWLINE         reduce using rule 14 (action -> movement target NEWLINE .)
+    error           reduce using rule 14 (action -> movement target NEWLINE .)
+    Prefer          reduce using rule 14 (action -> movement target NEWLINE .)
+    Patient         reduce using rule 14 (action -> movement target NEWLINE .)
+    Visit           reduce using rule 14 (action -> movement target NEWLINE .)
+    Blind           reduce using rule 14 (action -> movement target NEWLINE .)
+    Click           reduce using rule 14 (action -> movement target NEWLINE .)
+    Input           reduce using rule 14 (action -> movement target NEWLINE .)
+    Choose          reduce using rule 14 (action -> movement target NEWLINE .)
+    Back            reduce using rule 14 (action -> movement target NEWLINE .)
+    Forward         reduce using rule 14 (action -> movement target NEWLINE .)
+    Accept          reduce using rule 14 (action -> movement target NEWLINE .)
+    Dismiss         reduce using rule 14 (action -> movement target NEWLINE .)
+    Press           reduce using rule 14 (action -> movement target NEWLINE .)
+    Switch          reduce using rule 14 (action -> movement target NEWLINE .)
+    Enter           reduce using rule 14 (action -> movement target NEWLINE .)
+    Repeat          reduce using rule 14 (action -> movement target NEWLINE .)
+    Task            reduce using rule 14 (action -> movement target NEWLINE .)
+    $end            reduce using rule 14 (action -> movement target NEWLINE .)
+    End             reduce using rule 14 (action -> movement target NEWLINE .)
+
+
+state 51
+
+    (13) action -> movement target BOOL . NEWLINE
+
+    NEWLINE         shift and go to state 60
+
+
+state 52
+
+    (40) task_block -> Task ID NEWLINE . actions End
+    (41) task_block -> Task ID NEWLINE . compound_action End
+    (6) actions -> . actions action
+    (7) actions -> . action
+    (36) compound_action -> . repeat_block
+    (37) compound_action -> . task_block
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (38) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
+    (39) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
+    (40) task_block -> . Task ID NEWLINE actions End
+    (41) task_block -> . Task ID NEWLINE compound_action End
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Repeat          shift and go to state 8
+    Task            shift and go to state 15
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+    task_block                     shift and go to state 1
+    repeat_block                   shift and go to state 21
+    compound_action                shift and go to state 61
+    actions                        shift and go to state 62
+    action                         shift and go to state 26
+    movement                       shift and go to state 14
+
+state 53
+
+    (17) action -> Judge target Not . STRING NEWLINE
+
+    STRING          shift and go to state 63
+
+
+state 54
+
+    (16) action -> Judge target STRING . NEWLINE
+
+    NEWLINE         shift and go to state 64
+
+
+state 55
+
+    (39) repeat_block -> Repeat NUMBER NEWLINE compound_action . End NEWLINE
+
+    End             shift and go to state 65
+
+
+state 56
+
+    (38) repeat_block -> Repeat NUMBER NEWLINE actions . End NEWLINE
+    (6) actions -> actions . action
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+    End             shift and go to state 66
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+    action                         shift and go to state 30
+    movement                       shift and go to state 14
+
+state 57
+
+    (8) action -> Auth STRING STRING NEWLINE .
+
+    Auth            reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Judge           reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    NEWLINE         reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    error           reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Prefer          reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Patient         reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Visit           reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Blind           reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Click           reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Input           reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Choose          reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Back            reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Forward         reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Accept          reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Dismiss         reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Press           reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Switch          reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Enter           reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Repeat          reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    Task            reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    $end            reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    End             reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+
+
+state 58
+
+    (12) action -> movement target STRING NEWLINE .
+
+    Auth            reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Judge           reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    NEWLINE         reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    error           reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Prefer          reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Patient         reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Visit           reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Blind           reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Click           reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Input           reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Choose          reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Back            reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Forward         reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Accept          reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Dismiss         reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Press           reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Switch          reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Enter           reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Repeat          reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    Task            reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    $end            reduce using rule 12 (action -> movement target STRING NEWLINE .)
+    End             reduce using rule 12 (action -> movement target STRING NEWLINE .)
+
+
+state 59
+
+    (11) action -> movement target STRING BOOL . NEWLINE
+
+    NEWLINE         shift and go to state 67
+
+
+state 60
+
+    (13) action -> movement target BOOL NEWLINE .
+
+    Auth            reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Judge           reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    NEWLINE         reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    error           reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Prefer          reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Patient         reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Visit           reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Blind           reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Click           reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Input           reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Choose          reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Back            reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Forward         reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Accept          reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Dismiss         reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Press           reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Switch          reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Enter           reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Repeat          reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    Task            reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    $end            reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+    End             reduce using rule 13 (action -> movement target BOOL NEWLINE .)
+
+
+state 61
+
+    (41) task_block -> Task ID NEWLINE compound_action . End
+
+    End             shift and go to state 68
+
+
+state 62
+
+    (40) task_block -> Task ID NEWLINE actions . End
+    (6) actions -> actions . action
+    (8) action -> . Auth STRING STRING NEWLINE
+    (9) action -> . movement BOOL NEWLINE
+    (10) action -> . movement NEWLINE
+    (11) action -> . movement target STRING BOOL NEWLINE
+    (12) action -> . movement target STRING NEWLINE
+    (13) action -> . movement target BOOL NEWLINE
+    (14) action -> . movement target NEWLINE
+    (15) action -> . movement STRING NEWLINE
+    (16) action -> . Judge target STRING NEWLINE
+    (17) action -> . Judge target Not STRING NEWLINE
+    (18) action -> . NEWLINE
+    (19) action -> . error NEWLINE
+    (20) movement -> . Prefer
+    (21) movement -> . Patient
+    (22) movement -> . Visit
+    (23) movement -> . Blind
+    (24) movement -> . Click
+    (25) movement -> . Input
+    (26) movement -> . Choose
+    (27) movement -> . Back
+    (28) movement -> . Forward
+    (29) movement -> . Accept
+    (30) movement -> . Auth
+    (31) movement -> . Dismiss
+    (32) movement -> . Press
+    (33) movement -> . Switch
+    (34) movement -> . Enter
+    (35) movement -> . error
+
+    End             shift and go to state 69
+    Auth            shift and go to state 11
+    Judge           shift and go to state 16
+    NEWLINE         shift and go to state 10
+    error           shift and go to state 29
+    Prefer          shift and go to state 22
+    Patient         shift and go to state 9
+    Visit           shift and go to state 3
+    Blind           shift and go to state 19
+    Click           shift and go to state 27
+    Input           shift and go to state 7
+    Choose          shift and go to state 5
+    Back            shift and go to state 23
+    Forward         shift and go to state 6
+    Accept          shift and go to state 24
+    Dismiss         shift and go to state 20
+    Press           shift and go to state 12
+    Switch          shift and go to state 17
+    Enter           shift and go to state 18
+
+    action                         shift and go to state 30
+    movement                       shift and go to state 14
+
+state 63
+
+    (17) action -> Judge target Not STRING . NEWLINE
+
+    NEWLINE         shift and go to state 70
+
+
+state 64
+
+    (16) action -> Judge target STRING NEWLINE .
+
+    Auth            reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Judge           reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    NEWLINE         reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    error           reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Prefer          reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Patient         reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Visit           reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Blind           reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Click           reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Input           reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Choose          reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Back            reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Forward         reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Accept          reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Dismiss         reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Press           reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Switch          reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Enter           reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Repeat          reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    Task            reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    $end            reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+    End             reduce using rule 16 (action -> Judge target STRING NEWLINE .)
+
+
+state 65
+
+    (39) repeat_block -> Repeat NUMBER NEWLINE compound_action End . NEWLINE
+
+    NEWLINE         shift and go to state 71
+
+
+state 66
+
+    (38) repeat_block -> Repeat NUMBER NEWLINE actions End . NEWLINE
+
+    NEWLINE         shift and go to state 72
+
+
+state 67
+
+    (11) action -> movement target STRING BOOL NEWLINE .
+
+    Auth            reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Judge           reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    NEWLINE         reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    error           reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Prefer          reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Patient         reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Visit           reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Blind           reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Click           reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Input           reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Choose          reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Back            reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Forward         reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Accept          reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Dismiss         reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Press           reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Switch          reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Enter           reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Repeat          reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    Task            reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    $end            reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+    End             reduce using rule 11 (action -> movement target STRING BOOL NEWLINE .)
+
+
+state 68
+
+    (41) task_block -> Task ID NEWLINE compound_action End .
+
+    End             reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Auth            reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Judge           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    NEWLINE         reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    error           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Prefer          reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Patient         reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Visit           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Blind           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Click           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Input           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Choose          reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Back            reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Forward         reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Accept          reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Dismiss         reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Press           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Switch          reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+    Enter           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
+
+
+state 69
+
+    (40) task_block -> Task ID NEWLINE actions End .
+
+    End             reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Auth            reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Judge           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    NEWLINE         reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    error           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Prefer          reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Patient         reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Visit           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Blind           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Click           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Input           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Choose          reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Back            reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Forward         reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Accept          reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Dismiss         reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Press           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Switch          reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Enter           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+
+
+state 70
+
+    (17) action -> Judge target Not STRING NEWLINE .
+
+    Auth            reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Judge           reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    NEWLINE         reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    error           reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Prefer          reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Patient         reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Visit           reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Blind           reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Click           reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Input           reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Choose          reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Back            reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Forward         reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Accept          reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Dismiss         reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Press           reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Switch          reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Enter           reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Repeat          reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    Task            reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    $end            reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+    End             reduce using rule 17 (action -> Judge target Not STRING NEWLINE .)
+
+
+state 71
+
+    (39) repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .
+
+    Auth            reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Judge           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    NEWLINE         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    error           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Prefer          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Patient         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Visit           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Blind           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Click           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Input           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Choose          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Back            reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Forward         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Accept          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Dismiss         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Press           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Switch          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Enter           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    End             reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+
+
+state 72
+
+    (38) repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .
+
+    Auth            reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Judge           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    NEWLINE         reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    error           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Prefer          reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Patient         reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Visit           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Blind           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Click           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Input           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Choose          reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Back            reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Forward         reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Accept          reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Dismiss         reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Press           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Switch          reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Enter           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    End             reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for Auth in state 4 resolved as shift
+WARNING: shift/reduce conflict for Judge in state 4 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 4 resolved as shift
+WARNING: shift/reduce conflict for error in state 4 resolved as shift
+WARNING: shift/reduce conflict for Prefer in state 4 resolved as shift
+WARNING: shift/reduce conflict for Patient in state 4 resolved as shift
+WARNING: shift/reduce conflict for Visit in state 4 resolved as shift
+WARNING: shift/reduce conflict for Blind in state 4 resolved as shift
+WARNING: shift/reduce conflict for Click in state 4 resolved as shift
+WARNING: shift/reduce conflict for Input in state 4 resolved as shift
+WARNING: shift/reduce conflict for Choose in state 4 resolved as shift
+WARNING: shift/reduce conflict for Back in state 4 resolved as shift
+WARNING: shift/reduce conflict for Forward in state 4 resolved as shift
+WARNING: shift/reduce conflict for Accept in state 4 resolved as shift
+WARNING: shift/reduce conflict for Dismiss in state 4 resolved as shift
+WARNING: shift/reduce conflict for Press in state 4 resolved as shift
+WARNING: shift/reduce conflict for Switch in state 4 resolved as shift
+WARNING: shift/reduce conflict for Enter in state 4 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 11 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 25 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 25 resolved as shift
+WARNING: shift/reduce conflict for Auth in state 28 resolved as shift
+WARNING: shift/reduce conflict for Judge in state 28 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 28 resolved as shift
+WARNING: shift/reduce conflict for error in state 28 resolved as shift
+WARNING: shift/reduce conflict for Prefer in state 28 resolved as shift
+WARNING: shift/reduce conflict for Patient in state 28 resolved as shift
+WARNING: shift/reduce conflict for Visit in state 28 resolved as shift
+WARNING: shift/reduce conflict for Blind in state 28 resolved as shift
+WARNING: shift/reduce conflict for Click in state 28 resolved as shift
+WARNING: shift/reduce conflict for Input in state 28 resolved as shift
+WARNING: shift/reduce conflict for Choose in state 28 resolved as shift
+WARNING: shift/reduce conflict for Back in state 28 resolved as shift
+WARNING: shift/reduce conflict for Forward in state 28 resolved as shift
+WARNING: shift/reduce conflict for Accept in state 28 resolved as shift
+WARNING: shift/reduce conflict for Dismiss in state 28 resolved as shift
+WARNING: shift/reduce conflict for Press in state 28 resolved as shift
+WARNING: shift/reduce conflict for Switch in state 28 resolved as shift
+WARNING: shift/reduce conflict for Enter in state 28 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 29 resolved as shift
+WARNING: shift/reduce conflict for Auth in state 34 resolved as shift
+WARNING: shift/reduce conflict for Judge in state 34 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 34 resolved as shift
+WARNING: shift/reduce conflict for error in state 34 resolved as shift
+WARNING: shift/reduce conflict for Prefer in state 34 resolved as shift
+WARNING: shift/reduce conflict for Patient in state 34 resolved as shift
+WARNING: shift/reduce conflict for Visit in state 34 resolved as shift
+WARNING: shift/reduce conflict for Blind in state 34 resolved as shift
+WARNING: shift/reduce conflict for Click in state 34 resolved as shift
+WARNING: shift/reduce conflict for Input in state 34 resolved as shift
+WARNING: shift/reduce conflict for Choose in state 34 resolved as shift
+WARNING: shift/reduce conflict for Back in state 34 resolved as shift
+WARNING: shift/reduce conflict for Forward in state 34 resolved as shift
+WARNING: shift/reduce conflict for Accept in state 34 resolved as shift
+WARNING: shift/reduce conflict for Dismiss in state 34 resolved as shift
+WARNING: shift/reduce conflict for Press in state 34 resolved as shift
+WARNING: shift/reduce conflict for Switch in state 34 resolved as shift
+WARNING: shift/reduce conflict for Enter in state 34 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 35 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 35 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 41 resolved as shift
+WARNING: shift/reduce conflict for Auth in state 45 resolved as shift
+WARNING: shift/reduce conflict for Judge in state 45 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 45 resolved as shift
+WARNING: shift/reduce conflict for error in state 45 resolved as shift
+WARNING: shift/reduce conflict for Prefer in state 45 resolved as shift
+WARNING: shift/reduce conflict for Patient in state 45 resolved as shift
+WARNING: shift/reduce conflict for Visit in state 45 resolved as shift
+WARNING: shift/reduce conflict for Blind in state 45 resolved as shift
+WARNING: shift/reduce conflict for Click in state 45 resolved as shift
+WARNING: shift/reduce conflict for Input in state 45 resolved as shift
+WARNING: shift/reduce conflict for Choose in state 45 resolved as shift
+WARNING: shift/reduce conflict for Back in state 45 resolved as shift
+WARNING: shift/reduce conflict for Forward in state 45 resolved as shift
+WARNING: shift/reduce conflict for Accept in state 45 resolved as shift
+WARNING: shift/reduce conflict for Dismiss in state 45 resolved as shift
+WARNING: shift/reduce conflict for Press in state 45 resolved as shift
+WARNING: shift/reduce conflict for Switch in state 45 resolved as shift
+WARNING: shift/reduce conflict for Enter in state 45 resolved as shift

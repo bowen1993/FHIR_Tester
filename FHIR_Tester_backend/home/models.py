@@ -31,7 +31,7 @@ class result(models.Model):
 class task_steps(models.Model):
     task = models.ForeignKey(task)
     step_desc = models.TextField(null=True)
-    additional_info = models.CharField(max_length=256, null=True)
+    additional_file = models.CharField(max_length=256, null=True)
     name = models.CharField(max_length=64, null=True)
 
 class step_detail(models.Model):
