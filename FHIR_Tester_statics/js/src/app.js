@@ -157,6 +157,12 @@ var app = app || {};
         updateResourceState:function(resource, callback){
             this.setState({resources:resource});
         },
+        loadAppSample:function(){
+            this.refs.codeeditor.loadAppTestSample()
+        },
+        loadServerSample:function(){
+            this.refs.codeeditor.loadServerTestSample()
+        },
         render:function(){
             return (
                 <div className="box">
@@ -170,6 +176,12 @@ var app = app || {};
                             <SideMenuButton updateResource={this.updateResourceState} submitTestTask={this.handleTaskSubmit}/>
                             {this.state.isReportReady ? <button className="btn btn-primary" onClick={this.toggle_report}>Report</button> : null }
                         </div>
+                        {this.state.isEditting ?<div className="btnArea">
+                            <button onClick={this.loadAppSample} className="btn btn-primary">Load App Sample</button>
+                            <span> </span>
+                            <button onClick={this.loadServerSample} className="btn btn-primary">Load Server Test Sample</button>
+                        </div> : null}
+                        
                         <div className="btnArea">
                             <label>
                                 <input type="checkbox" checked={this.state.isEditting} onChange={this.toggleEditting}/> Code Editor
@@ -181,7 +193,7 @@ var app = app || {};
                         {this.state.isCustomedURL ? <div><UrlEditor updateUrl={this.updateUrl}/><TokenEditor updateToken={this.updateAccessToken} /></div> : null}
                         {this.state.isLoading ? <div className="loading"><img src="../img/5.png" alt="loading" class="img-responsive loading-img" /></div>  : null}
                         {!this.state.isLoading && this.state.isResultReady ? <ResultDisplay showFullyDetail={this.showFullyDetail} ref="res_area"/> : null }
-                        {this.state.isEditting ? <CodeEditor frame={document} updateCode={this.updateCode} language="python"/> : null}
+                        {this.state.isEditting ? <CodeEditor frame={document} updateCode={this.updateCode} ref="codeeditor" language="python"/> : null}
                     </div>
                     <div className="result-area">
                         { this.state.isDetailShow ? <FullyDetail detail={this.state.curr_detail}/> : null }

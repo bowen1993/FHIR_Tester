@@ -66,8 +66,7 @@ def p_action_auth(p):
     p[0] = action_dict
 
 def p_action_single(p):
-    '''action   : movement BOOL NEWLINE
-                | movement NEWLINE
+    '''action   : movement NEWLINE
     '''
     action_dict = {
         'move': p[1][1],

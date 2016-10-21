@@ -106,6 +106,12 @@ var app = app || {};
             });
             this.editor.session.setMode("ace/mode/"+this.props.language);
         },
+        loadAppTestSample:function(){
+            this.editor.setValue(app.app_sample,1);
+        },
+        loadServerTestSample:function(){
+            this.editor.setValue(app.server_sample, 1);
+        },
         componentWillUnmount: function() {
             this.stopFrameListeners();
             window.removeEventListener("dragover", this._handleWindowDragOverOrDrop);
