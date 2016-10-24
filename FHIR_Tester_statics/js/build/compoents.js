@@ -108,9 +108,11 @@ var app = app || {};
         },
         loadAppTestSample:function(){
             this.editor.setValue(app.app_sample,1);
+            this.props.updateCode(this.editor.session.getValue());
         },
         loadServerTestSample:function(){
             this.editor.setValue(app.server_sample, 1);
+            this.props.updateCode(this.editor.session.getValue());
         },
         componentWillUnmount: function() {
             this.stopFrameListeners();
@@ -385,8 +387,10 @@ var app = app || {};
         render:function(){
             return (
                 React.createElement("div", {className: "user-op"}, 
+                    React.createElement("button", {className: "btn btn-user", onClick: this.props.showMatrix}, "FHIR Matrix"), 
                     React.createElement("button", {className: "btn btn-user", onClick: this.props.history_action}, "History"), 
                     React.createElement("button", {className: "btn btn-user", onClick: this.props.search_action}, "Search Task"), 
+
                     React.createElement("button", {className: "btn btn-user", onClick: this.handleLogout}, React.createElement("span", {className: "glyphicon glyphicon-off"}))
                 )
             );
@@ -469,6 +473,16 @@ var app = app || {};
                     )
                 )
             )
+        }
+    });
+    app.MatrixArea = React.createClass({displayName: "MatrixArea",
+        componentDidMount:function(){
+            $.get(app.host+ '/home/rmatrix', function (result) {
+                app.drawMatrix(result);
+            }.bind(this));
+        },
+        render:function(){
+            return (React.createElement("div", {id: "matrix"}))
         }
     });
     var HistoryViewer = app.HistoryViewer = React.createClass({displayName: "HistoryViewer",

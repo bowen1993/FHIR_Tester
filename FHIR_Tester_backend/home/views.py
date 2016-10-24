@@ -8,6 +8,7 @@ from home.task_runner import perform_test
 from home.models import task, server, resource
 from home.search import search_basedon_id
 from services import auth
+from home.matrix import form_resource_martix, form_level_martix
 import traceback
 # Create your views here.
 
@@ -63,6 +64,11 @@ def submit_task(request):
         'isSuccessful':True,
         'task_id':task_id
     }
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+@csrf_exempt
+def get_resource_matrix(request):
+    result = form_resource_martix()
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 @csrf_exempt

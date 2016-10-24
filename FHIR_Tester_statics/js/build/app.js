@@ -19,6 +19,7 @@ var app = app || {};
     var FullyDetail = app.FullyDetail;
     var ReportView = app.ReportView;
     var SideMenuButton = app.SideMenuButton;
+    var MatrixArea = app.MatrixArea;
     app.type2str = function(test_type){
         var typeStr = '';
         switch (test_type)
@@ -47,7 +48,7 @@ var app = app || {};
         };
     var TesterApp = React.createClass({displayName: "TesterApp",
         getInitialState: function() {
-            return {resources:[],isReportReady:false,test_report:{},code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false, isReportShow:false};
+            return {resources:[],isReportReady:false,test_report:{},code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false, isReportShow:false,isRMatrixShow:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
@@ -135,6 +136,9 @@ var app = app || {};
         handleHideReportModal(){
             this.setState({isReportShow:false});
         },
+        handleHideMatrixModal(){
+            this.setState({isRMatrixShow:false});
+        },
         showFullyDetail:function(detail){
             if( this.state.curr_detail === detail ){
                 this.setState({isDetailShow:!this.state.isDetailShow})
@@ -163,10 +167,13 @@ var app = app || {};
         loadServerSample:function(){
             this.refs.codeeditor.loadServerTestSample()
         },
+        showRMatrixView:function(){
+            this.setState({isRMatrixShow:!this.state.isRMatrixShow});
+        },
         render:function(){
             return (
                 React.createElement("div", {className: "box"}, 
-                    React.createElement(UserBtnArea, {history_action: this.showHistoryView, search_action: this.showSearchView}), 
+                    React.createElement(UserBtnArea, {history_action: this.showHistoryView, search_action: this.showSearchView, showMatrix: this.showRMatrixView}), 
                     React.createElement("div", {className: "test-input"}, 
                         React.createElement(ServerList, {updateServer: this.updateChosenServer}), 
                         React.createElement("div", {className: "btnArea"}, 
@@ -200,7 +207,8 @@ var app = app || {};
                     ), 
                     this.state.is_history_show ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "History", content: React.createElement(HistoryViewer, null)}) : null, 
                     this.state.isSearchShow ? React.createElement(Modal, {handleHideModal: this.handleSearchHideModal, title: "Search Task", content: React.createElement(TaskSearchView, null)}) : null, 
-                    this.state.isReportShow ? React.createElement(Modal, {handleHideModal: this.handleHideReportModal, title: "Test Report", content: React.createElement(ReportView, {report: this.state.test_report})}) : null
+                    this.state.isReportShow ? React.createElement(Modal, {handleHideModal: this.handleHideReportModal, title: "Test Report", content: React.createElement(ReportView, {report: this.state.test_report})}) : null, 
+                    this.state.isRMatrixShow ? React.createElement(Modal, {handleHideMatrixModal: this.handleHideMatrixModal, title: "Test Matrix", content: React.createElement(MatrixArea, null)}) : null
                 )
             );
         }

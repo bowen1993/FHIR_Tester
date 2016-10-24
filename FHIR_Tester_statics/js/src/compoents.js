@@ -108,9 +108,11 @@ var app = app || {};
         },
         loadAppTestSample:function(){
             this.editor.setValue(app.app_sample,1);
+            this.props.updateCode(this.editor.session.getValue());
         },
         loadServerTestSample:function(){
             this.editor.setValue(app.server_sample, 1);
+            this.props.updateCode(this.editor.session.getValue());
         },
         componentWillUnmount: function() {
             this.stopFrameListeners();
@@ -385,8 +387,10 @@ var app = app || {};
         render:function(){
             return (
                 <div className="user-op">
+                    <button className="btn btn-user" onClick={this.props.showMatrix}>FHIR Matrix</button>
                     <button className="btn btn-user" onClick={this.props.history_action}>History</button>
                     <button className="btn btn-user" onClick={this.props.search_action}>Search Task</button>
+
                     <button className="btn btn-user" onClick={this.handleLogout}><span className="glyphicon glyphicon-off"></span></button>
                 </div>
             );
@@ -469,6 +473,16 @@ var app = app || {};
                     </div>
                 </div>
             )
+        }
+    });
+    app.MatrixArea = React.createClass({
+        componentDidMount:function(){
+            $.get(app.host+ '/home/rmatrix', function (result) {
+                app.drawMatrix(result);
+            }.bind(this));
+        },
+        render:function(){
+            return (<div id="matrix"></div>)
         }
     });
     var HistoryViewer = app.HistoryViewer = React.createClass({

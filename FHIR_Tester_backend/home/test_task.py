@@ -93,15 +93,15 @@ class test_task:
                 self.form_error_report("Can't excute code")
                 self.save_result()
                 return
-            res = Runner.excute(code_filename, output_filename, command, 1000, 100)
-            #print res
+            res = Runner.excute(code_filename, output_filename, command, 100000, 5000)
+            print res
             #analyse output file
             self.save_steps(output_filename)
             #remove code & output file
             print code_filename
             print output_filename
             os.remove(code_filename)
-            os.remove(output_filename)
+            #os.remove(output_filename)
             #save result to database
             self.result = res.split(',')[0]
             self.status='finished'
