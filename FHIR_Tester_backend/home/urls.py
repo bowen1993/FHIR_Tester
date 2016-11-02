@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^search$', views.search_task),
     url(r'^resources$', views.get_resources),
     url(r'^rmatrix$', views.get_resource_matrix),
+    url(r'^times$', views.all_test_time),
 ]

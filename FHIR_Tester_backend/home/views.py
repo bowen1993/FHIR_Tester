@@ -160,3 +160,17 @@ def search_task(request):
     result['tasks'] = search_basedon_id(keyword)
     return HttpResponse(json.dumps(result), content_type="application/json")
 
+
+@csrf_exempt
+def all_test_time(request):
+    req_json = json.loads(request.body)
+    ttype = req_json['ttype']
+    result = {
+        'isSuccessful':True
+    }
+    time_list = task.objects.filter(task_type=ttype).values_list('create_time', flat=True)
+    strtime_list = []
+    for time_obj in time_list:
+        strtime_list.append(str(time_obj))
+    result['times'] = strtime_list
+    return HttpResponse(json.dumps(result), content_type="application/json")

@@ -232,3 +232,48 @@ ul.customed-menu li label{
     font-weight: 400;
     color:rgba(55, 71, 79, 1);
 }
+
+.matrix-area{
+    width: 100%;
+    margin: 10px auto;
+    padding: 10px;
+}
+
+.matrix-area .btn-area{
+    width:80%;
+    margin: 0 auto;
+    padding: 10px;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+.matrix-area .btn-area .btn-matrix{
+    flex: 1 0 auto;
+    margin: 10px;
+}
+
+.matrix-area .timeline{
+    width:80%;
+    height: 2px;
+    border-radius: 2px;
+    background-color: #546e7a;
+    margin: 10px auto;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.matrix-area .timeline .timedot{
+    width:10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #4caf50;
+}
+
+.matrix-area .timeline .timedot:hover{
+    width: 15px;
+    height: 15px;
+    border-radius: 8px;
+}

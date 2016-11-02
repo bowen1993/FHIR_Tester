@@ -14,6 +14,7 @@ def create_pre_resources(url, basepath, access_token=None):
     if url and len(url) != 0:
         filepath_dict = {}
         id_dict = {}
+        print 'getting resource file'
         for parentDir, dirnames, filenames in os.walk(basepath):
             for filename in filenames:
                 if filename.endswith('json'):
@@ -23,6 +24,7 @@ def create_pre_resources(url, basepath, access_token=None):
                         filepath_dict[resource_name].append(fullFilename)
                     else:
                         filepath_dict[resource_name] = [fullFilename]
+        print 'file getted'
         for resource_name in base_resource_list:
             if not url.endswith('/'):
                     url += '/'

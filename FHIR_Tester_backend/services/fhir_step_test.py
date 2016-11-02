@@ -30,6 +30,7 @@ def perform_resource_test(resource_name,step_obj ,url, id_dict, base_desc,name=N
 def setup(task_id, url, access_token=None):
     step_info = form_new_step_info(True, 'Setting up standard test......', [], 'Setup')
     step_obj = create_one_step(task_id ,step_info)
+    print 'pre created'
     create_res, id_dict = create_pre_resources(url, 'resources', access_token)
     pre_resource_result = ana_pre_creation_result(create_res)
     # print pre_resource_result
@@ -48,6 +49,7 @@ def setup(task_id, url, access_token=None):
     return id_dict
 
 def test_resources(resource_list, task_id, url, access_token=None):
+    print 'setting up'
     id_dict = setup(task_id, url, access_token)
     for resource_name in resource_list:
         step_info = form_new_step_info(True, 'Testing resource %s' % resource_name, [], resource_name)

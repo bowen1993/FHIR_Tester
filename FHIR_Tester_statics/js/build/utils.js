@@ -32,7 +32,7 @@ var app = app || {};
             xn = resources.length;
         var margin = {top: 100, right: 0, bottom: 10, left: 200},
             width = 600,
-            height = 50 *yn;
+            height = 55 *yn;
         var x = d3.scale.ordinal().rangeBands([0, width]),
             y = d3.scale.ordinal().rangeBands([0,height]),
             z = d3.scale.linear().domain([0, 4]).clamp(true);
@@ -85,7 +85,8 @@ var app = app || {};
 	  .each(rowf);
 
 	row.append("line")
-	  .attr("x2", width);
+	  .attr("x2", width)
+      .attr("stroke-width", 2);
 
 	row.append("text")
 	  .attr("x", -6)
@@ -101,7 +102,8 @@ var app = app || {};
 	  .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
 
 	column.append("line")
-	  .attr("x1", -width);
+	  .attr("x1", -width)
+      .attr("stroke-width", 2);
 
 	column.append("text")
 	  .attr("x", 6)

@@ -328,7 +328,7 @@ var app = app || {};
             }
         },
         componentWillReceiveProps:function(nextProps){
-            if (nextProps.stepInfo.addi.length != 0){
+            if (nextProps.stepInfo.addi && nextProps.stepInfo.addi.length != 0){
                 this.setState({is_has_image:true})
             }
         },
@@ -476,13 +476,48 @@ var app = app || {};
         }
     });
     app.MatrixArea = React.createClass({displayName: "MatrixArea",
+        getInitialState:function(){
+            return {'type':app.FHIR_TEST,'time':-1, time_list:[]};
+        },
+        componentWillMount:function(){
+            $.ajax({
+                type:"POST",
+                url:app.host+'/home/times',
+                data:JSON.stringify({'ttype':this.state.type}),
+                dataType:'json',
+                success:function(result){
+                    this.setState({time_list:result['times']});
+                    $('[data-toggle="tooltip"]').tooltip();
+                }.bind(this)
+            })
+        },
         componentDidMount:function(){
             $.get(app.host+ '/home/rmatrix', function (result) {
                 app.drawMatrix(result);
             }.bind(this));
+            $('[data-toggle="tooltip"]').tooltip();
+        },
+        updateTType:function(event){
+            var ttype = event.currentTarget.dataset.ttype
+            this.setState({'type':ttype});
         },
         render:function(){
-            return (React.createElement("div", {id: "matrix"}))
+            return (
+                React.createElement("div", {className: "matrix-area"}, 
+                    React.createElement("div", {className: "btn-area"}, 
+
+                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.FHIR_TEST}, "FHIR Genomics"), 
+                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.STANDARD_TEST}, "Level Test"), 
+                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.SERVER_TEST}, "Server Test")
+                    ), 
+                    React.createElement("div", {className: "timeline"}, 
+                    this.state.time_list.map(function(t){
+                        return React.createElement("div", {className: "timedot", "data-toggle": "tooltip", "data-placement": "bottom", title: t})
+                    },this)
+                    ), 
+                    React.createElement("div", {id: "matrix"})
+                )
+                )
         }
     });
     var HistoryViewer = app.HistoryViewer = React.createClass({displayName: "HistoryViewer",
