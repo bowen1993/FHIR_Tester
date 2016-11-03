@@ -330,6 +330,9 @@ def level4Test(url, id_dict,step_obj, access_token):
         id_list = get_resource_id_list(url, resource_name, access_token)
         hint = ''
         flag = True
+        req_header = None
+        res_header = None
+        response = None
         if id_list and len(id_list) > 0: 
             random_id = random_picker(id_list)
             response, req_header, res_header = send_read_resource_request("%s%s/%s" %(url,resource_name,random_id), access_token)

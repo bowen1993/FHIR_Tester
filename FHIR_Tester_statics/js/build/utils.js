@@ -36,6 +36,7 @@ var app = app || {};
         var x = d3.scale.ordinal().rangeBands([0, width]),
             y = d3.scale.ordinal().rangeBands([0,height]),
             z = d3.scale.linear().domain([0, 4]).clamp(true);
+        d3.select("#matrix").selectAll("*").remove();
         var svg = d3.select("#matrix").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)

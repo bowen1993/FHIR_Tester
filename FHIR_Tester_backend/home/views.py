@@ -8,7 +8,7 @@ from home.task_runner import perform_test
 from home.models import task, server, resource
 from home.search import search_basedon_id
 from services import auth
-from home.matrix import form_resource_martix, form_level_martix
+from home.matrix import form_resource_martix, form_level_martix,form_matrix
 import traceback
 # Create your views here.
 
@@ -171,6 +171,20 @@ def all_test_time(request):
     time_list = task.objects.filter(task_type=ttype).values_list('create_time', flat=True)
     strtime_list = []
     for time_obj in time_list:
-        strtime_list.append(str(time_obj))
+        strtime_list.append(time_obj.strftime('%Y-%m-%d %H:%M:%S'))
     result['times'] = strtime_list
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+@csrf_exempt
+def get_certain_matrix(request):
+    req_json = json.loads(request.body)
+    ttype = str(req_json['ttype'])
+    result = {
+        'isSuccessful':True
+    }
+    ttime = None
+    if 'time' in req_json:
+        ttime = req_json['time']
+    print ttime,ttype
+    result['matrix'] = form_matrix(ttype, ttime)
     return HttpResponse(json.dumps(result), content_type="application/json")

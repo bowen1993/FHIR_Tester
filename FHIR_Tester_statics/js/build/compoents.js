@@ -477,7 +477,7 @@ var app = app || {};
     });
     app.MatrixArea = React.createClass({displayName: "MatrixArea",
         getInitialState:function(){
-            return {'type':app.FHIR_TEST,'time':-1, time_list:[]};
+            return {'type':app.FHIR_TEST,'curr_title':'FHIR Genomics','time':'', time_list:[]};
         },
         componentWillMount:function(){
             $.ajax({
@@ -491,28 +491,70 @@ var app = app || {};
                 }.bind(this)
             })
         },
+        updateTimeline:function(ttype){
+            $.ajax({
+                type:"POST",
+                url:app.host+'/home/times',
+                data:JSON.stringify({'ttype':ttype}),
+                dataType:'json',
+                success:function(result){
+                    this.setState({time_list:result['times']});
+                    $('[data-toggle="tooltip"]').tooltip();
+                }.bind(this)
+            })
+        },
         componentDidMount:function(){
             $.get(app.host+ '/home/rmatrix', function (result) {
                 app.drawMatrix(result);
             }.bind(this));
             $('[data-toggle="tooltip"]').tooltip();
         },
+        transTypeTitle:function(ttype){
+            if( ttype == app.FHIR_TEST){
+                return 'FHIR Genomics';
+            }else if( ttype == app.SERVER_TEST ){
+                return 'Custom Server Test';
+            }else if( ttype == app.STANDARD_TEST ){
+                return 'Server Level';
+            }else{
+                return "";
+            }
+        },
+        retriveNewMatrix:function(ttype, ttime){
+            $.ajax({
+                type:'POST',
+                dataType:'json',
+                data:JSON.stringify({ttype:ttype, time:ttime}),
+                url:app.host + '/home/matrix',
+                success:function(res){
+                    app.drawMatrix(res.matrix);
+                }.bind(this)
+            })
+        },
         updateTType:function(event){
-            var ttype = event.currentTarget.dataset.ttype
-            this.setState({'type':ttype});
+            var ttype = event.currentTarget.dataset.ttype;
+            var ttype_title = this.transTypeTitle(ttype);
+            this.setState({'type':ttype, curr_title:ttype_title});
+            this.retriveNewMatrix(ttype, this.state.time);
+            this.updateTimeline(ttype);
+        },
+        updateTTime:function(event){
+            var ttime = event.currentTarget.dataset.ttime;
+            this.setState({'time':ttime})
+            this.retriveNewMatrix(this.state.type, ttime);
         },
         render:function(){
             return (
                 React.createElement("div", {className: "matrix-area"}, 
+                React.createElement("div", {className: "title"}, React.createElement("h4", null, this.state.curr_title)), 
                     React.createElement("div", {className: "btn-area"}, 
-
                         React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.FHIR_TEST}, "FHIR Genomics"), 
                         React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.STANDARD_TEST}, "Level Test"), 
                         React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.SERVER_TEST}, "Server Test")
                     ), 
                     React.createElement("div", {className: "timeline"}, 
                     this.state.time_list.map(function(t){
-                        return React.createElement("div", {className: "timedot", "data-toggle": "tooltip", "data-placement": "bottom", title: t})
+                        return React.createElement("div", {onClick: this.updateTTime, className: "timedot", "data-toggle": "tooltip", "data-ttime": t, "data-placement": "bottom", title: t})
                     },this)
                     ), 
                     React.createElement("div", {id: "matrix"})
