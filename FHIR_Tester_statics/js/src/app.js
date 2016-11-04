@@ -44,7 +44,7 @@ var app = app || {};
     }
     var options = {
             lineNumbers: true,
-            mode:'java'
+            mode:'python'
         };
     var TesterApp = React.createClass({
         getInitialState: function() {
@@ -126,6 +126,7 @@ var app = app || {};
         updateTestResult:function(res){
             this.setState({isResultReady:true, isLoading:false});
             this.refs.res_area.displayResult(res);
+            this.refs.full_detail.updateDetail(res.steps);
         },
         handleHideModal(){
             this.setState({is_history_show:false});
@@ -140,11 +141,12 @@ var app = app || {};
             this.setState({isRMatrixShow:false});
         },
         showFullyDetail:function(detail){
-            if( this.state.curr_detail === detail ){
-                this.setState({isDetailShow:!this.state.isDetailShow})
-            }else{
-                this.setState({isDetailShow:true, curr_detail:detail})
-            }
+            console.log(detail);
+            // if( this.state.curr_detail === detail ){
+            //     this.setState({isDetailShow:!this.state.isDetailShow})
+            // }else{
+            //     this.setState({isDetailShow:true, curr_detail:detail})
+            // }
         },
         toggleCustomedURL:function(){
             this.setState({isCustomedURL:!this.state.isCustomedURL});
@@ -203,7 +205,7 @@ var app = app || {};
                         {this.state.isEditting ? <CodeEditor frame={document} updateCode={this.updateCode} ref="codeeditor" language="python"/> : null}
                     </div>
                     <div className="result-area">
-                        { this.state.isDetailShow ? <FullyDetail detail={this.state.curr_detail}/> : null }
+                        <FullyDetail ref="full_detail" />
                     </div>
                     {this.state.is_history_show ? <Modal handleHideModal={this.handleHideModal} title="History" content={<HistoryViewer />} /> : null}
                     {this.state.isSearchShow ? <Modal handleHideModal={this.handleSearchHideModal} title="Search Task" content={<TaskSearchView />} /> : null}

@@ -6,9 +6,7 @@ var app = app || {};
         var ws_scheme = window.location.protocol == "https" ? "wss" : "ws";
         var tasksocket = new ReconnectingWebSocket(ws_scheme + '://localhost:8000/task/' + task_id);
         tasksocket.onmessage = function(message){
-            console.log(message.data);
             var data = JSON.parse(message.data);
-            console.log(data);
             // console.log(window.comp)
             if(data.place == 1){
                 window.comp.updateTestResult(data.step_result);

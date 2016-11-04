@@ -284,16 +284,31 @@ var app = app || {};
     });
 
     var FullyDetail = app.FullyDetail = React.createClass({
+        getInitialState:function(){
+            return {detail_infos:[]}
+        },
+        updateDetail:function(new_details){
+            this.setState({detail_infos:new_details});
+        },
         render:function(){
             return (
                 <div className="result-container">
-                    <div className="result-head"><span className="area-title area-title-black">Test case detail </span>
-                    {this.props.detail.status ? <span className="success-bar">Success</span> : <span className="fail-bar">Fail</span>} 
-                    </div>
-                    <div className="detail-desc-block">
-                            {this.props.detail.desc}
-                    </div>
-                    <HTTPDetail detail={this.props.detail}/>
+                {this.state.detail_infos.map(function(step){
+                    return step.details.map(function(detail){
+                        return <div id={step.index + "_" + detail.index}>
+                                <h3>{step.name + " " + detail.resource_name}</h3>
+                                <div className="result-head"><span className="area-title area-title-black">Test case detail </span>
+                                {detail.status ? <span className="success-bar">Success</span> : <span className="fail-bar">Fail</span>} 
+                                </div>
+                                <div className="detail-desc-block">
+                                        {detail.desc}
+                                </div>
+                                <HTTPDetail detail={detail}/>
+                            </div>
+                    },this)
+                },this)}
+                            
+                
                 </div>
             );
         }
@@ -349,7 +364,7 @@ var app = app || {};
                     <div className="step-detail-area">
                         <div className="detail-hint-block">
                             {this.props.stepInfo.details.map(function(detail){
-                                return <StepDetail fully_detail={detail} status={detail.status} desc={detail.desc} showDetail={this.showDetail} />
+                                return <StepDetail sindex={this.props.stepInfo.index} fully_detail={detail} status={detail.status} desc={detail.desc} showDetail={this.showDetail} />
                             }, this)}
                         </div>
                         {this.state.is_detail_showing ? <div className="detail-desc-block">
@@ -375,7 +390,7 @@ var app = app || {};
         },
         render:function(){
             return (
-                <button onClick={this.onBtnClick} className={this.props.status ? 'btn btn-circle btn-success': 'btn btn-circle btn-danger'}>{ this.props.status ? 'P' : 'F'}</button>
+                <a href={"#"+this.props.sindex+"_"+this.props.fully_detail.index} onClick={this.onBtnClick} className={this.props.status ? 'btn btn-circle btn-success': 'btn btn-circle btn-danger'}>{ this.props.status ? 'P' : 'F'}</a>
             )
         }
     })

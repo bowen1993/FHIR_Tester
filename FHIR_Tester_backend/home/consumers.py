@@ -12,25 +12,33 @@ def form_results(task_id):
         'steps':[]
     }
     task_step_list = task_steps.objects.filter(task_id=task_id)
+    sindex = 0
     for step in task_step_list:
+        dindex = 0
         step_info = {
             'desc':step.step_desc,
             'addi':step.additional_file,
-            'details':[]
+            'details':[],
+            'index':sindex,
+            'name':step.name
         }
         details = step_detail.objects.filter(step=step)
         for detail in details:
             new_detail = {
+                'index':dindex,
                 'desc':detail.detail_desc,
                 'status':detail.detail_status,
                 'req_header':detail.http_request,
                 'req_resource':detail.request_resource,
                 'res_header':detail.http_response,
-                'response_message':detail.response_message
+                'response_message':detail.response_message,
+                'resource_name':detail.resource_name
             }
             step_info['details'].append(new_detail)
+            dindex += 1
 
         res_dict['steps'].append(step_info)
+        sindex += 1
     return res_dict
 
 def form_detil_report(step_obj):

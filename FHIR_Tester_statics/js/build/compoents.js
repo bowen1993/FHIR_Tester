@@ -284,16 +284,31 @@ var app = app || {};
     });
 
     var FullyDetail = app.FullyDetail = React.createClass({displayName: "FullyDetail",
+        getInitialState:function(){
+            return {detail_infos:[]}
+        },
+        updateDetail:function(new_details){
+            this.setState({detail_infos:new_details});
+        },
         render:function(){
             return (
                 React.createElement("div", {className: "result-container"}, 
-                    React.createElement("div", {className: "result-head"}, React.createElement("span", {className: "area-title area-title-black"}, "Test case detail "), 
-                    this.props.detail.status ? React.createElement("span", {className: "success-bar"}, "Success") : React.createElement("span", {className: "fail-bar"}, "Fail")
-                    ), 
-                    React.createElement("div", {className: "detail-desc-block"}, 
-                            this.props.detail.desc
-                    ), 
-                    React.createElement(HTTPDetail, {detail: this.props.detail})
+                this.state.detail_infos.map(function(step){
+                    return step.details.map(function(detail){
+                        return React.createElement("div", {id: step.index + "_" + detail.index}, 
+                                React.createElement("h3", null, step.name + " " + detail.resource_name), 
+                                React.createElement("div", {className: "result-head"}, React.createElement("span", {className: "area-title area-title-black"}, "Test case detail "), 
+                                detail.status ? React.createElement("span", {className: "success-bar"}, "Success") : React.createElement("span", {className: "fail-bar"}, "Fail")
+                                ), 
+                                React.createElement("div", {className: "detail-desc-block"}, 
+                                        detail.desc
+                                ), 
+                                React.createElement(HTTPDetail, {detail: detail})
+                            )
+                    },this)
+                },this)
+                            
+                
                 )
             );
         }
@@ -349,7 +364,7 @@ var app = app || {};
                     React.createElement("div", {className: "step-detail-area"}, 
                         React.createElement("div", {className: "detail-hint-block"}, 
                             this.props.stepInfo.details.map(function(detail){
-                                return React.createElement(StepDetail, {fully_detail: detail, status: detail.status, desc: detail.desc, showDetail: this.showDetail})
+                                return React.createElement(StepDetail, {sindex: this.props.stepInfo.index, fully_detail: detail, status: detail.status, desc: detail.desc, showDetail: this.showDetail})
                             }, this)
                         ), 
                         this.state.is_detail_showing ? React.createElement("div", {className: "detail-desc-block"}, 
@@ -375,7 +390,7 @@ var app = app || {};
         },
         render:function(){
             return (
-                React.createElement("button", {onClick: this.onBtnClick, className: this.props.status ? 'btn btn-circle btn-success': 'btn btn-circle btn-danger'},  this.props.status ? 'P' : 'F')
+                React.createElement("a", {href: "#"+this.props.sindex+"_"+this.props.fully_detail.index, onClick: this.onBtnClick, className: this.props.status ? 'btn btn-circle btn-success': 'btn btn-circle btn-danger'},  this.props.status ? 'P' : 'F')
             )
         }
     })
