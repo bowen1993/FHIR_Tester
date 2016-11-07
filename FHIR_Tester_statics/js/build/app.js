@@ -172,6 +172,29 @@ var app = app || {};
         showRMatrixView:function(){
             this.setState({isRMatrixShow:!this.state.isRMatrixShow});
         },
+        handleAddServer:function(){
+            var server_url = this.state.url,
+                access_token = this.state.access_token;
+            var post_data = {
+                url:server_url,
+                token:access_token,
+                name:'User server'
+            }
+            $.ajax({
+                url:app.host+ '/home/addServer',
+                type:'POST',
+                data:JSON.stringify(post_data),
+                dataType:'json',
+                cache:false,
+                success:function(res){
+                    if( res.isSuccessful ){
+                        app.showMsg("Server Added");
+                    }else{
+                        app.showMsg("Server can not be added");
+                    }
+                }
+            })
+        },
         render:function(){
             return (
                 React.createElement("div", {className: "box"}, 
@@ -199,7 +222,7 @@ var app = app || {};
                                 React.createElement("input", {type: "checkbox", checked: this.state.isCustomedURL, onChange: this.toggleCustomedURL}), " Custom URL"
                             )
                         ), 
-                        this.state.isCustomedURL ? React.createElement("div", null, React.createElement(UrlEditor, {updateUrl: this.updateUrl}), React.createElement(TokenEditor, {updateToken: this.updateAccessToken})) : null, 
+                        this.state.isCustomedURL ? React.createElement("div", null, React.createElement(UrlEditor, {updateUrl: this.updateUrl}), React.createElement(TokenEditor, {updateToken: this.updateAccessToken}), " ", React.createElement("button", {onClick: this.handleAddServer, className: "btn btn-primary"}, "Add")) : null, 
                         this.state.isLoading ? React.createElement("div", {className: "loading"}, React.createElement("img", {src: "../img/5.png", alt: "loading", class: "img-responsive loading-img"}))  : null, 
                         !this.state.isLoading && this.state.isResultReady ? React.createElement(ResultDisplay, {showFullyDetail: this.showFullyDetail, ref: "res_area"}) : null, 
                         this.state.isEditting ? React.createElement(CodeEditor, {frame: document, updateCode: this.updateCode, ref: "codeeditor", language: "python"}) : null

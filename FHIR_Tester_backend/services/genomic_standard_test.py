@@ -66,6 +66,31 @@ genetic_observation_extension = [
     }
 ]
 
+base_fake_path = 'resources/fake_data/'
+
+fake_info = []
+
+def save_step2fake(info):
+    fake_info.append({
+        'type':'step',
+        'info':info
+    })
+
+def save_detail2fake(info):
+    info['req_header'] = json.dumps(dict(info['req_header'])) if info['req_header'] else None
+    info['res_header'] = json.dumps(dict(info['res_header'])) if info['res_header'] else None
+    info['resource'] = json.dumps(dict(info['resource'])) if info['resource'] else None
+    info['response'] = json.dumps(dict(info['response'])) if info['response'] else None
+    fake_info.append({
+        'type':'detail',
+        'info':info
+    })
+
+def save_fake2file():
+    file_obj = open('%sfake_fhir.json' % base_fake_path, 'w')
+    file_obj.write(json.dumps(fake_info))
+    file_obj.close()
+
 def create_all_test_case4type(resource_spec_filename,resource_type):
     #load spec
     csv_reader = csv.reader(open(resource_spec_filename, 'r'))
@@ -392,8 +417,10 @@ def save_step_detail(step_obj, detail_info):
             new_step_detail.save()
         except:
             print 'live create failed'
+    #save_detail2fake(detail_info)
 
 def create_one_step(task_id, step_info, step_obj=None):
+    #save_step2fake(step_info)
     if step_obj:
         with transaction.atomic():
             try:
@@ -494,6 +521,6 @@ def do_standard_test(task_id, url, access_token=None):
     flag = flag and step_info['status']
     if flag:
         level += 1
-    
+    #save_fake2file()
     return level, id_dict
 
