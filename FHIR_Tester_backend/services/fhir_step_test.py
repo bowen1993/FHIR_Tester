@@ -56,6 +56,5 @@ def test_resources(resource_list, task_id, url, access_token=None):
         step_obj = create_one_step(task_id ,step_info)
         step_info = perform_resource_test(resource_name,step_obj ,url, id_dict, '%s test' % resource_name, resource_name, access_token=None)
         create_one_step(task_id, step_info, step_obj)
-    #save_fake2file()
     return id_dict
 

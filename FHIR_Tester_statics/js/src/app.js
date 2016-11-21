@@ -202,17 +202,11 @@ var app = app || {};
                     <div className="test-input">
                         <ServerList updateServer={this.updateChosenServer}/>
                         <div className="btnArea">
-                            <TestButton btn_name="App Test" submitTestTask={this.handleTaskSubmit} btnType={app.APP_TEST}/>
-                            <TestButton btn_name="Server Test" submitTestTask={this.handleTaskSubmit} btnType={app.SERVER_TEST}/>
                             <TestButton btn_name="Level Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/>
                             <SideMenuButton updateResource={this.updateResourceState} submitTestTask={this.handleTaskSubmit}/>
                             {this.state.isReportReady ? <button className="btn btn-primary" onClick={this.toggle_report}>Report</button> : null }
                         </div>
-                        {this.state.isEditting ?<div className="btnArea">
-                            <button onClick={this.loadAppSample} className="btn btn-primary">Load App Sample</button>
-                            <span> </span>
-                            <button onClick={this.loadServerSample} className="btn btn-primary">Load Server Test Sample</button>
-                        </div> : null}
+                        
                         
                         <div className="btnArea">
                             <label>
@@ -225,7 +219,7 @@ var app = app || {};
                         {this.state.isCustomedURL ? <div><UrlEditor updateUrl={this.updateUrl}/><TokenEditor updateToken={this.updateAccessToken} /> <button onClick={this.handleAddServer} className="btn btn-primary">Add</button></div> : null}
                         {this.state.isLoading ? <div className="loading"><img src="../img/5.png" alt="loading" class="img-responsive loading-img" /></div>  : null}
                         {!this.state.isLoading && this.state.isResultReady ? <ResultDisplay showFullyDetail={this.showFullyDetail} ref="res_area"/> : null }
-                        {this.state.isEditting ? <CodeEditor frame={document} updateCode={this.updateCode} ref="codeeditor" language="python"/> : null}
+                        {this.state.isEditting ? <CodeEditor submitTestTask={this.handleTaskSubmit} loadServerSample={this.loadServerSample} loadAppSample={this.loadAppSample} frame={document} updateCode={this.updateCode} ref="codeeditor" language="python"/> : null}
                     </div>
                     <div className="result-area">
                         <FullyDetail ref="full_detail" />

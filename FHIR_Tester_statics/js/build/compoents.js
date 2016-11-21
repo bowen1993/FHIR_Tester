@@ -5,7 +5,7 @@ var app = app || {};
 (function(){
     var SideMenuButton = app.SideMenuButton = React.createClass({displayName: "SideMenuButton",
         getInitialState(){
-            return {resources:[]};
+            return {resources:[],curr_type:app.APP_TEST};
         },
         componentDidMount:function(){
             $.get(app.host+ '/home/resources', function (result) {
@@ -119,6 +119,19 @@ var app = app || {};
             window.removeEventListener("dragover", this._handleWindowDragOverOrDrop);
             window.removeEventListener("drop", this._handleWindowDragOverOrDrop);
         },
+        loadAppCode:function(){
+            $('#tab-app').tab('show');
+            this.setState({curr_type:app.APP_TEST});
+            this.props.loadAppSample();
+        },
+        loadServerCode:function(){
+            $('#tab-server').tab('show');
+            this.setState({curr_type:app.SERVER_TEST});
+            this.props.loadServerSample();
+        },
+        performTestCode:function(){
+            this.props.submitTestTask(this.state.curr_type);
+        },
         handleDrop:function(event){
             event.preventDefault();
             var files = (event.dataTransfer) ? event.dataTransfer.files : (event.frame) ? event.frame.files : undefined;
@@ -126,7 +139,14 @@ var app = app || {};
         },
         render:function(){
             return (
+                React.createElement("div", {className: "editorWrap"}, 
+                React.createElement("ul", {className: "nav nav-tabs mode-tab", role: "tablist"}, 
+                    React.createElement("li", {role: "presentation", id: "tab-app", onClick: this.loadAppCode, className: "active"}, React.createElement("a", {href: "#"}, "App Test")), 
+                    React.createElement("li", {role: "presentation", id: "tab-server", onClick: this.loadServerCode}, React.createElement("a", {href: "#"}, "Server Test")), 
+                    React.createElement("button", {onClick: this.performTestCode, className: "btn btn-run pull-right"}, React.createElement("span", {className: "glyphicon glyphicon-play"}), " Run")
+                ), 
                 React.createElement("div", {id: "codeeditor", onDrop: this.handleDrop, onKeyUp: this.handleType}
+                )
                 )
             );
         }

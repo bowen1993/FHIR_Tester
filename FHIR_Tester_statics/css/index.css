@@ -34,6 +34,21 @@ div#main div.box{
     display: flex;
 }
 
+.editorWrap{
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 300px;
+    display: flex;
+    flex-flow:column;
+}
+
+
+.btn-run{
+    background-color: #00c853;
+    color: #FFF;
+
+}
+
 #codeeditor {
     width: 100%;
     flex: 1 1 auto;

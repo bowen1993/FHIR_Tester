@@ -417,10 +417,10 @@ def save_step_detail(step_obj, detail_info):
             new_step_detail.save()
         except:
             print 'live create failed'
-    #save_detail2fake(detail_info)
+    save_detail2fake(detail_info)
 
 def create_one_step(task_id, step_info, step_obj=None):
-    #save_step2fake(step_info)
+    save_step2fake(step_info)
     if step_obj:
         with transaction.atomic():
             try:
