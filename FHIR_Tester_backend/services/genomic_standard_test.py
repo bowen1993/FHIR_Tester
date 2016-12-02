@@ -126,7 +126,7 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
             if isinstance(response, str):
                 hint += response
             elif isinstance(response, dict):
-                hint += response['issue'][0]['diagnostics']
+                hint += response['issue']
             isSuccessful = isSuccessful and False
             hint_infos.append({
                 'status': False,
@@ -239,7 +239,7 @@ def level1Test(url,id_dict,step_obj, access_token):
             if isinstance(response, str):
                 hint += response
             elif isinstance(response, dict):
-                hint += response['issue'][0]['diagnostics']
+                hint += response['issue']
             isSuccessful = isSuccessful and False
         if not isSuccessful:
             hint_infos.append({
@@ -294,7 +294,7 @@ def level2Test(url, id_dict,step_obj, access_token):
             if isinstance(response, str):
                 hint += response
             elif isinstance(response, dict):
-                hint += response['issue'][0]['diagnostics']
+                hint += response['issue']
             isSuccessful = isSuccessful and False
         if not isSuccessful:
             hint_infos.append({
@@ -368,7 +368,7 @@ def level4Test(url, id_dict,step_obj, access_token):
                 else:
                     flag = False
                     isSuccessful = isSuccessful and False
-                    hint += response['issue'][0]['diagnostics']
+                    hint += response['issue']
             else:
                 flag = False
                 isSuccessful = isSuccessful and False

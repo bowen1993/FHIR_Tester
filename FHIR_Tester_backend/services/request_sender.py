@@ -5,9 +5,9 @@ def send_create_resource_request(resource_obj, url, access_token=None):
     print url
     try:
         if access_token and len(access_token) != 0:
-            r = requests.post(url, data=resource_obj, headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
+            r = requests.post('%?_format=json'%url, data=resource_obj, headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
         else:
-            r = requests.post(url,data=resource_obj)
+            r = requests.post('%?_format=json'%url,data=resource_obj)
         try:
             response_json = r.json()
             return response_json, r.request.headers, r.headers
@@ -21,9 +21,9 @@ def send_read_resource_request(url, access_token):
     print url
     try:
         if access_token and len(access_token) != 0:
-            r = requests.get(url, headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
+            r = requests.get('%?_format=json'%url, headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
         else:
-            r = requests.get(url)
+            r = requests.get('%?_format=json'%url)
         try:
             response_json = r.json()
             return response_json, r.request.headers, r.headers
@@ -36,9 +36,9 @@ def send_read_resource_request(url, access_token):
 def send_fetch_resource_request(url, resource_name, access_token=None):
     try:
         if access_token and len(access_token) != 0:
-            r = requests.get('%s%s' % (url, resource_name), headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
+            r = requests.get('%s%s?_format=json' % (url, resource_name), headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
         else:
-            r = requests.get('%s%s' % (url, resource_name))
+            r = requests.get('%s%s?_format=json' % (url, resource_name))
         try:
             response_json = r.json()
             if response_json['total'] != 0 and 'entry' in response_json:
