@@ -1,5 +1,5 @@
 def Prefer(value="PhantomJS"):
-    return True, "driver = webdriver.%s(desired_capabilities=dcap)\ndriver.implicitly_wait(5)\n" % value
+    return True, "driver = webdriver.%s(desired_capabilities=dcap)\ndriver.implicitly_wait(5)\ndriver.set_window_size(1440,960)\n" % value
 
 def Patient(value=0):
     return True, ""

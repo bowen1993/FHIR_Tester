@@ -10,6 +10,7 @@ dcap = dict(DesiredCapabilities.PHANTOMJS)
 dcap["phantomjs.page.settings.userAgent"] = user_agent
 driver = webdriver.Chrome(desired_capabilities=dcap)
 driver.implicitly_wait(5)
+driver.set_window_size(1440,960)
 driver.get('https://gallery.smarthealthit.org/hrs/clindat')
 ele = driver.find_element_by_xpath('/html/body/div[3]/div[1]/div/div/div[2]/div/div/a')
 ele.click()
@@ -32,7 +33,7 @@ driver.switch_to_window(window_after)
 driver.get_screenshot_as_file('/_1.png')
 steps.append(('LoadSmartApp','/_1.png'))
 ele = driver.find_element_by_xpath("/html/body/div[10]/div[2]/div[3]/div/div/div[1]/div/div/h3")
-assert 'hello' in ele.text
+assert 'Daniel' in ele.text
 driver.get_screenshot_as_file('/_2.png')
 steps.append(('Judge','/_2.png'))
 driver.close()
