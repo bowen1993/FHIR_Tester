@@ -138,6 +138,7 @@ def p_action_judge(p):
                 | Judge target Not STRING NEWLINE
     '''
     action_dict = {
+        'move':'Judge',
         'type': 'action_judge',
         'target': p[2],
         'expect': p[3] if len(p) == 5 else p[4],
@@ -174,6 +175,7 @@ def p_movement(p):
                 | Press
                 | Switch
                 | Enter
+                | LoadSmartApp
     '''
     p[0] = (True, p[1])
 

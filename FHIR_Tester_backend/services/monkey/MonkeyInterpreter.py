@@ -48,6 +48,7 @@ dcap["phantomjs.page.settings.userAgent"] = user_agent
 
     def translate(self):
         for index, action in enumerate(self.prog):
+            print action
             if action['type'] == 'auth':
                 self.code_str += self.transAuth(action)
             elif 'single' in action['type']:

@@ -60,7 +60,9 @@ class test_task:
         print self.url
         if self.test_type == 0:
             #run standard test
-            level, id_dict = do_standard_test(self.task_name ,self.url, self.access_token)
+            if len(self.resources) == 0:
+                self.resources = ["0","1","2","3","4"]
+            level, id_dict = do_standard_test(self.task_name ,self.url, self.access_token, self.resources)
             self.baseid_dict = id_dict
             print level
             self.level = level

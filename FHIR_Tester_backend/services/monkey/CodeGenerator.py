@@ -1,5 +1,5 @@
 def Prefer(value="PhantomJS"):
-    return True, "driver = webdriver.%s(desired_capabilities=dcap)\n" % value
+    return True, "driver = webdriver.%s(desired_capabilities=dcap)\ndriver.implicitly_wait(5)\n" % value
 
 def Patient(value=0):
     return True, ""
@@ -9,6 +9,30 @@ def Visit(value=""):
         return True, "driver.get('%s')\n" % value
     else:
         return False, "Wrong URL"
+
+def LoadSmartApp(value=""):
+    if len(value) > 0:
+        return True, '''driver.get('%s')
+ele = driver.find_element_by_xpath('/html/body/div[3]/div[1]/div/div/div[2]/div/div/a')
+ele.click()
+ele = driver.find_element_by_css_selector('input#j_username')
+ele.send_keys('Bowen')
+ele = driver.find_element_by_css_selector('input#j_password')
+ele.send_keys('YLX-7sw-7ZT-PBK')
+ele = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div/form/div[3]/input')
+ele.click()
+ele = driver.find_element_by_css_selector('a#launch-button')
+ele.click()
+ele = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]')
+ele.click()
+ele = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[3]/div/div[2]/div')
+ele.click()
+time.sleep(5)
+print driver.window_handles
+window_after = driver.window_handles[-1]
+driver.switch_to_window(window_after)
+''' % value
+    else: return False, "Wrong URL"
 
 def Blind(value=True):
     return True, ""

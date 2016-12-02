@@ -5,12 +5,9 @@ import time
 user_agent = (
    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Safari/602.1.50'"
 )
-steps = []
-dcap = dict(DesiredCapabilities.PHANTOMJS)
-dcap["phantomjs.page.settings.userAgent"] = user_agent
-driver = webdriver.Chrome(desired_capabilities=dcap)
+driver = webdriver.Chrome()
 driver.implicitly_wait(5)
-driver.get('https://gallery.smarthealthit.org/hrs/clindat')
+driver.get('https://gallery.smarthealthit.org/gemomics/genomicsadvisor')
 ele = driver.find_element_by_xpath('/html/body/div[3]/div[1]/div/div/div[2]/div/div/a')
 ele.click()
 ele = driver.find_element_by_css_selector('input#j_username')
@@ -29,10 +26,5 @@ time.sleep(5)
 print driver.window_handles
 window_after = driver.window_handles[-1]
 driver.switch_to_window(window_after)
-driver.get_screenshot_as_file('/_1.png')
-steps.append(('LoadSmartApp','/_1.png'))
-ele = driver.find_element_by_xpath("/html/body/div[10]/div[2]/div[3]/div/div/div[1]/div/div/h3")
-assert 'hello' in ele.text
-driver.get_screenshot_as_file('/_2.png')
-steps.append(('Judge','/_2.png'))
-driver.close()
+ele = driver.find_element_by_xpath('/html/body/div/ul/a[1]')
+ele.click()
