@@ -195,10 +195,6 @@ var app = app || {};
                 }
             })
         },
-        getUserLevel:function(){
-            var token = $.cookie('fhir_token');
-            console.log(this.state.usrlevel);
-        }
         render:function(){
             return (
                 React.createElement("div", {className: "box"}, 
