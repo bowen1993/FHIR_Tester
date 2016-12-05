@@ -11,6 +11,7 @@ class MonkeyInterpreter:
         self._code_init()
         self.base_path = base_path
         self.id = identify
+        self.image_index = 0
     
     def _code_init(self):
         self.code_str = """from selenium import webdriver
@@ -46,6 +47,16 @@ dcap["phantomjs.page.settings.userAgent"] = user_agent
         }
         self.code_str += "driver.get_screenshot_as_file('%(basepath)s/%(id)s_%(filename)s')\nsteps.append(('%(hint)s','%(basepath)s/%(id)s_%(filename)s'))\n" % step_info_dict
 
+    def get_screenshot_code(self, filename, hint):
+        step_info_dict = {
+            'basepath': self.base_path,
+            'filename':filename,
+            'id':self.id,
+            'hint':hint
+        }
+        return "driver.get_screenshot_as_file('%(basepath)s/%(id)s_%(filename)s')\nsteps.append(('%(hint)s','%(basepath)s/%(id)s_%(filename)s'))\n" % step_info_dict
+
+
     def translate(self):
         for index, action in enumerate(self.prog):
             print action
@@ -64,7 +75,8 @@ dcap["phantomjs.page.settings.userAgent"] = user_agent
             elif 'task' in action['type']:
                 self.code_str += self.transTask(action)
             if "driver.get(" in self.code_str:
-                self.add_screenshot("%d.png"%index, action['move'])
+                self.add_screenshot("%d.png"%self.image_index, action['move'])
+            self.image_index += 1
         self.code_str += "driver.close()"
     
     def transAuth(self, action):
@@ -74,7 +86,11 @@ dcap["phantomjs.page.settings.userAgent"] = user_agent
     
     def transSingleAction(self, action):
         move = action['move']
-        is_success, stmt_str = globals()[move]()
+        if move == 'DoGenomicAuth':
+            is_success, increase,stmt_str = globals()[move](self.get_screenshot_code, self.image_index)
+            self.image_index += increase
+        else:
+            is_success, stmt_str = globals()[move]()
         if is_success:
             return stmt_str
     
