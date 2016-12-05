@@ -2,9 +2,8 @@ var app = app || {};
 
 app.host = "http://localhost:8000";
 app.app_sample = ["Prefer \"PhantomJS\"",
-"Visit \"https://www.google.com/\"",
-"Input \"input\" \"#lst-ib\" \"fhir\"",
-"Enter",
+"LoadSmartApp \"https://gallery.smarthealthit.org/gemomics/genetic-report-viewer\"",
+"DoGenomicAuth",
 ""
 ].join("\n");
 

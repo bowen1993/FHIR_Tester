@@ -74,11 +74,6 @@ var app = app || {};
         updateRepassword:function(new_repassword){
             this.setState({repassword:new_repassword});
         },
-        getUserLevel:function(){
-            var token = $.cookie('fhir_token');
-            console.log(this.state.usrlevel);
-            // return this.state.usrlevel;
-        },
         render:function(){
             return (
                 React.createElement("div", {className: "index-content"}, 

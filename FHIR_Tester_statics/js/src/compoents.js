@@ -105,6 +105,7 @@ var app = app || {};
                 fontSize: "1.2em"
             });
             this.editor.session.setMode("ace/mode/"+this.props.language);
+            this.setState({curr_type:app.APP_TEST});
             this.loadAppTestSample();
         },
         loadAppTestSample:function(){

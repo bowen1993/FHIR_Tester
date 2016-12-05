@@ -2,7 +2,8 @@ var app = app || {};
 
 app.host = "http://localhost:8000";
 app.app_sample = ["Prefer \"PhantomJS\"",
-"LoadSmartApp \"https://gallery.smarthealthit.org/hrs/clindat\"",
+"LoadSmartApp \"https://gallery.smarthealthit.org/gemomics/genetic-report-viewer\"",
+"DoGenomicAuth",
 ""
 ].join("\n");
 
