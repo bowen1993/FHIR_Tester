@@ -105,6 +105,7 @@ var app = app || {};
                 fontSize: "1.2em"
             });
             this.editor.session.setMode("ace/mode/"+this.props.language);
+            this.loadAppTestSample();
         },
         loadAppTestSample:function(){
             this.editor.setValue(app.app_sample,1);
@@ -225,7 +226,7 @@ var app = app || {};
     })
     var ResultDisplay = app.ResultDisplay = React.createClass({displayName: "ResultDisplay",
         getInitialState:function(){
-            return {'level':-1,test_type:null,  test_type_str:'', 'steps':[]}
+            return {'level':[],test_type:null,  test_type_str:'', 'steps':[]}
         },
         emptyCurrentDisplay:function(){
             this.setState({steps:[]});
@@ -254,7 +255,9 @@ var app = app || {};
                     React.createElement("div", {className: "result-head"}, React.createElement("span", {className: "area-title area-title-black"}, "Test Type: ", this.state.test_type_str), " ", React.createElement("span", null)), 
                     React.createElement("div", {className: "detail-result"}, 
                         React.createElement("div", {className: "result-sum"}, 
-                            this.state.test_type == 0 ? React.createElement("h3", null, "Level: ", this.state.level) : null
+                            this.state.test_type == 0 ? React.createElement("h3", null, "Level: ", this.state.level.map(function(l){
+                                return React.createElement("span", null, l, ", ")
+                            })) : null
                         ), 
                         this.state.steps.map(function(step){
                             return React.createElement(StepDisplay, {showFullyDetail: this.props.showFullyDetail, stepInfo: step})
@@ -652,7 +655,9 @@ var app = app || {};
                     React.createElement("div", {className: "brief-info"}, 
                         React.createElement("h4", null, "Test Type: ", this.props.report.test_type), 
                         React.createElement("h4", null, "Target Server: ", this.props.report.server), 
-                        React.createElement("h4", null, "Level: ", this.props.report.level)
+                        React.createElement("h4", null, "Level: ", this.props.report.level.map(function(l){
+                            return React.createElement("span", null, l, ", ")
+                        }))
                     ), 
                     React.createElement("div", {className: "table-info"}, 
                     React.createElement("h3", null, "Details"), 

@@ -176,6 +176,7 @@ def p_movement(p):
                 | Switch
                 | Enter
                 | LoadSmartApp
+                | DoGenomicAuth
     '''
     p[0] = (True, p[1])
 

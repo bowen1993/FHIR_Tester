@@ -3,7 +3,7 @@ from ply import *
 keywords = (
     'Prefer', 'Patient', 'Visit', 'Blind', 'Click', 'Input', 'Choose',
     'Back', 'Forward', 'Accept', 'Auth', 'Dismiss', 'Press', 'Switch',
-    'Repeat', 'Task', 'End', 'Judge', 'Empty', 'Not', 'True', 'False', 'Page', 'Enter','LoadSmartApp'
+    'Repeat', 'Task', 'End', 'Judge', 'Empty', 'Not', 'True', 'False', 'Page', 'Enter','LoadSmartApp', 'DoGenomicAuth'
 )
 
 tokens = keywords + (

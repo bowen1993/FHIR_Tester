@@ -5,9 +5,9 @@ def send_create_resource_request(resource_obj, url, access_token=None):
     print url
     try:
         if access_token and len(access_token) != 0:
-            r = requests.post('%?_format=json'%url, data=resource_obj, headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
+            r = requests.post('%s?_format=json'%url, data=resource_obj, headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
         else:
-            r = requests.post('%?_format=json'%url,data=resource_obj)
+            r = requests.post('%s?_format=json'%url,data=resource_obj)
         try:
             response_json = r.json()
             return response_json, r.request.headers, r.headers
@@ -21,9 +21,9 @@ def send_read_resource_request(url, access_token):
     print url
     try:
         if access_token and len(access_token) != 0:
-            r = requests.get('%?_format=json'%url, headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
+            r = requests.get('%s?_format=json'%url, headers={'Content-Type':'application/json','Authorization':'Bearer %s'% access_token})
         else:
-            r = requests.get('%?_format=json'%url)
+            r = requests.get('%s?_format=json'%url)
         try:
             response_json = r.json()
             return response_json, r.request.headers, r.headers

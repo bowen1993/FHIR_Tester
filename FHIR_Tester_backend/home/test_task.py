@@ -10,7 +10,7 @@ from services.create_resource import *
 from services.genomic_standard_test import *
 from services.fhir_step_test import *
 from services.monkey_test import do_monkey_test
-
+import json
 
 def random_string_generate(length):
     '''
@@ -61,7 +61,7 @@ class test_task:
         if self.test_type == 0:
             #run standard test
             if len(self.resources) == 0:
-                self.resources = ["0","1","2","3","4"]
+                self.resources = ["0","1","2","3","4","5"]
             level, id_dict = do_standard_test(self.task_name ,self.url, self.access_token, self.resources)
             self.baseid_dict = id_dict
             print level
@@ -173,7 +173,7 @@ class test_task:
         with transaction.atomic():
             try:
                 task_obj = task.objects.get(task_id=self.task_name)
-                new_result_obj = result(task=task_obj,status=self.status, level=self.level)
+                new_result_obj = result(task=task_obj,status=self.status, level=json.dumps(self.level))
                 new_result_obj.save()
                 task_obj.status = 'finished'
                 task_obj.save()

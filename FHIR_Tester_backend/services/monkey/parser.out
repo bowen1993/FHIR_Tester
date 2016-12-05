@@ -45,15 +45,16 @@ Rule 31    movement -> Press
 Rule 32    movement -> Switch
 Rule 33    movement -> Enter
 Rule 34    movement -> LoadSmartApp
-Rule 35    movement -> error
-Rule 36    compound_action -> repeat_block
-Rule 37    compound_action -> task_block
-Rule 38    repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE
-Rule 39    repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE
-Rule 40    task_block -> Task ID NEWLINE actions End
-Rule 41    task_block -> Task ID NEWLINE compound_action End
-Rule 42    target -> STRING STRING
-Rule 43    target -> STRING
+Rule 35    movement -> DoGenomicAuth
+Rule 36    movement -> error
+Rule 37    compound_action -> repeat_block
+Rule 38    compound_action -> task_block
+Rule 39    repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE
+Rule 40    repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE
+Rule 41    task_block -> Task ID NEWLINE actions End
+Rule 42    task_block -> Task ID NEWLINE compound_action End
+Rule 43    target -> STRING STRING
+Rule 44    target -> STRING
 
 Terminals, with rules where they appear
 
@@ -65,41 +66,42 @@ Blind                : 22
 Choose               : 25
 Click                : 23
 Dismiss              : 30
+DoGenomicAuth        : 35
 EQUAL                : 
 Empty                : 
-End                  : 38 39 40 41
+End                  : 39 40 41 42
 Enter                : 33
 False                : 
 Forward              : 27
-ID                   : 40 41
+ID                   : 41 42
 Input                : 24
 Judge                : 15 16
 LoadSmartApp         : 34
-NEWLINE              : 8 9 10 11 12 13 14 15 16 17 18 38 38 39 39 40 41
-NUMBER               : 38 39
+NEWLINE              : 8 9 10 11 12 13 14 15 16 17 18 39 39 40 40 41 42
+NUMBER               : 39 40
 Not                  : 16
 Page                 : 
 Patient              : 20
 Prefer               : 19
 Press                : 31
-Repeat               : 38 39
-STRING               : 8 8 10 11 14 15 16 42 42 43
+Repeat               : 39 40
+STRING               : 8 8 10 11 14 15 16 43 43 44
 Switch               : 32
-Task                 : 40 41
+Task                 : 41 42
 True                 : 
 Visit                : 21
-error                : 5 18 35
+error                : 5 18 36
 
 Nonterminals, with rules where they appear
 
 action               : 6 7
-actions              : 1 2 3 4 6 38 40
-compound_action      : 1 2 39 41
+actions              : 1 2 3 4 6 39 41
+compound_action      : 1 2 40 42
 movement             : 9 10 11 12 13 14
 program              : 1 3 0
-repeat_block         : 36
+repeat_block         : 37
 target               : 10 11 12 13 15 16
-task_block           : 37
+task_block           : 38
 
 Parsing method: LALR
 
@@ -111,14 +113,14 @@ state 0
     (3) program -> . program actions
     (4) program -> . actions
     (5) program -> . error
-    (36) compound_action -> . repeat_block
-    (37) compound_action -> . task_block
+    (37) compound_action -> . repeat_block
+    (38) compound_action -> . task_block
     (6) actions -> . actions action
     (7) actions -> . action
-    (38) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
-    (39) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
-    (40) task_block -> . Task ID NEWLINE actions End
-    (41) task_block -> . Task ID NEWLINE compound_action End
+    (39) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
+    (40) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
+    (41) task_block -> . Task ID NEWLINE actions End
+    (42) task_block -> . Task ID NEWLINE compound_action End
     (8) action -> . Auth STRING STRING NEWLINE
     (9) action -> . movement NEWLINE
     (10) action -> . movement target STRING BOOL NEWLINE
@@ -146,62 +148,65 @@ state 0
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
-    error           shift and go to state 26
-    Repeat          shift and go to state 8
-    Task            shift and go to state 16
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    error           shift and go to state 27
+    Repeat          shift and go to state 9
+    Task            shift and go to state 17
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
     task_block                     shift and go to state 1
-    repeat_block                   shift and go to state 22
+    repeat_block                   shift and go to state 23
     compound_action                shift and go to state 2
     actions                        shift and go to state 4
-    program                        shift and go to state 14
-    action                         shift and go to state 27
-    movement                       shift and go to state 15
+    program                        shift and go to state 15
+    action                         shift and go to state 28
+    movement                       shift and go to state 16
 
 state 1
 
-    (37) compound_action -> task_block .
+    (38) compound_action -> task_block .
 
-    End             reduce using rule 37 (compound_action -> task_block .)
-    Auth            reduce using rule 37 (compound_action -> task_block .)
-    Judge           reduce using rule 37 (compound_action -> task_block .)
-    NEWLINE         reduce using rule 37 (compound_action -> task_block .)
-    error           reduce using rule 37 (compound_action -> task_block .)
-    Prefer          reduce using rule 37 (compound_action -> task_block .)
-    Patient         reduce using rule 37 (compound_action -> task_block .)
-    Visit           reduce using rule 37 (compound_action -> task_block .)
-    Blind           reduce using rule 37 (compound_action -> task_block .)
-    Click           reduce using rule 37 (compound_action -> task_block .)
-    Input           reduce using rule 37 (compound_action -> task_block .)
-    Choose          reduce using rule 37 (compound_action -> task_block .)
-    Back            reduce using rule 37 (compound_action -> task_block .)
-    Forward         reduce using rule 37 (compound_action -> task_block .)
-    Accept          reduce using rule 37 (compound_action -> task_block .)
-    Dismiss         reduce using rule 37 (compound_action -> task_block .)
-    Press           reduce using rule 37 (compound_action -> task_block .)
-    Switch          reduce using rule 37 (compound_action -> task_block .)
-    Enter           reduce using rule 37 (compound_action -> task_block .)
-    LoadSmartApp    reduce using rule 37 (compound_action -> task_block .)
+    End             reduce using rule 38 (compound_action -> task_block .)
+    Auth            reduce using rule 38 (compound_action -> task_block .)
+    Judge           reduce using rule 38 (compound_action -> task_block .)
+    NEWLINE         reduce using rule 38 (compound_action -> task_block .)
+    error           reduce using rule 38 (compound_action -> task_block .)
+    Prefer          reduce using rule 38 (compound_action -> task_block .)
+    Patient         reduce using rule 38 (compound_action -> task_block .)
+    Visit           reduce using rule 38 (compound_action -> task_block .)
+    Blind           reduce using rule 38 (compound_action -> task_block .)
+    Click           reduce using rule 38 (compound_action -> task_block .)
+    Input           reduce using rule 38 (compound_action -> task_block .)
+    Choose          reduce using rule 38 (compound_action -> task_block .)
+    Back            reduce using rule 38 (compound_action -> task_block .)
+    Forward         reduce using rule 38 (compound_action -> task_block .)
+    Accept          reduce using rule 38 (compound_action -> task_block .)
+    Dismiss         reduce using rule 38 (compound_action -> task_block .)
+    Press           reduce using rule 38 (compound_action -> task_block .)
+    Switch          reduce using rule 38 (compound_action -> task_block .)
+    Enter           reduce using rule 38 (compound_action -> task_block .)
+    LoadSmartApp    reduce using rule 38 (compound_action -> task_block .)
+    DoGenomicAuth   reduce using rule 38 (compound_action -> task_block .)
 
 
 state 2
@@ -236,31 +241,33 @@ state 2
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
-    action                         shift and go to state 27
-    actions                        shift and go to state 29
-    movement                       shift and go to state 15
+    action                         shift and go to state 28
+    actions                        shift and go to state 30
+    movement                       shift and go to state 16
 
 state 3
 
@@ -301,7 +308,8 @@ state 4
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
   ! shift/reduce conflict for Auth resolved as shift
   ! shift/reduce conflict for Judge resolved as shift
@@ -322,28 +330,30 @@ state 4
   ! shift/reduce conflict for Switch resolved as shift
   ! shift/reduce conflict for Enter resolved as shift
   ! shift/reduce conflict for LoadSmartApp resolved as shift
+  ! shift/reduce conflict for DoGenomicAuth resolved as shift
     Repeat          reduce using rule 4 (program -> actions .)
     Task            reduce using rule 4 (program -> actions .)
     $end            reduce using rule 4 (program -> actions .)
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
   ! Auth            [ reduce using rule 4 (program -> actions .) ]
   ! Judge           [ reduce using rule 4 (program -> actions .) ]
@@ -364,9 +374,10 @@ state 4
   ! Switch          [ reduce using rule 4 (program -> actions .) ]
   ! Enter           [ reduce using rule 4 (program -> actions .) ]
   ! LoadSmartApp    [ reduce using rule 4 (program -> actions .) ]
+  ! DoGenomicAuth   [ reduce using rule 4 (program -> actions .) ]
 
-    action                         shift and go to state 31
-    movement                       shift and go to state 15
+    action                         shift and go to state 32
+    movement                       shift and go to state 16
 
 state 5
 
@@ -394,13 +405,21 @@ state 7
 
 state 8
 
-    (38) repeat_block -> Repeat . NUMBER NEWLINE actions End NEWLINE
-    (39) repeat_block -> Repeat . NUMBER NEWLINE compound_action End NEWLINE
+    (35) movement -> DoGenomicAuth .
 
-    NUMBER          shift and go to state 32
+    NEWLINE         reduce using rule 35 (movement -> DoGenomicAuth .)
+    STRING          reduce using rule 35 (movement -> DoGenomicAuth .)
 
 
 state 9
+
+    (39) repeat_block -> Repeat . NUMBER NEWLINE actions End NEWLINE
+    (40) repeat_block -> Repeat . NUMBER NEWLINE compound_action End NEWLINE
+
+    NUMBER          shift and go to state 33
+
+
+state 10
 
     (20) movement -> Patient .
 
@@ -408,7 +427,7 @@ state 9
     STRING          reduce using rule 20 (movement -> Patient .)
 
 
-state 10
+state 11
 
     (34) movement -> LoadSmartApp .
 
@@ -416,7 +435,7 @@ state 10
     STRING          reduce using rule 34 (movement -> LoadSmartApp .)
 
 
-state 11
+state 12
 
     (17) action -> NEWLINE .
 
@@ -439,25 +458,26 @@ state 11
     Switch          reduce using rule 17 (action -> NEWLINE .)
     Enter           reduce using rule 17 (action -> NEWLINE .)
     LoadSmartApp    reduce using rule 17 (action -> NEWLINE .)
+    DoGenomicAuth   reduce using rule 17 (action -> NEWLINE .)
     Repeat          reduce using rule 17 (action -> NEWLINE .)
     Task            reduce using rule 17 (action -> NEWLINE .)
     $end            reduce using rule 17 (action -> NEWLINE .)
     End             reduce using rule 17 (action -> NEWLINE .)
 
 
-state 12
+state 13
 
     (8) action -> Auth . STRING STRING NEWLINE
     (29) movement -> Auth .
 
   ! shift/reduce conflict for STRING resolved as shift
-    STRING          shift and go to state 33
+    STRING          shift and go to state 34
     NEWLINE         reduce using rule 29 (movement -> Auth .)
 
   ! STRING          [ reduce using rule 29 (movement -> Auth .) ]
 
 
-state 13
+state 14
 
     (31) movement -> Press .
 
@@ -465,19 +485,19 @@ state 13
     STRING          reduce using rule 31 (movement -> Press .)
 
 
-state 14
+state 15
 
     (0) S' -> program .
     (1) program -> program . compound_action actions
     (3) program -> program . actions
-    (36) compound_action -> . repeat_block
-    (37) compound_action -> . task_block
+    (37) compound_action -> . repeat_block
+    (38) compound_action -> . task_block
     (6) actions -> . actions action
     (7) actions -> . action
-    (38) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
-    (39) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
-    (40) task_block -> . Task ID NEWLINE actions End
-    (41) task_block -> . Task ID NEWLINE compound_action End
+    (39) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
+    (40) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
+    (41) task_block -> . Task ID NEWLINE actions End
+    (42) task_block -> . Task ID NEWLINE compound_action End
     (8) action -> . Auth STRING STRING NEWLINE
     (9) action -> . movement NEWLINE
     (10) action -> . movement target STRING BOOL NEWLINE
@@ -505,38 +525,40 @@ state 14
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
-    Repeat          shift and go to state 8
-    Task            shift and go to state 16
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    Repeat          shift and go to state 9
+    Task            shift and go to state 17
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
     task_block                     shift and go to state 1
-    repeat_block                   shift and go to state 22
-    compound_action                shift and go to state 34
-    actions                        shift and go to state 35
-    action                         shift and go to state 27
-    movement                       shift and go to state 15
+    repeat_block                   shift and go to state 23
+    compound_action                shift and go to state 35
+    actions                        shift and go to state 36
+    action                         shift and go to state 28
+    movement                       shift and go to state 16
 
-state 15
+state 16
 
     (9) action -> movement . NEWLINE
     (10) action -> movement . target STRING BOOL NEWLINE
@@ -544,34 +566,34 @@ state 15
     (12) action -> movement . target BOOL NEWLINE
     (13) action -> movement . target NEWLINE
     (14) action -> movement . STRING NEWLINE
-    (42) target -> . STRING STRING
-    (43) target -> . STRING
+    (43) target -> . STRING STRING
+    (44) target -> . STRING
 
-    NEWLINE         shift and go to state 37
-    STRING          shift and go to state 36
+    NEWLINE         shift and go to state 38
+    STRING          shift and go to state 37
 
-    target                         shift and go to state 38
-
-state 16
-
-    (40) task_block -> Task . ID NEWLINE actions End
-    (41) task_block -> Task . ID NEWLINE compound_action End
-
-    ID              shift and go to state 39
-
+    target                         shift and go to state 39
 
 state 17
 
-    (15) action -> Judge . target STRING NEWLINE
-    (16) action -> Judge . target Not STRING NEWLINE
-    (42) target -> . STRING STRING
-    (43) target -> . STRING
+    (41) task_block -> Task . ID NEWLINE actions End
+    (42) task_block -> Task . ID NEWLINE compound_action End
 
-    STRING          shift and go to state 41
+    ID              shift and go to state 40
 
-    target                         shift and go to state 40
 
 state 18
+
+    (15) action -> Judge . target STRING NEWLINE
+    (16) action -> Judge . target Not STRING NEWLINE
+    (43) target -> . STRING STRING
+    (44) target -> . STRING
+
+    STRING          shift and go to state 42
+
+    target                         shift and go to state 41
+
+state 19
 
     (32) movement -> Switch .
 
@@ -579,7 +601,7 @@ state 18
     STRING          reduce using rule 32 (movement -> Switch .)
 
 
-state 19
+state 20
 
     (33) movement -> Enter .
 
@@ -587,7 +609,7 @@ state 19
     STRING          reduce using rule 33 (movement -> Enter .)
 
 
-state 20
+state 21
 
     (22) movement -> Blind .
 
@@ -595,7 +617,7 @@ state 20
     STRING          reduce using rule 22 (movement -> Blind .)
 
 
-state 21
+state 22
 
     (30) movement -> Dismiss .
 
@@ -603,33 +625,34 @@ state 21
     STRING          reduce using rule 30 (movement -> Dismiss .)
 
 
-state 22
-
-    (36) compound_action -> repeat_block .
-
-    End             reduce using rule 36 (compound_action -> repeat_block .)
-    Auth            reduce using rule 36 (compound_action -> repeat_block .)
-    Judge           reduce using rule 36 (compound_action -> repeat_block .)
-    NEWLINE         reduce using rule 36 (compound_action -> repeat_block .)
-    error           reduce using rule 36 (compound_action -> repeat_block .)
-    Prefer          reduce using rule 36 (compound_action -> repeat_block .)
-    Patient         reduce using rule 36 (compound_action -> repeat_block .)
-    Visit           reduce using rule 36 (compound_action -> repeat_block .)
-    Blind           reduce using rule 36 (compound_action -> repeat_block .)
-    Click           reduce using rule 36 (compound_action -> repeat_block .)
-    Input           reduce using rule 36 (compound_action -> repeat_block .)
-    Choose          reduce using rule 36 (compound_action -> repeat_block .)
-    Back            reduce using rule 36 (compound_action -> repeat_block .)
-    Forward         reduce using rule 36 (compound_action -> repeat_block .)
-    Accept          reduce using rule 36 (compound_action -> repeat_block .)
-    Dismiss         reduce using rule 36 (compound_action -> repeat_block .)
-    Press           reduce using rule 36 (compound_action -> repeat_block .)
-    Switch          reduce using rule 36 (compound_action -> repeat_block .)
-    Enter           reduce using rule 36 (compound_action -> repeat_block .)
-    LoadSmartApp    reduce using rule 36 (compound_action -> repeat_block .)
-
-
 state 23
+
+    (37) compound_action -> repeat_block .
+
+    End             reduce using rule 37 (compound_action -> repeat_block .)
+    Auth            reduce using rule 37 (compound_action -> repeat_block .)
+    Judge           reduce using rule 37 (compound_action -> repeat_block .)
+    NEWLINE         reduce using rule 37 (compound_action -> repeat_block .)
+    error           reduce using rule 37 (compound_action -> repeat_block .)
+    Prefer          reduce using rule 37 (compound_action -> repeat_block .)
+    Patient         reduce using rule 37 (compound_action -> repeat_block .)
+    Visit           reduce using rule 37 (compound_action -> repeat_block .)
+    Blind           reduce using rule 37 (compound_action -> repeat_block .)
+    Click           reduce using rule 37 (compound_action -> repeat_block .)
+    Input           reduce using rule 37 (compound_action -> repeat_block .)
+    Choose          reduce using rule 37 (compound_action -> repeat_block .)
+    Back            reduce using rule 37 (compound_action -> repeat_block .)
+    Forward         reduce using rule 37 (compound_action -> repeat_block .)
+    Accept          reduce using rule 37 (compound_action -> repeat_block .)
+    Dismiss         reduce using rule 37 (compound_action -> repeat_block .)
+    Press           reduce using rule 37 (compound_action -> repeat_block .)
+    Switch          reduce using rule 37 (compound_action -> repeat_block .)
+    Enter           reduce using rule 37 (compound_action -> repeat_block .)
+    LoadSmartApp    reduce using rule 37 (compound_action -> repeat_block .)
+    DoGenomicAuth   reduce using rule 37 (compound_action -> repeat_block .)
+
+
+state 24
 
     (19) movement -> Prefer .
 
@@ -637,7 +660,7 @@ state 23
     STRING          reduce using rule 19 (movement -> Prefer .)
 
 
-state 24
+state 25
 
     (26) movement -> Back .
 
@@ -645,7 +668,7 @@ state 24
     STRING          reduce using rule 26 (movement -> Back .)
 
 
-state 25
+state 26
 
     (28) movement -> Accept .
 
@@ -653,11 +676,11 @@ state 25
     STRING          reduce using rule 28 (movement -> Accept .)
 
 
-state 26
+state 27
 
     (5) program -> error .
     (18) action -> error . NEWLINE
-    (35) movement -> error .
+    (36) movement -> error .
 
   ! shift/reduce conflict for NEWLINE resolved as shift
   ! shift/reduce conflict for NEWLINE resolved as shift
@@ -681,15 +704,16 @@ state 26
     Switch          reduce using rule 5 (program -> error .)
     Enter           reduce using rule 5 (program -> error .)
     LoadSmartApp    reduce using rule 5 (program -> error .)
+    DoGenomicAuth   reduce using rule 5 (program -> error .)
     $end            reduce using rule 5 (program -> error .)
-    NEWLINE         shift and go to state 42
-    STRING          reduce using rule 35 (movement -> error .)
+    NEWLINE         shift and go to state 43
+    STRING          reduce using rule 36 (movement -> error .)
 
   ! NEWLINE         [ reduce using rule 5 (program -> error .) ]
-  ! NEWLINE         [ reduce using rule 35 (movement -> error .) ]
+  ! NEWLINE         [ reduce using rule 36 (movement -> error .) ]
 
 
-state 27
+state 28
 
     (7) actions -> action .
 
@@ -712,13 +736,14 @@ state 27
     Switch          reduce using rule 7 (actions -> action .)
     Enter           reduce using rule 7 (actions -> action .)
     LoadSmartApp    reduce using rule 7 (actions -> action .)
+    DoGenomicAuth   reduce using rule 7 (actions -> action .)
     Repeat          reduce using rule 7 (actions -> action .)
     Task            reduce using rule 7 (actions -> action .)
     $end            reduce using rule 7 (actions -> action .)
     End             reduce using rule 7 (actions -> action .)
 
 
-state 28
+state 29
 
     (23) movement -> Click .
 
@@ -726,7 +751,7 @@ state 28
     STRING          reduce using rule 23 (movement -> Click .)
 
 
-state 29
+state 30
 
     (2) program -> compound_action actions .
     (6) actions -> actions . action
@@ -757,7 +782,8 @@ state 29
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
   ! shift/reduce conflict for Auth resolved as shift
   ! shift/reduce conflict for Judge resolved as shift
@@ -778,28 +804,30 @@ state 29
   ! shift/reduce conflict for Switch resolved as shift
   ! shift/reduce conflict for Enter resolved as shift
   ! shift/reduce conflict for LoadSmartApp resolved as shift
+  ! shift/reduce conflict for DoGenomicAuth resolved as shift
     Repeat          reduce using rule 2 (program -> compound_action actions .)
     Task            reduce using rule 2 (program -> compound_action actions .)
     $end            reduce using rule 2 (program -> compound_action actions .)
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
   ! Auth            [ reduce using rule 2 (program -> compound_action actions .) ]
   ! Judge           [ reduce using rule 2 (program -> compound_action actions .) ]
@@ -820,23 +848,24 @@ state 29
   ! Switch          [ reduce using rule 2 (program -> compound_action actions .) ]
   ! Enter           [ reduce using rule 2 (program -> compound_action actions .) ]
   ! LoadSmartApp    [ reduce using rule 2 (program -> compound_action actions .) ]
+  ! DoGenomicAuth   [ reduce using rule 2 (program -> compound_action actions .) ]
 
-    action                         shift and go to state 31
-    movement                       shift and go to state 15
-
-state 30
-
-    (18) action -> error . NEWLINE
-    (35) movement -> error .
-
-  ! shift/reduce conflict for NEWLINE resolved as shift
-    NEWLINE         shift and go to state 42
-    STRING          reduce using rule 35 (movement -> error .)
-
-  ! NEWLINE         [ reduce using rule 35 (movement -> error .) ]
-
+    action                         shift and go to state 32
+    movement                       shift and go to state 16
 
 state 31
+
+    (18) action -> error . NEWLINE
+    (36) movement -> error .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 43
+    STRING          reduce using rule 36 (movement -> error .)
+
+  ! NEWLINE         [ reduce using rule 36 (movement -> error .) ]
+
+
+state 32
 
     (6) actions -> actions action .
 
@@ -859,28 +888,29 @@ state 31
     Switch          reduce using rule 6 (actions -> actions action .)
     Enter           reduce using rule 6 (actions -> actions action .)
     LoadSmartApp    reduce using rule 6 (actions -> actions action .)
+    DoGenomicAuth   reduce using rule 6 (actions -> actions action .)
     Repeat          reduce using rule 6 (actions -> actions action .)
     Task            reduce using rule 6 (actions -> actions action .)
     $end            reduce using rule 6 (actions -> actions action .)
     End             reduce using rule 6 (actions -> actions action .)
 
 
-state 32
-
-    (38) repeat_block -> Repeat NUMBER . NEWLINE actions End NEWLINE
-    (39) repeat_block -> Repeat NUMBER . NEWLINE compound_action End NEWLINE
-
-    NEWLINE         shift and go to state 43
-
-
 state 33
 
-    (8) action -> Auth STRING . STRING NEWLINE
+    (39) repeat_block -> Repeat NUMBER . NEWLINE actions End NEWLINE
+    (40) repeat_block -> Repeat NUMBER . NEWLINE compound_action End NEWLINE
 
-    STRING          shift and go to state 44
+    NEWLINE         shift and go to state 44
 
 
 state 34
+
+    (8) action -> Auth STRING . STRING NEWLINE
+
+    STRING          shift and go to state 45
+
+
+state 35
 
     (1) program -> program compound_action . actions
     (6) actions -> . actions action
@@ -912,33 +942,35 @@ state 34
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
-    actions                        shift and go to state 45
-    action                         shift and go to state 27
-    movement                       shift and go to state 15
+    actions                        shift and go to state 46
+    action                         shift and go to state 28
+    movement                       shift and go to state 16
 
-state 35
+state 36
 
     (3) program -> program actions .
     (6) actions -> actions . action
@@ -969,7 +1001,8 @@ state 35
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
   ! shift/reduce conflict for Auth resolved as shift
   ! shift/reduce conflict for Judge resolved as shift
@@ -990,28 +1023,30 @@ state 35
   ! shift/reduce conflict for Switch resolved as shift
   ! shift/reduce conflict for Enter resolved as shift
   ! shift/reduce conflict for LoadSmartApp resolved as shift
+  ! shift/reduce conflict for DoGenomicAuth resolved as shift
     Repeat          reduce using rule 3 (program -> program actions .)
     Task            reduce using rule 3 (program -> program actions .)
     $end            reduce using rule 3 (program -> program actions .)
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
   ! Auth            [ reduce using rule 3 (program -> program actions .) ]
   ! Judge           [ reduce using rule 3 (program -> program actions .) ]
@@ -1032,27 +1067,28 @@ state 35
   ! Switch          [ reduce using rule 3 (program -> program actions .) ]
   ! Enter           [ reduce using rule 3 (program -> program actions .) ]
   ! LoadSmartApp    [ reduce using rule 3 (program -> program actions .) ]
+  ! DoGenomicAuth   [ reduce using rule 3 (program -> program actions .) ]
 
-    action                         shift and go to state 31
-    movement                       shift and go to state 15
+    action                         shift and go to state 32
+    movement                       shift and go to state 16
 
-state 36
+state 37
 
     (14) action -> movement STRING . NEWLINE
-    (42) target -> STRING . STRING
-    (43) target -> STRING .
+    (43) target -> STRING . STRING
+    (44) target -> STRING .
 
   ! shift/reduce conflict for STRING resolved as shift
   ! shift/reduce conflict for NEWLINE resolved as shift
-    NEWLINE         shift and go to state 46
-    STRING          shift and go to state 47
-    BOOL            reduce using rule 43 (target -> STRING .)
+    NEWLINE         shift and go to state 47
+    STRING          shift and go to state 48
+    BOOL            reduce using rule 44 (target -> STRING .)
 
-  ! STRING          [ reduce using rule 43 (target -> STRING .) ]
-  ! NEWLINE         [ reduce using rule 43 (target -> STRING .) ]
+  ! STRING          [ reduce using rule 44 (target -> STRING .) ]
+  ! NEWLINE         [ reduce using rule 44 (target -> STRING .) ]
 
 
-state 37
+state 38
 
     (9) action -> movement NEWLINE .
 
@@ -1075,54 +1111,55 @@ state 37
     Switch          reduce using rule 9 (action -> movement NEWLINE .)
     Enter           reduce using rule 9 (action -> movement NEWLINE .)
     LoadSmartApp    reduce using rule 9 (action -> movement NEWLINE .)
+    DoGenomicAuth   reduce using rule 9 (action -> movement NEWLINE .)
     Repeat          reduce using rule 9 (action -> movement NEWLINE .)
     Task            reduce using rule 9 (action -> movement NEWLINE .)
     $end            reduce using rule 9 (action -> movement NEWLINE .)
     End             reduce using rule 9 (action -> movement NEWLINE .)
 
 
-state 38
+state 39
 
     (10) action -> movement target . STRING BOOL NEWLINE
     (11) action -> movement target . STRING NEWLINE
     (12) action -> movement target . BOOL NEWLINE
     (13) action -> movement target . NEWLINE
 
-    STRING          shift and go to state 48
-    BOOL            shift and go to state 50
-    NEWLINE         shift and go to state 49
-
-
-state 39
-
-    (40) task_block -> Task ID . NEWLINE actions End
-    (41) task_block -> Task ID . NEWLINE compound_action End
-
-    NEWLINE         shift and go to state 51
+    STRING          shift and go to state 49
+    BOOL            shift and go to state 51
+    NEWLINE         shift and go to state 50
 
 
 state 40
 
-    (15) action -> Judge target . STRING NEWLINE
-    (16) action -> Judge target . Not STRING NEWLINE
+    (41) task_block -> Task ID . NEWLINE actions End
+    (42) task_block -> Task ID . NEWLINE compound_action End
 
-    STRING          shift and go to state 53
-    Not             shift and go to state 52
+    NEWLINE         shift and go to state 52
 
 
 state 41
 
-    (42) target -> STRING . STRING
-    (43) target -> STRING .
+    (15) action -> Judge target . STRING NEWLINE
+    (16) action -> Judge target . Not STRING NEWLINE
 
-  ! shift/reduce conflict for STRING resolved as shift
-    STRING          shift and go to state 47
-    Not             reduce using rule 43 (target -> STRING .)
-
-  ! STRING          [ reduce using rule 43 (target -> STRING .) ]
+    STRING          shift and go to state 54
+    Not             shift and go to state 53
 
 
 state 42
+
+    (43) target -> STRING . STRING
+    (44) target -> STRING .
+
+  ! shift/reduce conflict for STRING resolved as shift
+    STRING          shift and go to state 48
+    Not             reduce using rule 44 (target -> STRING .)
+
+  ! STRING          [ reduce using rule 44 (target -> STRING .) ]
+
+
+state 43
 
     (18) action -> error NEWLINE .
 
@@ -1145,20 +1182,21 @@ state 42
     Switch          reduce using rule 18 (action -> error NEWLINE .)
     Enter           reduce using rule 18 (action -> error NEWLINE .)
     LoadSmartApp    reduce using rule 18 (action -> error NEWLINE .)
+    DoGenomicAuth   reduce using rule 18 (action -> error NEWLINE .)
     Repeat          reduce using rule 18 (action -> error NEWLINE .)
     Task            reduce using rule 18 (action -> error NEWLINE .)
     $end            reduce using rule 18 (action -> error NEWLINE .)
     End             reduce using rule 18 (action -> error NEWLINE .)
 
 
-state 43
+state 44
 
-    (38) repeat_block -> Repeat NUMBER NEWLINE . actions End NEWLINE
-    (39) repeat_block -> Repeat NUMBER NEWLINE . compound_action End NEWLINE
+    (39) repeat_block -> Repeat NUMBER NEWLINE . actions End NEWLINE
+    (40) repeat_block -> Repeat NUMBER NEWLINE . compound_action End NEWLINE
     (6) actions -> . actions action
     (7) actions -> . action
-    (36) compound_action -> . repeat_block
-    (37) compound_action -> . task_block
+    (37) compound_action -> . repeat_block
+    (38) compound_action -> . task_block
     (8) action -> . Auth STRING STRING NEWLINE
     (9) action -> . movement NEWLINE
     (10) action -> . movement target STRING BOOL NEWLINE
@@ -1170,10 +1208,10 @@ state 43
     (16) action -> . Judge target Not STRING NEWLINE
     (17) action -> . NEWLINE
     (18) action -> . error NEWLINE
-    (38) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
-    (39) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
-    (40) task_block -> . Task ID NEWLINE actions End
-    (41) task_block -> . Task ID NEWLINE compound_action End
+    (39) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
+    (40) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
+    (41) task_block -> . Task ID NEWLINE actions End
+    (42) task_block -> . Task ID NEWLINE compound_action End
     (19) movement -> . Prefer
     (20) movement -> . Patient
     (21) movement -> . Visit
@@ -1190,45 +1228,47 @@ state 43
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Repeat          shift and go to state 8
-    Task            shift and go to state 16
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Repeat          shift and go to state 9
+    Task            shift and go to state 17
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
     task_block                     shift and go to state 1
-    repeat_block                   shift and go to state 22
-    compound_action                shift and go to state 54
-    actions                        shift and go to state 55
-    action                         shift and go to state 27
-    movement                       shift and go to state 15
+    repeat_block                   shift and go to state 23
+    compound_action                shift and go to state 55
+    actions                        shift and go to state 56
+    action                         shift and go to state 28
+    movement                       shift and go to state 16
 
-state 44
+state 45
 
     (8) action -> Auth STRING STRING . NEWLINE
 
-    NEWLINE         shift and go to state 56
+    NEWLINE         shift and go to state 57
 
 
-state 45
+state 46
 
     (1) program -> program compound_action actions .
     (6) actions -> actions . action
@@ -1259,7 +1299,8 @@ state 45
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
   ! shift/reduce conflict for Auth resolved as shift
   ! shift/reduce conflict for Judge resolved as shift
@@ -1280,28 +1321,30 @@ state 45
   ! shift/reduce conflict for Switch resolved as shift
   ! shift/reduce conflict for Enter resolved as shift
   ! shift/reduce conflict for LoadSmartApp resolved as shift
+  ! shift/reduce conflict for DoGenomicAuth resolved as shift
     Repeat          reduce using rule 1 (program -> program compound_action actions .)
     Task            reduce using rule 1 (program -> program compound_action actions .)
     $end            reduce using rule 1 (program -> program compound_action actions .)
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
   ! Auth            [ reduce using rule 1 (program -> program compound_action actions .) ]
   ! Judge           [ reduce using rule 1 (program -> program compound_action actions .) ]
@@ -1322,11 +1365,12 @@ state 45
   ! Switch          [ reduce using rule 1 (program -> program compound_action actions .) ]
   ! Enter           [ reduce using rule 1 (program -> program compound_action actions .) ]
   ! LoadSmartApp    [ reduce using rule 1 (program -> program compound_action actions .) ]
+  ! DoGenomicAuth   [ reduce using rule 1 (program -> program compound_action actions .) ]
 
-    action                         shift and go to state 31
-    movement                       shift and go to state 15
+    action                         shift and go to state 32
+    movement                       shift and go to state 16
 
-state 46
+state 47
 
     (14) action -> movement STRING NEWLINE .
 
@@ -1349,32 +1393,33 @@ state 46
     Switch          reduce using rule 14 (action -> movement STRING NEWLINE .)
     Enter           reduce using rule 14 (action -> movement STRING NEWLINE .)
     LoadSmartApp    reduce using rule 14 (action -> movement STRING NEWLINE .)
+    DoGenomicAuth   reduce using rule 14 (action -> movement STRING NEWLINE .)
     Repeat          reduce using rule 14 (action -> movement STRING NEWLINE .)
     Task            reduce using rule 14 (action -> movement STRING NEWLINE .)
     $end            reduce using rule 14 (action -> movement STRING NEWLINE .)
     End             reduce using rule 14 (action -> movement STRING NEWLINE .)
 
 
-state 47
-
-    (42) target -> STRING STRING .
-
-    STRING          reduce using rule 42 (target -> STRING STRING .)
-    BOOL            reduce using rule 42 (target -> STRING STRING .)
-    NEWLINE         reduce using rule 42 (target -> STRING STRING .)
-    Not             reduce using rule 42 (target -> STRING STRING .)
-
-
 state 48
+
+    (43) target -> STRING STRING .
+
+    STRING          reduce using rule 43 (target -> STRING STRING .)
+    BOOL            reduce using rule 43 (target -> STRING STRING .)
+    NEWLINE         reduce using rule 43 (target -> STRING STRING .)
+    Not             reduce using rule 43 (target -> STRING STRING .)
+
+
+state 49
 
     (10) action -> movement target STRING . BOOL NEWLINE
     (11) action -> movement target STRING . NEWLINE
 
-    BOOL            shift and go to state 58
-    NEWLINE         shift and go to state 57
+    BOOL            shift and go to state 59
+    NEWLINE         shift and go to state 58
 
 
-state 49
+state 50
 
     (13) action -> movement target NEWLINE .
 
@@ -1397,27 +1442,28 @@ state 49
     Switch          reduce using rule 13 (action -> movement target NEWLINE .)
     Enter           reduce using rule 13 (action -> movement target NEWLINE .)
     LoadSmartApp    reduce using rule 13 (action -> movement target NEWLINE .)
+    DoGenomicAuth   reduce using rule 13 (action -> movement target NEWLINE .)
     Repeat          reduce using rule 13 (action -> movement target NEWLINE .)
     Task            reduce using rule 13 (action -> movement target NEWLINE .)
     $end            reduce using rule 13 (action -> movement target NEWLINE .)
     End             reduce using rule 13 (action -> movement target NEWLINE .)
 
 
-state 50
+state 51
 
     (12) action -> movement target BOOL . NEWLINE
 
-    NEWLINE         shift and go to state 59
+    NEWLINE         shift and go to state 60
 
 
-state 51
+state 52
 
-    (40) task_block -> Task ID NEWLINE . actions End
-    (41) task_block -> Task ID NEWLINE . compound_action End
+    (41) task_block -> Task ID NEWLINE . actions End
+    (42) task_block -> Task ID NEWLINE . compound_action End
     (6) actions -> . actions action
     (7) actions -> . action
-    (36) compound_action -> . repeat_block
-    (37) compound_action -> . task_block
+    (37) compound_action -> . repeat_block
+    (38) compound_action -> . task_block
     (8) action -> . Auth STRING STRING NEWLINE
     (9) action -> . movement NEWLINE
     (10) action -> . movement target STRING BOOL NEWLINE
@@ -1429,10 +1475,10 @@ state 51
     (16) action -> . Judge target Not STRING NEWLINE
     (17) action -> . NEWLINE
     (18) action -> . error NEWLINE
-    (38) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
-    (39) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
-    (40) task_block -> . Task ID NEWLINE actions End
-    (41) task_block -> . Task ID NEWLINE compound_action End
+    (39) repeat_block -> . Repeat NUMBER NEWLINE actions End NEWLINE
+    (40) repeat_block -> . Repeat NUMBER NEWLINE compound_action End NEWLINE
+    (41) task_block -> . Task ID NEWLINE actions End
+    (42) task_block -> . Task ID NEWLINE compound_action End
     (19) movement -> . Prefer
     (20) movement -> . Patient
     (21) movement -> . Visit
@@ -1449,61 +1495,63 @@ state 51
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Repeat          shift and go to state 8
-    Task            shift and go to state 16
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Repeat          shift and go to state 9
+    Task            shift and go to state 17
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
     task_block                     shift and go to state 1
-    repeat_block                   shift and go to state 22
-    compound_action                shift and go to state 60
-    actions                        shift and go to state 61
-    action                         shift and go to state 27
-    movement                       shift and go to state 15
-
-state 52
-
-    (16) action -> Judge target Not . STRING NEWLINE
-
-    STRING          shift and go to state 62
-
+    repeat_block                   shift and go to state 23
+    compound_action                shift and go to state 61
+    actions                        shift and go to state 62
+    action                         shift and go to state 28
+    movement                       shift and go to state 16
 
 state 53
 
-    (15) action -> Judge target STRING . NEWLINE
+    (16) action -> Judge target Not . STRING NEWLINE
 
-    NEWLINE         shift and go to state 63
+    STRING          shift and go to state 63
 
 
 state 54
 
-    (39) repeat_block -> Repeat NUMBER NEWLINE compound_action . End NEWLINE
+    (15) action -> Judge target STRING . NEWLINE
 
-    End             shift and go to state 64
+    NEWLINE         shift and go to state 64
 
 
 state 55
 
-    (38) repeat_block -> Repeat NUMBER NEWLINE actions . End NEWLINE
+    (40) repeat_block -> Repeat NUMBER NEWLINE compound_action . End NEWLINE
+
+    End             shift and go to state 65
+
+
+state 56
+
+    (39) repeat_block -> Repeat NUMBER NEWLINE actions . End NEWLINE
     (6) actions -> actions . action
     (8) action -> . Auth STRING STRING NEWLINE
     (9) action -> . movement NEWLINE
@@ -1532,33 +1580,35 @@ state 55
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
-    End             shift and go to state 65
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    End             shift and go to state 66
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
-    action                         shift and go to state 31
-    movement                       shift and go to state 15
+    action                         shift and go to state 32
+    movement                       shift and go to state 16
 
-state 56
+state 57
 
     (8) action -> Auth STRING STRING NEWLINE .
 
@@ -1581,13 +1631,14 @@ state 56
     Switch          reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
     Enter           reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
     LoadSmartApp    reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
+    DoGenomicAuth   reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
     Repeat          reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
     Task            reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
     $end            reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
     End             reduce using rule 8 (action -> Auth STRING STRING NEWLINE .)
 
 
-state 57
+state 58
 
     (11) action -> movement target STRING NEWLINE .
 
@@ -1610,20 +1661,21 @@ state 57
     Switch          reduce using rule 11 (action -> movement target STRING NEWLINE .)
     Enter           reduce using rule 11 (action -> movement target STRING NEWLINE .)
     LoadSmartApp    reduce using rule 11 (action -> movement target STRING NEWLINE .)
+    DoGenomicAuth   reduce using rule 11 (action -> movement target STRING NEWLINE .)
     Repeat          reduce using rule 11 (action -> movement target STRING NEWLINE .)
     Task            reduce using rule 11 (action -> movement target STRING NEWLINE .)
     $end            reduce using rule 11 (action -> movement target STRING NEWLINE .)
     End             reduce using rule 11 (action -> movement target STRING NEWLINE .)
 
 
-state 58
+state 59
 
     (10) action -> movement target STRING BOOL . NEWLINE
 
-    NEWLINE         shift and go to state 66
+    NEWLINE         shift and go to state 67
 
 
-state 59
+state 60
 
     (12) action -> movement target BOOL NEWLINE .
 
@@ -1646,22 +1698,23 @@ state 59
     Switch          reduce using rule 12 (action -> movement target BOOL NEWLINE .)
     Enter           reduce using rule 12 (action -> movement target BOOL NEWLINE .)
     LoadSmartApp    reduce using rule 12 (action -> movement target BOOL NEWLINE .)
+    DoGenomicAuth   reduce using rule 12 (action -> movement target BOOL NEWLINE .)
     Repeat          reduce using rule 12 (action -> movement target BOOL NEWLINE .)
     Task            reduce using rule 12 (action -> movement target BOOL NEWLINE .)
     $end            reduce using rule 12 (action -> movement target BOOL NEWLINE .)
     End             reduce using rule 12 (action -> movement target BOOL NEWLINE .)
 
 
-state 60
-
-    (41) task_block -> Task ID NEWLINE compound_action . End
-
-    End             shift and go to state 67
-
-
 state 61
 
-    (40) task_block -> Task ID NEWLINE actions . End
+    (42) task_block -> Task ID NEWLINE compound_action . End
+
+    End             shift and go to state 68
+
+
+state 62
+
+    (41) task_block -> Task ID NEWLINE actions . End
     (6) actions -> actions . action
     (8) action -> . Auth STRING STRING NEWLINE
     (9) action -> . movement NEWLINE
@@ -1690,40 +1743,42 @@ state 61
     (32) movement -> . Switch
     (33) movement -> . Enter
     (34) movement -> . LoadSmartApp
-    (35) movement -> . error
+    (35) movement -> . DoGenomicAuth
+    (36) movement -> . error
 
-    End             shift and go to state 68
-    Auth            shift and go to state 12
-    Judge           shift and go to state 17
-    NEWLINE         shift and go to state 11
-    error           shift and go to state 30
-    Prefer          shift and go to state 23
-    Patient         shift and go to state 9
+    End             shift and go to state 69
+    Auth            shift and go to state 13
+    Judge           shift and go to state 18
+    NEWLINE         shift and go to state 12
+    error           shift and go to state 31
+    Prefer          shift and go to state 24
+    Patient         shift and go to state 10
     Visit           shift and go to state 3
-    Blind           shift and go to state 20
-    Click           shift and go to state 28
+    Blind           shift and go to state 21
+    Click           shift and go to state 29
     Input           shift and go to state 7
     Choose          shift and go to state 5
-    Back            shift and go to state 24
+    Back            shift and go to state 25
     Forward         shift and go to state 6
-    Accept          shift and go to state 25
-    Dismiss         shift and go to state 21
-    Press           shift and go to state 13
-    Switch          shift and go to state 18
-    Enter           shift and go to state 19
-    LoadSmartApp    shift and go to state 10
+    Accept          shift and go to state 26
+    Dismiss         shift and go to state 22
+    Press           shift and go to state 14
+    Switch          shift and go to state 19
+    Enter           shift and go to state 20
+    LoadSmartApp    shift and go to state 11
+    DoGenomicAuth   shift and go to state 8
 
-    action                         shift and go to state 31
-    movement                       shift and go to state 15
+    action                         shift and go to state 32
+    movement                       shift and go to state 16
 
-state 62
+state 63
 
     (16) action -> Judge target Not STRING . NEWLINE
 
-    NEWLINE         shift and go to state 69
+    NEWLINE         shift and go to state 70
 
 
-state 63
+state 64
 
     (15) action -> Judge target STRING NEWLINE .
 
@@ -1746,27 +1801,28 @@ state 63
     Switch          reduce using rule 15 (action -> Judge target STRING NEWLINE .)
     Enter           reduce using rule 15 (action -> Judge target STRING NEWLINE .)
     LoadSmartApp    reduce using rule 15 (action -> Judge target STRING NEWLINE .)
+    DoGenomicAuth   reduce using rule 15 (action -> Judge target STRING NEWLINE .)
     Repeat          reduce using rule 15 (action -> Judge target STRING NEWLINE .)
     Task            reduce using rule 15 (action -> Judge target STRING NEWLINE .)
     $end            reduce using rule 15 (action -> Judge target STRING NEWLINE .)
     End             reduce using rule 15 (action -> Judge target STRING NEWLINE .)
 
 
-state 64
-
-    (39) repeat_block -> Repeat NUMBER NEWLINE compound_action End . NEWLINE
-
-    NEWLINE         shift and go to state 70
-
-
 state 65
 
-    (38) repeat_block -> Repeat NUMBER NEWLINE actions End . NEWLINE
+    (40) repeat_block -> Repeat NUMBER NEWLINE compound_action End . NEWLINE
 
     NEWLINE         shift and go to state 71
 
 
 state 66
+
+    (39) repeat_block -> Repeat NUMBER NEWLINE actions End . NEWLINE
+
+    NEWLINE         shift and go to state 72
+
+
+state 67
 
     (10) action -> movement target STRING BOOL NEWLINE .
 
@@ -1789,65 +1845,68 @@ state 66
     Switch          reduce using rule 10 (action -> movement target STRING BOOL NEWLINE .)
     Enter           reduce using rule 10 (action -> movement target STRING BOOL NEWLINE .)
     LoadSmartApp    reduce using rule 10 (action -> movement target STRING BOOL NEWLINE .)
+    DoGenomicAuth   reduce using rule 10 (action -> movement target STRING BOOL NEWLINE .)
     Repeat          reduce using rule 10 (action -> movement target STRING BOOL NEWLINE .)
     Task            reduce using rule 10 (action -> movement target STRING BOOL NEWLINE .)
     $end            reduce using rule 10 (action -> movement target STRING BOOL NEWLINE .)
     End             reduce using rule 10 (action -> movement target STRING BOOL NEWLINE .)
 
 
-state 67
-
-    (41) task_block -> Task ID NEWLINE compound_action End .
-
-    End             reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Auth            reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Judge           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    NEWLINE         reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    error           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Prefer          reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Patient         reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Visit           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Blind           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Click           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Input           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Choose          reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Back            reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Forward         reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Accept          reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Dismiss         reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Press           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Switch          reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    Enter           reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-    LoadSmartApp    reduce using rule 41 (task_block -> Task ID NEWLINE compound_action End .)
-
-
 state 68
 
-    (40) task_block -> Task ID NEWLINE actions End .
+    (42) task_block -> Task ID NEWLINE compound_action End .
 
-    End             reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Auth            reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Judge           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    NEWLINE         reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    error           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Prefer          reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Patient         reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Visit           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Blind           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Click           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Input           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Choose          reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Back            reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Forward         reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Accept          reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Dismiss         reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Press           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Switch          reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    Enter           reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
-    LoadSmartApp    reduce using rule 40 (task_block -> Task ID NEWLINE actions End .)
+    Auth            reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Judge           reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    NEWLINE         reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    error           reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Prefer          reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Patient         reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Visit           reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Blind           reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Click           reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Input           reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Choose          reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Back            reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Forward         reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Accept          reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Dismiss         reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Press           reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Switch          reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    Enter           reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    LoadSmartApp    reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    DoGenomicAuth   reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
+    End             reduce using rule 42 (task_block -> Task ID NEWLINE compound_action End .)
 
 
 state 69
+
+    (41) task_block -> Task ID NEWLINE actions End .
+
+    Auth            reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Judge           reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    NEWLINE         reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    error           reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Prefer          reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Patient         reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Visit           reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Blind           reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Click           reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Input           reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Choose          reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Back            reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Forward         reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Accept          reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Dismiss         reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Press           reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Switch          reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    Enter           reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    LoadSmartApp    reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    DoGenomicAuth   reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+    End             reduce using rule 41 (task_block -> Task ID NEWLINE actions End .)
+
+
+state 70
 
     (16) action -> Judge target Not STRING NEWLINE .
 
@@ -1870,62 +1929,65 @@ state 69
     Switch          reduce using rule 16 (action -> Judge target Not STRING NEWLINE .)
     Enter           reduce using rule 16 (action -> Judge target Not STRING NEWLINE .)
     LoadSmartApp    reduce using rule 16 (action -> Judge target Not STRING NEWLINE .)
+    DoGenomicAuth   reduce using rule 16 (action -> Judge target Not STRING NEWLINE .)
     Repeat          reduce using rule 16 (action -> Judge target Not STRING NEWLINE .)
     Task            reduce using rule 16 (action -> Judge target Not STRING NEWLINE .)
     $end            reduce using rule 16 (action -> Judge target Not STRING NEWLINE .)
     End             reduce using rule 16 (action -> Judge target Not STRING NEWLINE .)
 
 
-state 70
-
-    (39) repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .
-
-    Auth            reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Judge           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    NEWLINE         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    error           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Prefer          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Patient         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Visit           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Blind           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Click           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Input           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Choose          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Back            reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Forward         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Accept          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Dismiss         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Press           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Switch          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    Enter           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    LoadSmartApp    reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-    End             reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
-
-
 state 71
 
-    (38) repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .
+    (40) repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .
 
-    Auth            reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Judge           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    NEWLINE         reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    error           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Prefer          reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Patient         reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Visit           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Blind           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Click           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Input           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Choose          reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Back            reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Forward         reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Accept          reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Dismiss         reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Press           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Switch          reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    Enter           reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    LoadSmartApp    reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
-    End             reduce using rule 38 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    End             reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Auth            reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Judge           reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    NEWLINE         reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    error           reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Prefer          reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Patient         reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Visit           reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Blind           reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Click           reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Input           reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Choose          reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Back            reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Forward         reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Accept          reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Dismiss         reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Press           reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Switch          reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    Enter           reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    LoadSmartApp    reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+    DoGenomicAuth   reduce using rule 40 (repeat_block -> Repeat NUMBER NEWLINE compound_action End NEWLINE .)
+
+
+state 72
+
+    (39) repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .
+
+    End             reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Auth            reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Judge           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    NEWLINE         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    error           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Prefer          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Patient         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Visit           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Blind           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Click           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Input           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Choose          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Back            reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Forward         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Accept          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Dismiss         reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Press           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Switch          reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    Enter           reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    LoadSmartApp    reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
+    DoGenomicAuth   reduce using rule 39 (repeat_block -> Repeat NUMBER NEWLINE actions End NEWLINE .)
 
 WARNING: 
 WARNING: Conflicts:
@@ -1949,67 +2011,71 @@ WARNING: shift/reduce conflict for Press in state 4 resolved as shift
 WARNING: shift/reduce conflict for Switch in state 4 resolved as shift
 WARNING: shift/reduce conflict for Enter in state 4 resolved as shift
 WARNING: shift/reduce conflict for LoadSmartApp in state 4 resolved as shift
-WARNING: shift/reduce conflict for STRING in state 12 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 26 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 26 resolved as shift
-WARNING: shift/reduce conflict for Auth in state 29 resolved as shift
-WARNING: shift/reduce conflict for Judge in state 29 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 29 resolved as shift
-WARNING: shift/reduce conflict for error in state 29 resolved as shift
-WARNING: shift/reduce conflict for Prefer in state 29 resolved as shift
-WARNING: shift/reduce conflict for Patient in state 29 resolved as shift
-WARNING: shift/reduce conflict for Visit in state 29 resolved as shift
-WARNING: shift/reduce conflict for Blind in state 29 resolved as shift
-WARNING: shift/reduce conflict for Click in state 29 resolved as shift
-WARNING: shift/reduce conflict for Input in state 29 resolved as shift
-WARNING: shift/reduce conflict for Choose in state 29 resolved as shift
-WARNING: shift/reduce conflict for Back in state 29 resolved as shift
-WARNING: shift/reduce conflict for Forward in state 29 resolved as shift
-WARNING: shift/reduce conflict for Accept in state 29 resolved as shift
-WARNING: shift/reduce conflict for Dismiss in state 29 resolved as shift
-WARNING: shift/reduce conflict for Press in state 29 resolved as shift
-WARNING: shift/reduce conflict for Switch in state 29 resolved as shift
-WARNING: shift/reduce conflict for Enter in state 29 resolved as shift
-WARNING: shift/reduce conflict for LoadSmartApp in state 29 resolved as shift
+WARNING: shift/reduce conflict for DoGenomicAuth in state 4 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 13 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 27 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 27 resolved as shift
+WARNING: shift/reduce conflict for Auth in state 30 resolved as shift
+WARNING: shift/reduce conflict for Judge in state 30 resolved as shift
 WARNING: shift/reduce conflict for NEWLINE in state 30 resolved as shift
-WARNING: shift/reduce conflict for Auth in state 35 resolved as shift
-WARNING: shift/reduce conflict for Judge in state 35 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 35 resolved as shift
-WARNING: shift/reduce conflict for error in state 35 resolved as shift
-WARNING: shift/reduce conflict for Prefer in state 35 resolved as shift
-WARNING: shift/reduce conflict for Patient in state 35 resolved as shift
-WARNING: shift/reduce conflict for Visit in state 35 resolved as shift
-WARNING: shift/reduce conflict for Blind in state 35 resolved as shift
-WARNING: shift/reduce conflict for Click in state 35 resolved as shift
-WARNING: shift/reduce conflict for Input in state 35 resolved as shift
-WARNING: shift/reduce conflict for Choose in state 35 resolved as shift
-WARNING: shift/reduce conflict for Back in state 35 resolved as shift
-WARNING: shift/reduce conflict for Forward in state 35 resolved as shift
-WARNING: shift/reduce conflict for Accept in state 35 resolved as shift
-WARNING: shift/reduce conflict for Dismiss in state 35 resolved as shift
-WARNING: shift/reduce conflict for Press in state 35 resolved as shift
-WARNING: shift/reduce conflict for Switch in state 35 resolved as shift
-WARNING: shift/reduce conflict for Enter in state 35 resolved as shift
-WARNING: shift/reduce conflict for LoadSmartApp in state 35 resolved as shift
-WARNING: shift/reduce conflict for STRING in state 36 resolved as shift
+WARNING: shift/reduce conflict for error in state 30 resolved as shift
+WARNING: shift/reduce conflict for Prefer in state 30 resolved as shift
+WARNING: shift/reduce conflict for Patient in state 30 resolved as shift
+WARNING: shift/reduce conflict for Visit in state 30 resolved as shift
+WARNING: shift/reduce conflict for Blind in state 30 resolved as shift
+WARNING: shift/reduce conflict for Click in state 30 resolved as shift
+WARNING: shift/reduce conflict for Input in state 30 resolved as shift
+WARNING: shift/reduce conflict for Choose in state 30 resolved as shift
+WARNING: shift/reduce conflict for Back in state 30 resolved as shift
+WARNING: shift/reduce conflict for Forward in state 30 resolved as shift
+WARNING: shift/reduce conflict for Accept in state 30 resolved as shift
+WARNING: shift/reduce conflict for Dismiss in state 30 resolved as shift
+WARNING: shift/reduce conflict for Press in state 30 resolved as shift
+WARNING: shift/reduce conflict for Switch in state 30 resolved as shift
+WARNING: shift/reduce conflict for Enter in state 30 resolved as shift
+WARNING: shift/reduce conflict for LoadSmartApp in state 30 resolved as shift
+WARNING: shift/reduce conflict for DoGenomicAuth in state 30 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 31 resolved as shift
+WARNING: shift/reduce conflict for Auth in state 36 resolved as shift
+WARNING: shift/reduce conflict for Judge in state 36 resolved as shift
 WARNING: shift/reduce conflict for NEWLINE in state 36 resolved as shift
-WARNING: shift/reduce conflict for STRING in state 41 resolved as shift
-WARNING: shift/reduce conflict for Auth in state 45 resolved as shift
-WARNING: shift/reduce conflict for Judge in state 45 resolved as shift
-WARNING: shift/reduce conflict for NEWLINE in state 45 resolved as shift
-WARNING: shift/reduce conflict for error in state 45 resolved as shift
-WARNING: shift/reduce conflict for Prefer in state 45 resolved as shift
-WARNING: shift/reduce conflict for Patient in state 45 resolved as shift
-WARNING: shift/reduce conflict for Visit in state 45 resolved as shift
-WARNING: shift/reduce conflict for Blind in state 45 resolved as shift
-WARNING: shift/reduce conflict for Click in state 45 resolved as shift
-WARNING: shift/reduce conflict for Input in state 45 resolved as shift
-WARNING: shift/reduce conflict for Choose in state 45 resolved as shift
-WARNING: shift/reduce conflict for Back in state 45 resolved as shift
-WARNING: shift/reduce conflict for Forward in state 45 resolved as shift
-WARNING: shift/reduce conflict for Accept in state 45 resolved as shift
-WARNING: shift/reduce conflict for Dismiss in state 45 resolved as shift
-WARNING: shift/reduce conflict for Press in state 45 resolved as shift
-WARNING: shift/reduce conflict for Switch in state 45 resolved as shift
-WARNING: shift/reduce conflict for Enter in state 45 resolved as shift
-WARNING: shift/reduce conflict for LoadSmartApp in state 45 resolved as shift
+WARNING: shift/reduce conflict for error in state 36 resolved as shift
+WARNING: shift/reduce conflict for Prefer in state 36 resolved as shift
+WARNING: shift/reduce conflict for Patient in state 36 resolved as shift
+WARNING: shift/reduce conflict for Visit in state 36 resolved as shift
+WARNING: shift/reduce conflict for Blind in state 36 resolved as shift
+WARNING: shift/reduce conflict for Click in state 36 resolved as shift
+WARNING: shift/reduce conflict for Input in state 36 resolved as shift
+WARNING: shift/reduce conflict for Choose in state 36 resolved as shift
+WARNING: shift/reduce conflict for Back in state 36 resolved as shift
+WARNING: shift/reduce conflict for Forward in state 36 resolved as shift
+WARNING: shift/reduce conflict for Accept in state 36 resolved as shift
+WARNING: shift/reduce conflict for Dismiss in state 36 resolved as shift
+WARNING: shift/reduce conflict for Press in state 36 resolved as shift
+WARNING: shift/reduce conflict for Switch in state 36 resolved as shift
+WARNING: shift/reduce conflict for Enter in state 36 resolved as shift
+WARNING: shift/reduce conflict for LoadSmartApp in state 36 resolved as shift
+WARNING: shift/reduce conflict for DoGenomicAuth in state 36 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 37 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 37 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 42 resolved as shift
+WARNING: shift/reduce conflict for Auth in state 46 resolved as shift
+WARNING: shift/reduce conflict for Judge in state 46 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 46 resolved as shift
+WARNING: shift/reduce conflict for error in state 46 resolved as shift
+WARNING: shift/reduce conflict for Prefer in state 46 resolved as shift
+WARNING: shift/reduce conflict for Patient in state 46 resolved as shift
+WARNING: shift/reduce conflict for Visit in state 46 resolved as shift
+WARNING: shift/reduce conflict for Blind in state 46 resolved as shift
+WARNING: shift/reduce conflict for Click in state 46 resolved as shift
+WARNING: shift/reduce conflict for Input in state 46 resolved as shift
+WARNING: shift/reduce conflict for Choose in state 46 resolved as shift
+WARNING: shift/reduce conflict for Back in state 46 resolved as shift
+WARNING: shift/reduce conflict for Forward in state 46 resolved as shift
+WARNING: shift/reduce conflict for Accept in state 46 resolved as shift
+WARNING: shift/reduce conflict for Dismiss in state 46 resolved as shift
+WARNING: shift/reduce conflict for Press in state 46 resolved as shift
+WARNING: shift/reduce conflict for Switch in state 46 resolved as shift
+WARNING: shift/reduce conflict for Enter in state 46 resolved as shift
+WARNING: shift/reduce conflict for LoadSmartApp in state 46 resolved as shift
+WARNING: shift/reduce conflict for DoGenomicAuth in state 46 resolved as shift

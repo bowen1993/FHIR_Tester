@@ -126,7 +126,7 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
             if isinstance(response, str):
                 hint += response
             elif isinstance(response, dict):
-                hint += response['issue']
+                hint += json.dumps(response['issue'])
             isSuccessful = isSuccessful and False
             hint_infos.append({
                 'status': False,
@@ -345,8 +345,14 @@ def random_picker(pick_list):
     low, high = 0, len(pick_list)-1
     return pick_list[random.randint(low, high)]
 
+def level4Test(url, id_dict, step_obj, access_token):
+    if not url.endswith('/'):
+        url += '/'
+    isSuccessful = True
+    hint_infos = []
 
-def level4Test(url, id_dict,step_obj, access_token):
+
+def level5Test(url, id_dict,step_obj, access_token):
     if not url.endswith('/'):
         url += '/'
     isSuccessful = True
@@ -455,13 +461,13 @@ def perform_a_test(test_method,step_obj ,url, id_dict, base_desc,name=None, acce
     step_info = form_new_step_info(isSuccessful,'%s %s' % (base_desc, 'successfully' if isSuccessful else 'failed'), hint_infos, name)
     return step_info
 
-def do_standard_test(task_id, url, access_token=None, resources=["0","1","2","3","4"]):
+def do_standard_test(task_id, url, access_token=None, resources=["0","1","2","3","4","5"]):
     #create pre resources
     test_result = {
-        'level':-1,
+        'level':[],
         'steps':[]
     }
-    level = -1
+    level = []
     step_info = form_new_step_info(True, 'Setting up standard test......', [], 'Setup')
     step_obj = create_one_step(task_id ,step_info)
     create_res, id_dict = create_pre_resources(url, 'resources', access_token)
@@ -482,48 +488,42 @@ def do_standard_test(task_id, url, access_token=None, resources=["0","1","2","3"
     create_one_step(task_id ,step_info, step_obj)
     #standard test begin
     
-    flag = True
     if "0" in resources:
         step_info = form_new_step_info(True, 'Level 0 test performing', [], 'Level 0')
         step_obj = create_one_step(task_id ,step_info)
         step_info = perform_a_test(level0Test,step_obj, url, id_dict, 'Level 0 test', 'Level 0', access_token)
         create_one_step(task_id, step_info, step_obj)
-        flag = flag and step_info['status']
-        if flag:
-            level += 1
+        if step_info['status']:
+            test_result['level'].append('0')
     if "1" in resources:
         step_info = form_new_step_info(True, 'Level 1 test performing', [],'Level 1')
         step_obj = create_one_step(task_id ,step_info)
         step_info = perform_a_test(level1Test,step_obj, url, id_dict, 'Level 1 test', 'Level 1', access_token)
         create_one_step(task_id, step_info, step_obj)
-        flag = flag and step_info['status']
-        if flag:
-            level += 1
+        if step_info['status']:
+            test_result['level'].append('1')
 
     if "2" in resources:
         step_info = form_new_step_info(True, 'Level 2 test performing', [],'Level 2')
         step_obj = create_one_step(task_id ,step_info)
         step_info = perform_a_test(level2Test,step_obj, url, id_dict, 'Level 2 test','Level 2', access_token)
         create_one_step(task_id, step_info, step_obj)
-        flag = flag and step_info['status']
-        if flag:
-            level += 1
+        if step_info['status']:
+            test_result['level'].append('2')
     if "3" in resources:
         step_info = form_new_step_info(True, 'Level 3 test performing', [],'Level 3')
         step_obj = create_one_step(task_id ,step_info)
         step_info = perform_a_test(level3Test,step_obj, url, id_dict, 'Level 3 test','Level 3', access_token)
         create_one_step(task_id, step_info, step_obj)
-        flag = flag and step_info['status']
-        if flag:
-            level += 1
-    if "4" in resources:
-        step_info = form_new_step_info(True, 'Level 4 test performing', [],'Level 4')
+        if step_info['status']:
+            test_result['level'].append('3')
+    if "5" in resources:
+        step_info = form_new_step_info(True, 'Level 5 test performing', [],'Level 4')
         step_obj = create_one_step(task_id ,step_info)
-        step_info = perform_a_test(level4Test,step_obj, url, id_dict, 'Level 4 test','Level 4', access_token)
+        step_info = perform_a_test(level5Test,step_obj, url, id_dict, 'Level 5 test','Level 5', access_token)
         create_one_step(task_id, step_info, step_obj)
-        flag = flag and step_info['status']
-        if flag:
-            level += 1
+        if step_info['status']:
+            test_result['level'].append('5')
     #save_fake2file()
-    return level, id_dict
+    return test_result['level'], id_dict
 

@@ -26,7 +26,7 @@ class task(models.Model):
 class result(models.Model):
     task = models.ForeignKey(task)
     status = models.CharField(max_length=32, null=True)
-    level = models.IntegerField(null=True)
+    level = models.CharField(max_length=64, null=True)
 
 class task_steps(models.Model):
     task = models.ForeignKey(task)

@@ -108,7 +108,7 @@ def ws_receive(message):
                 else:
                     curr_steps = step_result
                     step_result['test_type'] = task_obj.task_type
-                    step_result['level'] = -1
+                    step_result['level'] = []
                     res_data = {
                         'step_result':step_result,
                         'place':place,
@@ -122,10 +122,10 @@ def ws_receive(message):
                 print 'sending'
                 step_result = form_results(task_id)
                 test_report = form_test_report(task_id)
-                test_report['level'] = result_obj.level
+                test_report['level'] = json.loads(result_obj.level)
                 test_report['test_type'] = task_obj.task_type
                 step_result['test_type'] = task_obj.task_type
-                step_result['level'] = result_obj.level
+                step_result['level'] = json.loads(result_obj.level)
                 res_data = {
                     'step_result':step_result,
                     'place':place,

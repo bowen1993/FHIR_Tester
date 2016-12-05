@@ -1,5 +1,5 @@
 def Prefer(value="PhantomJS"):
-    return True, "driver = webdriver.%s(desired_capabilities=dcap)\ndriver.implicitly_wait(5)\ndriver.set_window_size(1440,960)\n" % value
+    return True, "driver = webdriver.%s(desired_capabilities=dcap)\ndriver.implicitly_wait(10)\ndriver.set_window_size(1440,960)\n" % value
 
 def Patient(value=0):
     return True, ""
@@ -9,6 +9,17 @@ def Visit(value=""):
         return True, "driver.get('%s')\n" % value
     else:
         return False, "Wrong URL"
+
+def DoGenomicAuth():
+    return True, '''ele = driver.find_element_by_css_selector('input#inputEmail')
+ele.send_keys('test@email.com')
+ele = driver.find_element_by_css_selector('input#inputPassword')
+ele.send_keys('123456')
+ele = driver.find_element_by_xpath('/html/body/div/form/button')
+ele.click()
+ele = driver.find_element_by_xpath('/html/body/div/div/div/form/button[1]')
+ele.click()
+'''
 
 def LoadSmartApp(value=""):
     if len(value) > 0:
