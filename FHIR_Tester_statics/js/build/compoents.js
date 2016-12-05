@@ -656,7 +656,7 @@ var app = app || {};
                     React.createElement("div", {className: "brief-info"}, 
                         React.createElement("h4", null, "Test Type: ", this.props.report.test_type), 
                         React.createElement("h4", null, "Target Server: ", this.props.report.server), 
-                        React.createElement("h4", null, "Level: ", this.props.report.level.map(function(l){
+                        React.createElement("h4", null, "Level: ", this.props.report.level == null? null : this.props.report.level.map(function(l){
                             return React.createElement("span", null, l, ", ")
                         }))
                     ), 
