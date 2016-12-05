@@ -656,7 +656,7 @@ var app = app || {};
                     <div className="brief-info">
                         <h4>Test Type: {this.props.report.test_type}</h4>
                         <h4>Target Server: {this.props.report.server}</h4>
-                        <h4>Level: {this.props.report.level.map(function(l){
+                        <h4>Level: {this.props.report.level == null? null : this.props.report.level.map(function(l){
                             return <span>{l}, </span>
                         })}</h4>
                     </div>
