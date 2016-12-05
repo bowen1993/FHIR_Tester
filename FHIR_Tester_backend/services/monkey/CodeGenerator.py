@@ -16,9 +16,9 @@ ele.send_keys('test@email.com')
 ele = driver.find_element_by_css_selector('input#inputPassword')
 ele.send_keys('123456')
 ele = driver.find_element_by_xpath('/html/body/div/form/button')
-%s
 ele.click()
 ele = driver.find_element_by_xpath('/html/body/div/div/div/form/button[1]')
+%s
 ele.click()
 ''' % screenshot_func("%d.png"%index, "Genomic Auth")
 
