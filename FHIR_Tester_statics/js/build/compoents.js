@@ -309,15 +309,34 @@ var app = app || {};
 
     var FullyDetail = app.FullyDetail = React.createClass({displayName: "FullyDetail",
         getInitialState:function(){
-            return {detail_infos:[]}
+            return {detail_infos:[],is_image:false,is_modal_show:false,curr_img_src:''}
         },
         updateDetail:function(new_details){
             this.setState({detail_infos:new_details});
+            if( new_details.length>0 && new_details[0].addi && new_details[0].addi.length!=0 ){
+                this.setState({is_image:true})
+            }
+        },
+        handleHideModal(){
+            this.setState({is_modal_show:false});
+        },
+        handleShowModal(){
+            this.setState({is_modal_show: true});
+        },
+        handleShowFullImage:function(event,img_src){
+            event.stopPropagation();
+            this.setState({is_modal_show:true,curr_img_src:img_src});
         },
         render:function(){
             return (
                 React.createElement("div", {className: "result-container"}, 
-                this.state.detail_infos.map(function(step){
+                this.state.is_image ? this.state.detail_infos.map(function(step){
+                    return React.createElement("div", {id: step.index}, 
+                        React.createElement("h3", null, step.name), 
+                        step.status ? React.createElement("span", {className: "success-bar"}, "Success") : React.createElement("span", {className: "fail-bar"}, "Fail"), 
+                        React.createElement("img", {onClick: () =>this.handleShowFullImage(event,step.addi), className: "img-responsive img-rounded step-img", src: app.host + step.addi})
+                    )
+                },this) :this.state.detail_infos.map(function(step){
                     return step.details.map(function(detail){
                         return React.createElement("div", {id: step.index + "_" + detail.index}, 
                                 React.createElement("h3", null, step.name + " " + detail.resource_name), 
@@ -330,9 +349,8 @@ var app = app || {};
                                 React.createElement(HTTPDetail, {detail: detail})
                             )
                     },this)
-                },this)
-                            
-                
+                },this), 
+                this.state.is_modal_show && this.state.is_image ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "Step Image", content: React.createElement(FullImageArea, {img_src: app.host + this.state.curr_img_src})}) : null
                 )
             );
         }
@@ -397,8 +415,8 @@ var app = app || {};
                         
                     ), 
                     React.createElement("div", {hidden: this.state.is_img_hide && !this.state.is_has_image, className: "step-img-block"}, 
-                        React.createElement("button", {onClick: this.handleShowFullImage, className: "btn btn-primary"}, "Full Image"), 
-                        React.createElement("img", {className: "img-responsive img-rounded step-img", src: app.host + this.props.stepInfo.addi})
+                        
+                       React.createElement("a", {href: "#"+this.props.stepInfo.index}, " ", React.createElement("img", {className: "img-responsive img-thumbnail step-img-small", src: app.host + this.props.stepInfo.addi}), " ")
                     ), 
                     this.state.is_modal_show && this.state.is_has_image ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "Step Image", content: React.createElement(FullImageArea, {img_src: app.host + this.props.stepInfo.addi})}) : null
                 )

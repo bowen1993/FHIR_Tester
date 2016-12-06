@@ -107,6 +107,13 @@
 
 .step-img{
     margin:10px auto;
+    cursor: pointer;
+}
+
+.step-img-small{
+    margin:10px auto;
+    cursor: pointer;
+    width: 100px;
 }
 
 /*img.full-img{

@@ -309,15 +309,34 @@ var app = app || {};
 
     var FullyDetail = app.FullyDetail = React.createClass({
         getInitialState:function(){
-            return {detail_infos:[]}
+            return {detail_infos:[],is_image:false,is_modal_show:false,curr_img_src:''}
         },
         updateDetail:function(new_details){
             this.setState({detail_infos:new_details});
+            if( new_details.length>0 && new_details[0].addi && new_details[0].addi.length!=0 ){
+                this.setState({is_image:true})
+            }
+        },
+        handleHideModal(){
+            this.setState({is_modal_show:false});
+        },
+        handleShowModal(){
+            this.setState({is_modal_show: true});
+        },
+        handleShowFullImage:function(event,img_src){
+            event.stopPropagation();
+            this.setState({is_modal_show:true,curr_img_src:img_src});
         },
         render:function(){
             return (
                 <div className="result-container">
-                {this.state.detail_infos.map(function(step){
+                {this.state.is_image ? this.state.detail_infos.map(function(step){
+                    return <div id={step.index}>
+                        <h3>{step.name}</h3>
+                        {step.status ? <span className="success-bar">Success</span> : <span className="fail-bar">Fail</span>}
+                        <img onClick={() =>this.handleShowFullImage(event,step.addi)} className="img-responsive img-rounded step-img" src={app.host + step.addi} />
+                    </div>
+                },this) :this.state.detail_infos.map(function(step){
                     return step.details.map(function(detail){
                         return <div id={step.index + "_" + detail.index}>
                                 <h3>{step.name + " " + detail.resource_name}</h3>
@@ -331,8 +350,7 @@ var app = app || {};
                             </div>
                     },this)
                 },this)}
-                            
-                
+                {this.state.is_modal_show && this.state.is_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={app.host + this.state.curr_img_src} />} /> : null}
                 </div>
             );
         }
@@ -397,8 +415,8 @@ var app = app || {};
                         
                     </div>
                     <div hidden={this.state.is_img_hide && !this.state.is_has_image} className="step-img-block">
-                        <button onClick={this.handleShowFullImage} className="btn btn-primary">Full Image</button>
-                        <img className="img-responsive img-rounded step-img" src={app.host + this.props.stepInfo.addi} />
+                        
+                       <a href={"#"+this.props.stepInfo.index}> <img className="img-responsive img-thumbnail step-img-small" src={app.host + this.props.stepInfo.addi} /> </a>
                     </div>
                     {this.state.is_modal_show && this.state.is_has_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={app.host + this.props.stepInfo.addi} />} /> : null}
                 </div>

@@ -20,7 +20,8 @@ def form_results(task_id):
             'addi':step.additional_file,
             'details':[],
             'index':sindex,
-            'name':step.name
+            'name':step.name,
+            'status': True if 'success' in step.step_desc.lower() else False
         }
         details = step_detail.objects.filter(step=step)
         for detail in details:
