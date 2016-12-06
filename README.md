@@ -55,7 +55,7 @@ clang++ -std=c++11 -stdlib=libc++ -shared -I/System/Library/Frameworks/Python.fr
 ```
 
 #### Start service
-> Make Redis & MySQL is running before you start FHIR Tester Service  
+> Make sure Redis & MySQL is running before you start FHIR Tester Service  
 
 Under FHIR_Tester_backend, run
 > You may need open a new terminal window, or add & to the end of the first command to start both of them.  
