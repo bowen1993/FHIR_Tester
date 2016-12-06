@@ -24,7 +24,7 @@
 }
 
 .btn-test:hover .btn-test-text{
-    font-weight: bold;
+
     color: #fff;
 }
 
@@ -157,7 +157,6 @@
 
 .btn-user:hover, .btn-user:focus{
     color: #aaa;
-    font-weight: bold;
 }
 
 .btn-circle{
@@ -197,9 +196,17 @@ span.success-bar{
 
 span.fail-bar{
     background-color: rgba(183, 28, 28, 1);
+    color:#fff;
     padding: 10px;
     border-radius: 5px;
 }
+
+span.warning-bar{
+    background-color: #f0ad4e;
+    color:#fff;
+    padding: 10px;
+    border-radius: 5px;
+}   
 
 ul.customed-menu{
     border-radius: 0px;

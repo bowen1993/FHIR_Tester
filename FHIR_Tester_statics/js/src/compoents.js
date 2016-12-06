@@ -341,7 +341,7 @@ var app = app || {};
                         return <div id={step.index + "_" + detail.index}>
                                 <h3>{step.name + " " + detail.resource_name}</h3>
                                 <div className="result-head"><span className="area-title area-title-black">Test case detail </span>
-                                {detail.status ? <span className="success-bar">Success</span> : <span className="fail-bar">Fail</span>} 
+                                {detail.status==2 ? <span className="success-bar">Success</span> : detail.status==1? <span className="warning-bar">Warning</span> : <span className="fail-bar">Fall</span>} 
                                 </div>
                                 <div className="detail-desc-block">
                                         {detail.desc}
@@ -424,15 +424,27 @@ var app = app || {};
         }
     });
     var StepDetail = app.StepDetail = React.createClass({
+        getInitialState:function(){
+            return {btnStatus:"success"}
+        },
         classes:function(){
             return 'btn' + this.props.status ? ' btn-success': ' btn-danger' + ' btn-circle';
+        },
+        componentWillReceiveProps:function(nextProps){
+            if ( nextProps.status == 0 ) {
+                this.setState({btnStatus:"danger"})
+            }else if ( nextProps.status == 1 ) {
+                this.setState({btnStatus:"warning"})
+            }else if ( nextProps.status == 2 ) {
+                this.setState({btnStatus:"success"})
+            }
         },
         onBtnClick:function(){
             this.props.showDetail(this.props.fully_detail);
         },
         render:function(){
             return (
-                <a href={"#"+this.props.sindex+"_"+this.props.fully_detail.index} onClick={this.onBtnClick} className={this.props.status ? 'btn btn-circle btn-success': 'btn btn-circle btn-danger'}>{ this.props.status ? 'P' : 'F'}</a>
+                <a href={"#"+this.props.sindex+"_"+this.props.fully_detail.index} onClick={this.onBtnClick} className={'btn btn-circle btn-'+this.state.btnStatus}>{ this.props.status==2 ? 'P' : this.props.status==1 ? 'W' : 'F'}</a>
             )
         }
     })

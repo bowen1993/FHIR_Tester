@@ -341,7 +341,7 @@ var app = app || {};
                         return React.createElement("div", {id: step.index + "_" + detail.index}, 
                                 React.createElement("h3", null, step.name + " " + detail.resource_name), 
                                 React.createElement("div", {className: "result-head"}, React.createElement("span", {className: "area-title area-title-black"}, "Test case detail "), 
-                                detail.status ? React.createElement("span", {className: "success-bar"}, "Success") : React.createElement("span", {className: "fail-bar"}, "Fail")
+                                detail.status==2 ? React.createElement("span", {className: "success-bar"}, "Success") : detail.status==1? React.createElement("span", {className: "warning-bar"}, "Warning") : React.createElement("span", {className: "fail-bar"}, "Fall")
                                 ), 
                                 React.createElement("div", {className: "detail-desc-block"}, 
                                         detail.desc
@@ -424,15 +424,27 @@ var app = app || {};
         }
     });
     var StepDetail = app.StepDetail = React.createClass({displayName: "StepDetail",
+        getInitialState:function(){
+            return {btnStatus:"success"}
+        },
         classes:function(){
             return 'btn' + this.props.status ? ' btn-success': ' btn-danger' + ' btn-circle';
+        },
+        componentWillReceiveProps:function(nextProps){
+            if ( nextProps.status == 0 ) {
+                this.setState({btnStatus:"danger"})
+            }else if ( nextProps.status == 1 ) {
+                this.setState({btnStatus:"warning"})
+            }else if ( nextProps.status == 2 ) {
+                this.setState({btnStatus:"success"})
+            }
         },
         onBtnClick:function(){
             this.props.showDetail(this.props.fully_detail);
         },
         render:function(){
             return (
-                React.createElement("a", {href: "#"+this.props.sindex+"_"+this.props.fully_detail.index, onClick: this.onBtnClick, className: this.props.status ? 'btn btn-circle btn-success': 'btn btn-circle btn-danger'},  this.props.status ? 'P' : 'F')
+                React.createElement("a", {href: "#"+this.props.sindex+"_"+this.props.fully_detail.index, onClick: this.onBtnClick, className: 'btn btn-circle btn-'+this.state.btnStatus},  this.props.status==2 ? 'P' : this.props.status==1 ? 'W' : 'F')
             )
         }
     })

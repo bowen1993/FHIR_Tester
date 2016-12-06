@@ -129,11 +129,11 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
                 hint += json.dumps(response['issue'])
             isSuccessful = isSuccessful and False
             hint_infos.append({
-                'status': False,
+                'status': 0,
                 'desc': hint,
             })
             save_step_detail(step_obj, {
-                'status': False,
+                'status': 0,
                 'desc': 'Resource %s can not be processed. %s' %(resource_type, hint),
                 'req_header':req_header,
                 'res_header': res_header,
@@ -144,11 +144,11 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
     if isSuccessful:
         hint_infos.append({
                 'desc': '%s in correct format can be processed properly' % resource_type,
-                'status':True
+                'status':2
             })
         save_step_detail(step_obj, {
                 'desc': '%s in correct format can be processed properly' % resource_type,
-                'status':True,
+                'status':2,
                 'req_header':None,
                 'res_header': None,
                 'response':None,
@@ -167,11 +167,11 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
             isSuccessfulFalse = isSuccessfulFalse and True
         if not isSuccessfulFalse:
             hint_infos.append({
-                'status': False,
+                'status': 1,
                 'desc': hint
             })
             save_step_detail(step_obj, {
-                'status': False,
+                'status': 1,
                 'desc': hint,
                 'req_header':req_header,
                 'res_header': res_header,
@@ -182,18 +182,18 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
     if isSuccessfulFalse:
         hint_infos.append({
                 'desc': '%s with error can be handled' % resource_type,
-                'status':True
+                'status':2
             })
         save_step_detail(step_obj, {
                 'desc': '%s in incorrect format can be processed properly' % resource_type,
-                'status':True,
+                'status':2,
                 'req_header':None,
                 'res_header': None,
                 'response':None,
                 'resource':None,
                 'resource_name':resource_type
             })
-    return isSuccessful and isSuccessfulFalse, hint_infos
+    return isSuccessful, hint_infos
 
 def ana_pre_creation_result(raw_info):
     processed_info = {}
@@ -243,11 +243,11 @@ def level1Test(url,id_dict,step_obj, access_token):
             isSuccessful = isSuccessful and False
         if not isSuccessful:
             hint_infos.append({
-                'status': False,
+                'status': 0,
                 'desc': hint
             })
             save_step_detail(step_obj, {
-                'status': False,
+                'status': 0,
                 'desc': hint,
                 'req_header':req_header,
                 'res_header': res_header,
@@ -257,12 +257,12 @@ def level1Test(url,id_dict,step_obj, access_token):
             })
     if isSuccessful:
         hint_infos.append({
-                'status': True,
+                'status': 2,
                 'desc': 'Observation for genetic profile can be processed properly'
             })
         save_step_detail(step_obj, {
                 'desc': 'Observation for genetic profile can be processed properly',
-                'status':True,
+                'status':2,
                 'req_header':None,
                 'res_header': None,
                 'response':None,
@@ -298,11 +298,11 @@ def level2Test(url, id_dict,step_obj, access_token):
             isSuccessful = isSuccessful and False
         if not isSuccessful:
             hint_infos.append({
-                'status': False,
+                'status': 0,
                 'desc': hint
             })
             save_step_detail(step_obj, {
-                'status': False,
+                'status': 0,
                 'desc': hint,
                 'req_header':req_header,
                 'res_header': res_header,
@@ -312,12 +312,12 @@ def level2Test(url, id_dict,step_obj, access_token):
             })
     if isSuccessful:
         hint_infos.append({
-                'status':True,
+                'status':2,
                 'desc':'Observation with Gene extension can be processed properly'
             })
         save_step_detail(step_obj, {
                 'desc': 'Observation with Gene extension can be processed properly',
-                'status':True,
+                'status':2,
                 'req_header':None,
                 'res_header': None,
                 'response':None,
@@ -381,11 +381,11 @@ def level5Test(url, id_dict,step_obj, access_token):
                 hint += response
         if not isSuccessful:
             hint_infos.append({
-                'status':False,
+                'status':0,
                 'desc': '%s reading failed, %s' % (resource_name, hint)
             })
         save_step_detail(step_obj, {
-            'status': flag,
+            'status': 2 if flag else 0,
             'resource_name':resource_name,
             'desc': '%s reading %s, %s' % (resource_name, ('Success' if flag else 'Fail') ,hint),
             'req_header':req_header,
@@ -395,7 +395,7 @@ def level5Test(url, id_dict,step_obj, access_token):
         })
     if isSuccessful:
         hint_infos.append({
-                'status':True,
+                'status':2,
                 'desc':'FHIR Genomics Resources can be retrived'
             })
         # save_step_detail(step_obj, {
