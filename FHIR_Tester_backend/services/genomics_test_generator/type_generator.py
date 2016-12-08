@@ -12,6 +12,7 @@ def random_string_generate(length):
     @return random string
     @rtype str
     '''
+    random.seed(1)
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 def create_reference(reference_type=None):
@@ -37,6 +38,7 @@ def random_picker(pick_list):
     @return picked item
     @rtype: obj
     '''
+    random.seed(1)
     low, high = 0, len(pick_list)-1
     return pick_list[random.randint(low, high)]
 
@@ -128,6 +130,7 @@ def create_simplequantity():
     return create_quantity()
 
 def create_integer(customed=None):
+    random.seed(1)
     if customed == None:
         return random.randint(1,10)
     else:
