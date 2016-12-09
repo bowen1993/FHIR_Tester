@@ -57,6 +57,18 @@ def fetch_resource_id_list(entry_obj):
     id_list = map(lambda x: x['resource']['id'], entry_obj)
     return id_list
 
+def remove_none(resource_obj):
+    if isinstance(resource_obj, dict):
+        for key in resource_obj.keys() :
+            if resource_obj[key] is None:
+                del resource_obj[key]
+            elif isinstance(resource_obj[key], dict):
+                resource_obj[key] = remove_none(resource_obj[key])
+            elif isinstance(resource_obj[key], list):
+                for i in xrange(len(resource_obj[key])):
+                    resource_obj[key][i] = remove_none(resource_obj[key][i])
+    return resource_obj
+
 def set_reference(resource_obj,id_dict):
     if not isinstance(resource_obj, dict):
         return resource_obj

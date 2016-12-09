@@ -160,6 +160,7 @@ def create_instant():
     return create_datetime()
 
 def create_decimal(customed=None):
+    random.seed(1)
     if customed: 
         return customed
     else:

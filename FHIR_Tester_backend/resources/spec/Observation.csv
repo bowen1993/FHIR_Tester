@@ -2,6 +2,7 @@ Element,Type,Control,Binding,Reference,Binding_Url,Correct_Binding,Correct_Syste
  Observation.bodySite,CodeableConcept,0..1,SNOMED CT Body Structures: Codes describing anatomical locations. May include laterality. (Example),,http://hl7-fhir.github.io/valueset-body-site.html,39801007,http://snomed.info/sct,"{""code"":""39801007"",""system"":""http://snomed.info/sct""}"
  Observation.category,CodeableConcept,0..*,Observation Category Codes: Codes for high level observation categories . (Example),,http://hl7-fhir.github.io/valueset-observation-category.html,vital-signs,http://hl7.org/fhir/observation-category,"{""code"":""vital-signs"",""system"":""http://hl7.org/fhir/observation-category""}"
  Observation.code,CodeableConcept,1..1,LOINC Codes: Codes identifying names of simple observations. (Example),,http://hl7-fhir.github.io/valueset-observation-codes.html,10362-2,http://loinc.org,"{""code"":""10362-2"",""system"":""http://loinc.org""}"
+ Observation.component,BackboneElement,0..*,,,,,,
  Observation.comment,string,0..1,,,,,,
  Observation.component.code,CodeableConcept,1..1,LOINC Codes: Codes identifying names of simple observations. (Example),,http://hl7-fhir.github.io/valueset-observation-codes.html,10362-2,http://loinc.org,"{""code"":""10362-2"",""system"":""http://loinc.org""}"
  Observation.component.dataAbsentReason,CodeableConcept,0..1,Observation Value Absent Reason: Codes specifying why the result (Observation.value[x]) is missing. (Extensible),,http://hl7-fhir.github.io/valueset-observation-valueabsentreason.html,asked,http://hl7.org/fhir/data-absent-reason,"{""code"":""asked"",""system"":""http://hl7.org/fhir/data-absent-reason""}"
@@ -17,11 +18,13 @@ Element,Type,Control,Binding,Reference,Binding_Url,Correct_Binding,Correct_Syste
  Observation.issued,instant,0..1,,,,,,
  Observation.method,CodeableConcept,0..1,Observation Methods: Methods for simple observations. (Example),,http://hl7-fhir.github.io/valueset-observation-methods.html,PCR,http://hl7.org/fhir/v3/ObservationMethod,"{""code"":""PCR"",""system"":""http://hl7.org/fhir/v3/ObservationMethod""}"
  Observation.performer,Reference(Practitioner),0..*,,Practitioner,,,,
+ Observation.referenceRange,BackboneElement,0..*,,,,,,
  Observation.referenceRange.age,Range,0..1,,,,,,
  Observation.referenceRange.high,SimpleQuantity,0..1,,,,,,
  Observation.referenceRange.low,SimpleQuantity,0..1,,,,,,
- Observation.referenceRange.meaning,CodeableConcept,0..*,Observation Reference Range Meaning Codes: Code for the meaning of a reference range. (Example),,http://hl7-fhir.github.io/valueset-referencerange-meaning.html,1013-2,http://hl7.org/fhir/referencerange-meaning,"{""code"":""1013-2"",""system"":""http://hl7.org/fhir/referencerange-meaning""}"
+ Observation.referenceRange.meaning,CodeableConcept,0..*,Observation Reference Range Meaning Codes: Code for the meaning of a reference range. (Example),,http://hl7-fhir.github.io/valueset-referencerange-meaning.html,1013-2,http://hl7.org/fhir/referencerange-meaning,"{""code"":""normal"",""system"":""http://hl7.org/fhir/referencerange-meaning""}"
  Observation.referenceRange.text,string,0..1,,,,,,
+Observation.related,BackboneElement,0..*,,,,,,
  Observation.related.target,Reference(Observation),1..1,,Observation,,,,
  Observation.related.type,code,0..1,ObservationRelationshipType: Codes specifying how two observations are related. (Required),,http://hl7-fhir.github.io/valueset-observation-relationshiptypes.html,derived-from,http://hl7.org/fhir/observation-relationshiptypes,"{""code"":""derived-from"",""customed"":""type""}"
  Observation.specimen,Reference(Specimen),0..1,,Specimen,,,,

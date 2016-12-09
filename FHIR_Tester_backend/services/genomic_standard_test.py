@@ -91,6 +91,24 @@ def save_fake2file():
     file_obj.write(json.dumps(fake_info))
     file_obj.close()
 
+def get_right_cases(resource_type):
+    basepath = 'resources/resource_file'
+    filepath_list = []
+    for parentDir, dirnames, filenames in os.walk(basepath):
+        for filename in filenames:
+            if filename.endswith('json') and resource_type.lower() in filename.lower():
+                resource_name = filename[:filename.find('_')] if '_' in filename else filename[:filename.find('.')]
+                fullFilename = (parentDir if parentDir.endswith('/') else parentDir + '/') + filename
+                if resource_name.lower() == resource_type.lower(): filepath_list.append(fullFilename)
+    #get json objs
+    cases = []
+    for fullFilename in filepath_list:
+        f = open(fullFilename, 'r')
+        cases.append(json.loads(f.read()))
+        f.close()
+    return cases
+    
+
 def create_all_test_case4type(resource_spec_filename,resource_type):
     #load spec
     csv_reader = csv.reader(open(resource_spec_filename, 'r'))
@@ -101,11 +119,12 @@ def create_all_test_case4type(resource_spec_filename,resource_type):
     right_cases, wrong_cases = create_orthogonal_test_cases(test_cases)
     #wrap test cases
     all_cases = {}
-    all_cases['right'] = []
+    all_cases['right'] = get_right_cases(resource_type)
     all_cases['wrong'] = []
-    for case in right_cases:
-        case['resourceType'] = resource_type
-        all_cases['right'].append(case)
+    # for case in right_cases:
+    #     case['resourceType'] = resource_type
+    #     all_cases['right'].append(case)
+    # get right cases from files instead
     for case in wrong_cases:
         case['case']['resourceType'] = resource_type
         all_cases['wrong'].append(case)
@@ -118,16 +137,22 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
     hint_infos = []
     for case in all_cases['right']:
         hint = ''
+        flag = True
         case = set_reference(case,id_dict)
-        response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
-        if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
+        if 'id' in case:
+            del case['id']
+        # case = remove_none(case)
+        status_code, response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
+        if status_code == 201 or status_code == 200 :
             isSuccessful = isSuccessful and True
+            flag = True
         else:
             if isinstance(response, str):
                 hint += response
             elif isinstance(response, dict):
                 hint += json.dumps(response['issue'])
             isSuccessful = isSuccessful and False
+            flag = False
             hint_infos.append({
                 'status': 0,
                 'desc': hint,
@@ -159,8 +184,8 @@ def iter_all_cases(resource_type,step_obj, all_cases, url,id_dict, access_token=
     for case_with_info in all_cases['wrong']:
         case = case_with_info['case']
         hint = ''
-        response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
-        if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
+        status_code, response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
+        if status_code == 201 or status_code == 200:
             hint += case_with_info['info']
             isSuccessfulFalse = isSuccessfulFalse and False
         else:
@@ -227,21 +252,25 @@ def level1Test(url,id_dict,step_obj, access_token):
         url += '/'
     url += 'Observation'
     for case in right_cases:
+        flag = True
         case = set_reference(case,id_dict)
+        # case = remove_none(case)
         case['extension'] = genetic_observation_extension
         # print json.dumps(case)
         hint = ''
-        response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
-        
-        if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
+        status_code, response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
+        print status_code
+        print isSuccessful
+        if status_code == 201 or status_code == 200 or status_code == '201' or status_code == '200':
             isSuccessful = isSuccessful and True
+            flag = True
         else:
             if isinstance(response, str):
                 hint += response
             elif isinstance(response, dict):
-                hint += response['issue']
+                hint += json.dumps(response['issue'])
             isSuccessful = isSuccessful and False
-        if not isSuccessful:
+            flag = False
             hint_infos.append({
                 'status': 0,
                 'desc': hint
@@ -283,20 +312,20 @@ def level2Test(url, id_dict,step_obj, access_token):
     url += 'Observation'
     for case in right_cases:
         case = set_reference(case,id_dict)
+        # case = remove_none(case)
         #add gene and Variant extension
         case['extension'] = gene_variant_extension
         hint = ''
         # print json.dumps(case)
-        response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
-        if isinstance(response, dict) and 'issue' in response and response['issue'][0]['severity'] == 'information':
+        status_code, response, req_header, res_header = send_create_resource_request(json.dumps(case), url, access_token)
+        if status_code == 200 or status_code == 201:
             isSuccessful = isSuccessful and True
         else:
             if isinstance(response, str):
                 hint += response
             elif isinstance(response, dict):
-                hint += response['issue']
+                hint += json.dumps(response['issue'])
             isSuccessful = isSuccessful and False
-        if not isSuccessful:
             hint_infos.append({
                 'status': 0,
                 'desc': hint
@@ -366,19 +395,14 @@ def level5Test(url, id_dict,step_obj, access_token):
         response = None
         if id_list and len(id_list) > 0: 
             random_id = random_picker(id_list)
-            response, req_header, res_header = send_read_resource_request("%s%s/%s" %(url,resource_name,random_id), access_token)
-            if isinstance(response, dict):
-                if response['resourceType'] == resource_name:
-                    isSuccessful = isSuccessful and True
-                    flag = True
-                else:
-                    flag = False
-                    isSuccessful = isSuccessful and False
-                    hint += response['issue']
+            status_code, response, req_header, res_header = send_read_resource_request("%s%s/%s" %(url,resource_name,random_id), access_token)
+            if status_code == 201 or status_code == 200 or status_code == 302:
+                isSuccessful = isSuccessful and True
+                flag = True
             else:
                 flag = False
                 isSuccessful = isSuccessful and False
-                hint += response
+                # hint += response
         if not isSuccessful:
             hint_infos.append({
                 'status':0,
@@ -410,6 +434,7 @@ def level5Test(url, id_dict,step_obj, access_token):
     return isSuccessful, hint_infos
 
 def save_step_detail(step_obj, detail_info):
+    print detail_info['response']
     with transaction.atomic():
         new_step_detail = step_detail(step=step_obj)
         new_step_detail.detail_desc = detail_info['desc']
@@ -423,7 +448,6 @@ def save_step_detail(step_obj, detail_info):
             new_step_detail.save()
         except:
             print 'live create failed'
-    save_detail2fake(detail_info)
 
 def create_one_step(task_id, step_info, step_obj=None):
     save_step2fake(step_info)

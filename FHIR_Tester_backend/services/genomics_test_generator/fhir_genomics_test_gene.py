@@ -27,7 +27,7 @@ def create_element_test_cases(detail_dict):
         if element_type.lower() == 'extension' or element_type.lower() == 'resource' or element_type.lower() == 'identifier':
             continue
         if element_type.lower() == 'backboneelement':
-            test_cases[non_prefix_element] = 'backbone'
+            test_cases[non_prefix_element] = 'backbone%d' % (1 if control == 4 or control == 2 else 0)
         else:
             if 'reference' in element_type.lower():
                 binding = {'reference_type':detail_dict[element]['Reference']}
@@ -56,13 +56,13 @@ def create_orthogonal_test_cases(element_test_cases):
     element_name_lists = []
     for element in element_test_cases:
         element_name_lists.append(element)
-        if element_test_cases[element] == 'backbone' or len(element_test_cases[element]['right']) == 0:
+        if 'backbone' in element_test_cases[element] or len(element_test_cases[element]['right']) == 0:
             continue
         element_right_cases[element] = element_test_cases[element]['right']
     #get all wrong test cases
     element_wrong_cases = {}
     for element in element_test_cases:
-        if element_test_cases[element] == 'backbone' or len(element_test_cases[element]['wrong']) == 0:
+        if 'backbone' in element_test_cases[element] or len(element_test_cases[element]['wrong']) == 0:
             continue
         element_wrong_cases[element] = element_test_cases[element]['wrong']
     #generate orthogonal right test cases
@@ -85,12 +85,22 @@ def create_orthogonal_test_cases(element_test_cases):
             else:
                 i = len(element_right_cases[key])-1
             if len(curr_parent) > 0:
+                #get parent control
+                cont = element_test_cases[curr_parent][-1]
                 if curr_parent in new_test_case:
-                    new_test_case[curr_parent][non_prefix_key] = element_right_cases[key][i]
+                    if isinstance(new_test_case[curr_parent],list):
+                        new_test_case[curr_parent][0][non_prefix_key] = element_right_cases[key][i]
+                    else:
+                        new_test_case[curr_parent][non_prefix_key] = element_right_cases[key][i]
                 else:
-                    new_test_case[curr_parent] = {
-                        non_prefix_key:element_right_cases[key][i]
-                    }
+                    if cont == '0':
+                        new_test_case[curr_parent] = {
+                            non_prefix_key:element_right_cases[key][i]
+                        }
+                    else:
+                        new_test_case[curr_parent] = [{
+                            non_prefix_key:element_right_cases[key][i]
+                        }]
             else:
                 try:
                     new_test_case[key] = element_right_cases[key][index]
