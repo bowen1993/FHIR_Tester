@@ -1,0 +1,1 @@
+{"isSuccessful": true, "servers": [{"url": "http://fhirtest.uhn.ca/baseDstu3", "name": "HAPI Public Stu3", "id": 1}, {"url": "http://fhir2.ideaworld.org/FHIR-server/baseDstu2", "name": "HAPI Public Dstu2", "id": 2}, {"url": "http://fhir3.healthintersections.com.au/open", "name": "Grahame", "id": 5}, {"url": "http://wildfhir.aegis.net/fhir1-6-0", "name": "Wildfhir", "id": 6}]}
