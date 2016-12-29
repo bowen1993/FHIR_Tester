@@ -41,7 +41,7 @@ var app = app || {};
                     {this.state.resources.map(function(resource){
                         return (
                         <li>
-                            <label>
+                            <label onClick={this.code}>
                                 <input ref={resource.name} onChange={this.onResourceChange} type="checkbox" checked={resource.checked}/> {resource.name}
                             </label>
                         </li>
