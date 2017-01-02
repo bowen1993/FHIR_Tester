@@ -632,7 +632,9 @@ var app = app || {};
                         return React.createElement("div", {onClick: this.updateTTime, className: "timedot", "data-toggle": "tooltip", "data-ttime": t, "data-placement": "bottom", title: t})
                     },this)
                     ), 
-                    React.createElement("div", {id: "matrix"})
+                    React.createElement("div", {id: "matrix_test"},
+                        React.createElement("div", {ClassName: "visualization"},
+                    )
                 )
                 )
         }
