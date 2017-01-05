@@ -29,11 +29,6 @@ var app = app || {};
         handleClick:function(){
             this.props.submitTestTask(app.FHIR_TEST,this.state.resources);
         },
-        optionsCode:function(){
-            if (this.state.name === ""){
-                this.setState({name: this.refs.resource.name}); 
-            }
-        },
         render:function(){
             return (
                 React.createElement("div", {className: "btn-group"}, 
@@ -47,8 +42,7 @@ var app = app || {};
                         return (
                         React.createElement("li", null, 
                             React.createElement("label", {onClick: this.code}, 
-                                React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), " ", resource.name, 
-                                React.createElement("button", {ref: resource.name, onClick: this.optionsCode, id: "opt-code", className: "btn btn-primary options-code", value: this.state.name})
+                                React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), " ", resource.name
                             )
                         )
                         );
