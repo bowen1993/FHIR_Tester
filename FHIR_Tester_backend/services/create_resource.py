@@ -29,6 +29,8 @@ def create_pre_resources(url, basepath, access_token=None):
             if not url.endswith('/'):
                     url += '/'
             ids = get_resource_id_list(url, resource_name, access_token)
+            print resource_name
+            print ids
             if ids:
                 id_dict[resource_name] = ids
                 print '%s exists, passing' % resource_name
