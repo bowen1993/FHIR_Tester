@@ -74,8 +74,8 @@ var app = app || {};
 				.sort(null)
 				.size([width, height])
 				.value(function(d) { return 1; })
-    
-		// matrix transforming
+    	);
+// matrix transforming
 		var graph = {};
 		var server_list = [];
 		var level_list = [];
@@ -100,47 +100,60 @@ var app = app || {};
 		graph.name = "matrix";
 		graph.children = server_list;
 
-	    var nodes = partition.nodes(graph);
+		var nodes = partition.nodes(graph);
 		var links = partition.links(nodes);
-	);
 
-	console.log(matrix);
-	console.log(graph);
-	// Precompute the orders.
-	var server_orders = {
-	name: d3.range(yn).sort(function(a, b) { return d3.ascending(servers[a].name, servers[b].name); }),
-	};
-	var resource_orders = {
-		name: d3.range(xn).sort(function(a,b){return d3.ascending(resources[a].name, resources[b].name); })
-	}
+		console.log(matrix);
+		console.log(graph);
+		// Precompute the orders.
+		var server_orders = {
+			name: d3.range(yn).sort(function(a, b) {
+				return d3.ascending(servers[a].name, servers[b].name);
+			}),
+		};
+		var resource_orders = {
+			name: d3.range(xn).sort(function(a, b) {
+				return d3.ascending(resources[a].name, resources[b].name);
+			})
+		}
 
-	console.log(server_orders);
-	console.log(resource_orders);
+		console.log(server_orders);
+		console.log(resource_orders);
 
-	svg.append("rect")
-	  .attr("class", "background")
-	  .attr("width", width)
-	  .attr("height", height);
-	
-	var rect = svg.selectAll("g").data(nodes).enter().append("g");
+		svg.append("rect")
+			.attr("class", "background")
+			.attr("width", width)
+			.attr("height", height);
 
-	rect.append("rect")
-		.attr("x", function(d) { return d.x; })  
-		.attr("y", function(d) { return d.y/2; })  
-		.attr("width", function(d) { return d.dx; })  
-		.attr("height", function(d) { return d.dy/2; })  
-		.style("stroke", "#fff")
-		.style("fill", function(d) { 
-					return c(d.idx, d.value);
-				});
+		var rect = svg.selectAll("g").data(nodes).enter().append("g");
 
-	rect.append("text")  
-		.attr("class","node_text")
-		.attr("text-anchor","middle")
-		.attr("transform",function(d,i){
-			return "translate(" + (d.x + d.dx/2) + "," + (d.y/2+d.dy/4) + ")";
-		}) 
-		.text(function(d,i) {	return d.name;	});	
+		rect.append("rect")
+			.attr("x", function(d) {
+				return d.x;
+			})
+			.attr("y", function(d) {
+				return d.y / 2;
+			})
+			.attr("width", function(d) {
+				return d.dx;
+			})
+			.attr("height", function(d) {
+				return d.dy / 2;
+			})
+			.style("stroke", "#fff")
+			.style("fill", function(d) {
+				return c(d.idx, d.value);
+			});
+
+		rect.append("text")
+			.attr("class", "node_text")
+			.attr("text-anchor", "middle")
+			.attr("transform", function(d, i) {
+				return "translate(" + (d.x + d.dx / 2) + "," + (d.y / 2 + d.dy / 4) + ")";
+			})
+			.text(function(d, i) {
+				return d.name;
+			});
 					
 	// The default sort order.
 	// x.domain(resource_orders.name);
