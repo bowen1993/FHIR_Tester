@@ -138,9 +138,8 @@ var app = app || {};
 		.attr("transform",function(d,i){
 					return "translate(" + (d.x + d.dx/2) + "," + (d.y/2+d.dy/4) + ")";
 				}) 
-		.text(function(d,i) {
-					return d.name;	
-				});
+		.text(function(d,i) {	return d.name;	});	
+					
 	// The default sort order.
 	// x.domain(resource_orders.name);
 	// y.domain(server_orders.name);			
