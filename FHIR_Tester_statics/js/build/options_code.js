@@ -1,5 +1,4 @@
-var clipboard = new Clipboard('.options-code', {
-    
+var clipboard = new Clipboard('.options-code', {    
     text: function() {
     	var btn = document.getElementById('opt-code'); 
         return app[btn.value];

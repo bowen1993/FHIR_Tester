@@ -5,7 +5,7 @@ var app = app || {};
 (function(){
     var SideMenuButton = app.SideMenuButton = React.createClass({displayName: "SideMenuButton",
         getInitialState(){
-            return {resources:[],curr_type:app.APP_TEST,name:""};
+            return {resources:[],curr_type:app.APP_TEST};
         },
         componentDidMount:function(){
             $.get(app.host+ '/home/resources', function (result) {
@@ -46,9 +46,9 @@ var app = app || {};
                     this.state.resources.map(function(resource){
                         return (
                         React.createElement("li", null, 
-                            React.createElement("label", null, 
-                                React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), " ", resource.name, " ",
-                                React.createElement("button", {ref: resource.name, onClick: this.optionsCode, id: "opt-code", className="btn btn-primary option-code", value: {this.state.name}})
+                            React.createElement("label", {onClick: this.code}, 
+                                React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), " ", resource.name, 
+                                React.createElement("button", {ref: resource.name, onClick: this.optionsCode, id: "opt-code", className: "btn btn-primary options-code", value: this.state.name})
                             )
                         )
                         );
@@ -632,9 +632,7 @@ var app = app || {};
                         return React.createElement("div", {onClick: this.updateTTime, className: "timedot", "data-toggle": "tooltip", "data-ttime": t, "data-placement": "bottom", title: t})
                     },this)
                     ), 
-                    React.createElement("div", {id: "matrix_test"},
-                        React.createElement("div", {ClassName: "visualization"},
-                    )
+                    React.createElement("div", {id: "matrix"})
                 )
                 )
         }

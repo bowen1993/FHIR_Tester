@@ -17,7 +17,8 @@ var app = app || {};
             }else{
                 var post_data = {
                     'username':this.state.username,
-                    'password':this.state.password
+                    'password':this.state.password,
+                    // 'usrlevel':this.state.usrlevel
                 };
                 $.ajax({
                     url:app.host+ '/account/login',
