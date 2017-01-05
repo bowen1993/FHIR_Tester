@@ -28,9 +28,3 @@ app.server_sample = ["# Use print to get test result",
 "isSuccessful = True",
 "print \"%s:All %s cases tested:%s\" % (resource_name, resource_name, 'success' if isSuccessful else 'fail')"
 ].join("\n");
-
-app.Observation = ["Observation_code"].join("\n");
-app.Sequence = ["Sequence_code"].join("\n");
-app.FamilyMemberHistory = ["FamilyMemberHistory"].join("\n");
-app.DiagnosticRequest = ["DiagnosticRequest"].join("\n");
-app.DiagnosticReport = ["DiagnosticReport"].join("\n");

@@ -374,8 +374,10 @@ def level4Test(url, id_dict, step_obj, access_token):
     resource_filepath = '%sSequence_repo.json' % 'resources/resource_file/'
     resource_file = open(resource_filepath,'r')
     resource_obj = json.loads(resource_file.read())
+    print id_dict
     resource_obj = set_reference(resource_obj,id_dict)
     status_code, response, req_header, res_header = send_create_resource_request(json.dumps(resource_obj),'%sSequence'% url, access_token)
+    print 'sequence create %d' % status_code
     if status_code != 200 and status_code != 201 and 'resourceType' in response:
         isSuccessful = False
         if isinstance(response, str):
@@ -404,10 +406,10 @@ def level4Test(url, id_dict, step_obj, access_token):
             isSuccessful = False
     hint_infos.append({
             'status':2 if isSuccessful else 0,
-            'desc':'Repository %s be read' % 'can' if isSuccessful else 'cannot'
+            'desc':'Repository %s be read' % ('can' if isSuccessful else 'cannot')
         })
     save_step_detail(step_obj, {
-            'desc':'Repository %s be read' % 'can' if isSuccessful else 'cannot',
+            'desc':'Repository %s be read' % ('can' if isSuccessful else 'cannot'),
             'status':2 if isSuccessful else 0,
             'req_header':req_header,
             'res_header': res_header,
@@ -420,21 +422,27 @@ def level4Test(url, id_dict, step_obj, access_token):
 
 def read_repo(resource_id, url, access_token):
     print resource_id
+    print 'reading repo'
     status_code, response, req_header, res_header = send_read_resource_request("%sSequence/%s" %(url,resource_id), access_token)
     isSuccessful = True
-    if status_code != 200 or status_code != 201:
+    print 'sequence read %d' % status_code
+    if status_code >= 300:
         isSuccessful = False
         return isSuccessful,req_header,res_header
     #read ga4gh
     else:
         variantId = None
+        print 'response'
+        print response['repository']
         #get variant id
         try:
             variantId = response['repository'][0]['variantId']
         except:
             pass
+        print variantId
         if variantId and len(variantId) != 0:
             r = requests.get('%svariants/%s' % (ga4gh_server, variantId))
+            print r.status_code
             if r.status_code > 300:
                 isSuccessful = False
             return isSuccessful,r.request.headers, r.headers
