@@ -47,8 +47,8 @@ var app = app || {};
                         return (
                         React.createElement("li", null, 
                             React.createElement("label", {onClick: this.code}, 
-                                React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), " ", resource.name, 
-                                React.createElement("button", {ref: resource.name, onClick: this.optionsCode, id: "opt-code", className: "btn btn-primary options-code", value: this.state.name})
+                                React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), 
+                                React.createElement("button", {ref: resource.name, onClick: this.optionsCode, id: "opt-code", className: "btn btn-primary options-code", value: this.state.name}, " ", resource.name, " ")
                             )
                         )
                         );

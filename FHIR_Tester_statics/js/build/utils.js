@@ -69,9 +69,43 @@ var app = app || {};
         datas.links.forEach(function(link) {
 			matrix[link.source][link.target].value = link.value;
 		}
+
+		var partition = d3.layout.partition()
+				.sort(null)
+				.size([width, height])
+				.value(function(d) { return 1; })
+    
+		// matrix transforming
+		var graph = {};
+		var server_list = [];
+		var level_list = [];
+		var serv = {};
+		var cell = {};
+		for (var i = 0; i < matrix.length; i++) {
+			for (var j = 0; j < matrix[i].length; j++) {
+				cell.idx = matrix[i][j].server;
+				cell.name = resources[j].name;
+				cell.value = matrix[i][j].value;
+				level_list.push(cell);
+				cell = {}
+			}
+			serv.idx = level_list[0].idx;
+			serv.name = servers[i].name;
+			serv.children = level_list;
+			server_list.push(serv);
+			serv = {};
+			level_list = [];
+		}
+		graph.idx = 0;
+		graph.name = "matrix";
+		graph.children = server_list;
+
+	    var nodes = partition.nodes(graph);
+		var links = partition.links(nodes);
 	);
 
 	console.log(matrix);
+	console.log(graph);
 	// Precompute the orders.
 	var server_orders = {
 	name: d3.range(yn).sort(function(a, b) { return d3.ascending(servers[a].name, servers[b].name); }),
@@ -79,42 +113,10 @@ var app = app || {};
 	var resource_orders = {
 		name: d3.range(xn).sort(function(a,b){return d3.ascending(resources[a].name, resources[b].name); })
 	}
+
 	console.log(server_orders);
 	console.log(resource_orders);
 
-    var partition = d3.layout.partition()
-				.sort(null)
-				.size([width, height])
-				.value(function(d) { return 1; })
-    
-	// matrix transforming
-	var grahp = {};
-	var server_list = [];
-	var level_list = [];
-	var serv = {};
-	var cell = {};
-	for (var i = 0; i < matrix.length; i++) {
-		for (var j = 0; j < matrix[i].length; j++) {
-			cell.idx = matrix[i][j].server;
-			cell.name = resources[j].name;
-			cell.value = matrix[i][j].value;
-			level_list.push(cell);
-			cell = {}
-		}
-		serv.idx = level_list[0].idx;
-		serv.name = servers[i].name;
-		serv.children = level_list;
-		server_list.push(serv);
-		serv = {};
-		level_list = [];
-	}
-	graph.idx = 0;
-	graph.name = "matrix";
-	graph.children = server_list;
-
-    var nodes = partition.nodes(graph);
-	var links = partition.links(nodes);
-	
 	svg.append("rect")
 	  .attr("class", "background")
 	  .attr("width", width)
@@ -136,13 +138,14 @@ var app = app || {};
 		.attr("class","node_text")
 		.attr("text-anchor","middle")
 		.attr("transform",function(d,i){
-					return "translate(" + (d.x + d.dx/2) + "," + (d.y/2+d.dy/4) + ")";
-				}) 
+			return "translate(" + (d.x + d.dx/2) + "," + (d.y/2+d.dy/4) + ")";
+		}) 
 		.text(function(d,i) {	return d.name;	});	
 					
 	// The default sort order.
 	// x.domain(resource_orders.name);
-	// y.domain(server_orders.name);			
+	// y.domain(server_orders.name);
+
 	// var row = svg.selectAll(".row")
 	//   .data(matrix)
 	// .enter().append("g")

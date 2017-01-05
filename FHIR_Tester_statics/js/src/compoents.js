@@ -47,8 +47,8 @@ var app = app || {};
                         return (
                         <li>
                             <label onClick={this.code}>
-                                <input ref={resource.name} onChange={this.onResourceChange} type="checkbox" checked={resource.checked}/> {resource.name}
-                                <button ref={resource.name} onClick={this.optionsCode} id="opt-code" className="btn btn-primary options-code" value={this.state.name}/> 
+                                <input ref={resource.name} onChange={this.onResourceChange} type="checkbox" checked={resource.checked}/> 
+                                <button ref={resource.name} onClick={this.optionsCode} id="opt-code" className="btn btn-primary options-code" value={this.state.name}> {resource.name} </button>
                             </label>
                         </li>
                         );
