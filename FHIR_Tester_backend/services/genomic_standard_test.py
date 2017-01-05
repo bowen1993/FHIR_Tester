@@ -4,6 +4,7 @@ from services.create_resource import *
 import random
 import json
 import traceback
+import requests
 
 from django.db import transaction
 from home.models import task, task_steps, step_detail
@@ -11,6 +12,7 @@ from home.models import task, task_steps, step_detail
 resource_list = ['DiagnosticReport', 'FamilyMemberHistory', 'Sequence', 'DiagnosticRequest', 'Observation']
 spec_basepath = 'resources/spec/'
 resource_basepath = 'resources/json/'
+ga4gh_server = 'http://ideaworld.org:6060/'
 
 gene_variant_extension = [
     {
@@ -362,6 +364,83 @@ def level3Test(url, id_dict,step_obj, access_token):
         url += '/'
     return iter_all_cases('Sequence',step_obj, all_cases, '%s%s' % (url, 'Sequence'),id_dict, access_token)
 
+def level4Test(url, id_dict, step_obj, access_token):
+    if not url.endswith('/'):
+        url += '/'
+    isSuccessful = True
+    hint = ''
+    hint_infos = []
+    #get sequence resource file with repo
+    resource_filepath = '%sSequence_repo.json' % 'resources/resource_file/'
+    resource_file = open(resource_filepath,'r')
+    resource_obj = json.loads(resource_file.read())
+    resource_obj = set_reference(resource_obj,id_dict)
+    status_code, response, req_header, res_header = send_create_resource_request(json.dumps(resource_obj),'%sSequence'% url, access_token)
+    if status_code != 200 and status_code != 201 and 'resourceType' in response:
+        isSuccessful = False
+        if isinstance(response, str):
+            hint += response
+        elif isinstance(response, dict):
+            hint += json.dumps(response['issue'])
+    else:
+        resource_id = None
+        if response['resourceType'] == 'OperationOutcome':
+            try:
+                issue_desc = response['issue'][0]
+                if issue_desc['severity'] == 'information':
+                    resource_id = issue_desc['diagnostics'].split('/')[1]
+            except:
+                pass
+        elif response['resourceType'] == 'Sequence':
+            try:
+                resource_id = response['id']
+            except:
+                pass
+        #send read resource and then read ga4gh repo
+        if resource_id and len(resource_id) != 0:
+            isRepoSuccessful, req_header, res_heander = read_repo(resource_id, url, access_token)
+            isSuccessful = isSuccessful & isRepoSuccessful
+        else:
+            isSuccessful = False
+    hint_infos.append({
+            'status':2 if isSuccessful else 0,
+            'desc':'Repository %s be read' % 'can' if isSuccessful else 'cannot'
+        })
+    save_step_detail(step_obj, {
+            'desc':'Repository %s be read' % 'can' if isSuccessful else 'cannot',
+            'status':2 if isSuccessful else 0,
+            'req_header':req_header,
+            'res_header': res_header,
+            'response':None if isSuccessful else response,
+            'resource':None,
+            'resource_name':'Sequence'
+        })
+    return isSuccessful, hint_infos
+
+
+def read_repo(resource_id, url, access_token):
+    print resource_id
+    status_code, response, req_header, res_header = send_read_resource_request("%sSequence/%s" %(url,resource_id), access_token)
+    isSuccessful = True
+    if status_code != 200 or status_code != 201:
+        isSuccessful = False
+        return isSuccessful,req_header,res_header
+    #read ga4gh
+    else:
+        variantId = None
+        #get variant id
+        try:
+            variantId = response['repository'][0]['variantId']
+        except:
+            pass
+        if variantId and len(variantId) != 0:
+            r = requests.get('%svariants/%s' % (ga4gh_server, variantId))
+            if r.status_code > 300:
+                isSuccessful = False
+            return isSuccessful,r.request.headers, r.headers
+    return True, None, None
+
+
 def random_picker(pick_list):
     '''
     pick a element from a list randomly
@@ -374,11 +453,11 @@ def random_picker(pick_list):
     low, high = 0, len(pick_list)-1
     return pick_list[random.randint(low, high)]
 
-def level4Test(url, id_dict, step_obj, access_token):
-    if not url.endswith('/'):
-        url += '/'
-    isSuccessful = True
-    hint_infos = []
+# def level4Test(url, id_dict, step_obj, access_token):
+#     if not url.endswith('/'):
+#         url += '/'
+#     isSuccessful = True
+#     hint_infos = []
 
 
 def level5Test(url, id_dict,step_obj, access_token):
@@ -541,8 +620,15 @@ def do_standard_test(task_id, url, access_token=None, resources=["0","1","2","3"
         create_one_step(task_id, step_info, step_obj)
         if step_info['status']:
             test_result['level'].append('3')
+    if "4" in resources:
+        step_info = form_new_step_info(True, 'Level 4 test performing', [], 'Level 4')
+        step_obj = create_one_step(task_id, step_info)
+        step_info = perform_a_test(level4Test,step_obj,url, id_dict,'Level 4 test', 'Level 4', access_token)
+        create_one_step(task_id, step_info, step_obj)
+        if step_info['status']:
+            test_result['level'].append('4')
     if "5" in resources:
-        step_info = form_new_step_info(True, 'Level 5 test performing', [],'Level 4')
+        step_info = form_new_step_info(True, 'Level 5 test performing', [],'Level 5')
         step_obj = create_one_step(task_id ,step_info)
         step_info = perform_a_test(level5Test,step_obj, url, id_dict, 'Level 5 test','Level 5', access_token)
         create_one_step(task_id, step_info, step_obj)
