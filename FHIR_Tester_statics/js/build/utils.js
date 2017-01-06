@@ -24,8 +24,10 @@ var app = app || {};
 		var red = d3.rgb(211,26,26);
 
         var c = function(idx, val){
-            if( val == 0 ){
-                return red;
+            if( val == -1 ){
+                return d3.rgb(161,219,187);
+            }else if(val == 0){
+            	return red;
             }else{
             	return colors[idx];
         	}
