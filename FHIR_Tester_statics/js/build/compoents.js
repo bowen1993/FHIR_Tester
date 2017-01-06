@@ -5,10 +5,10 @@ var app = app || {};
 (function(){
     var SideMenuButton = app.SideMenuButton = React.createClass({displayName: "SideMenuButton",
         getInitialState(){
-            return {resources:[],curr_type:app.APP_TEST};
+            return {resources:[],curr_type:app.APP_TEST,name:""};
         },
         componentDidMount:function(){
-            $.get(app.host+ '/home/resources', function (result) {
+            $.get('http://tester.ideaworld.org'+ '/home/resources', function (result) {
                 if( result.isSuccessful ){
                     this.setState({resources:result.names});
                 }
@@ -22,6 +22,7 @@ var app = app || {};
                     name:resource_name,
                     checked:this.refs[resource_name].checked
                 });
+                // console.log(resource_state);
             }
             this.setState({resources:resource_state});
             // this.props.updateResource(resource_state);
@@ -29,10 +30,8 @@ var app = app || {};
         handleClick:function(){
             this.props.submitTestTask(app.FHIR_TEST,this.state.resources);
         },
-        optionsCode:function(){
-            if (this.state.name === ""){
-                this.setState({name: this.refs.resource.name}); 
-            }
+        cpCode:function(index){
+        	console.log("copy options", this);
         },
         render:function(){
             return (
@@ -47,9 +46,9 @@ var app = app || {};
                         return (
                         React.createElement("li", null, 
                             React.createElement("label", {onClick: this.code}, 
-                                React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), 
-                                React.createElement("button", {ref: resource.name, onClick: this.optionsCode, id: "opt-code", className: "btn btn-primary options-code", value: this.state.name}, " ", resource.name, " ")
-                            )
+                                React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), " ", resource.name
+                            ), 
+                            React.createElement("input", {type: "button", ref: resource.name, onClick: this.cpCode, className: resource.name, id: resource.name, name: resource.name})
                         )
                         );
                     },this)
@@ -202,7 +201,7 @@ var app = app || {};
         },
         componentDidMount:function(){
             //get server list
-            this.serverRequest = $.get(app.host+ '/home/servers', function (result) {
+            this.serverRequest = $.get('http://tester.ideaworld.org'+ '/home/servers', function (result) {
                 if( result.isSuccessful ){
                     this.setState({servers:result.servers});
                 }
@@ -340,7 +339,7 @@ var app = app || {};
                     return React.createElement("div", {id: step.index}, 
                         React.createElement("h3", null, step.name), 
                         step.status ? React.createElement("span", {className: "success-bar"}, "Success") : React.createElement("span", {className: "fail-bar"}, "Fail"), 
-                        React.createElement("img", {onClick: () =>this.handleShowFullImage(event,step.addi), className: "img-responsive img-rounded step-img", src: app.host + step.addi})
+                        React.createElement("img", {onClick: () =>this.handleShowFullImage(event,step.addi), className: "img-responsive img-rounded step-img", src: 'http://tester.ideaworld.org' + step.addi})
                     )
                 },this) :this.state.detail_infos.map(function(step){
                     return step.details.map(function(detail){
@@ -356,7 +355,7 @@ var app = app || {};
                             )
                     },this)
                 },this), 
-                this.state.is_modal_show && this.state.is_image ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "Step Image", content: React.createElement(FullImageArea, {img_src: app.host + this.state.curr_img_src})}) : null
+                this.state.is_modal_show && this.state.is_image ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "Step Image", content: React.createElement(FullImageArea, {img_src: 'http://tester.ideaworld.org' + this.state.curr_img_src})}) : null
                 )
             );
         }
@@ -422,9 +421,9 @@ var app = app || {};
                     ), 
                     React.createElement("div", {hidden: this.state.is_img_hide && !this.state.is_has_image, className: "step-img-block"}, 
                         
-                       React.createElement("a", {href: "#"+this.props.stepInfo.index}, " ", React.createElement("img", {className: "img-responsive img-thumbnail step-img-small", src: app.host + this.props.stepInfo.addi}), " ")
+                       React.createElement("a", {href: "#"+this.props.stepInfo.index}, " ", React.createElement("img", {className: "img-responsive img-thumbnail step-img-small", src: 'http://tester.ideaworld.org' + this.props.stepInfo.addi}), " ")
                     ), 
-                    this.state.is_modal_show && this.state.is_has_image ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "Step Image", content: React.createElement(FullImageArea, {img_src: app.host + this.props.stepInfo.addi})}) : null
+                    this.state.is_modal_show && this.state.is_has_image ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "Step Image", content: React.createElement(FullImageArea, {img_src: 'http://tester.ideaworld.org' + this.props.stepInfo.addi})}) : null
                 )
             );
         }
@@ -521,7 +520,7 @@ var app = app || {};
                 'keyword':this.refs.keywordField.value
             }
             $.ajax({
-                url:app.host+ '/home/search',
+                url:'http://tester.ideaworld.org'+ '/home/search',
                 type:'POST',
                 data:JSON.stringify(postData),
                 dataType:'json',
@@ -557,7 +556,7 @@ var app = app || {};
         componentWillMount:function(){
             $.ajax({
                 type:"POST",
-                url:app.host+'/home/times',
+                url:'http://tester.ideaworld.org'+'/home/times',
                 data:JSON.stringify({'ttype':this.state.type}),
                 dataType:'json',
                 success:function(result){
@@ -569,7 +568,7 @@ var app = app || {};
         updateTimeline:function(ttype){
             $.ajax({
                 type:"POST",
-                url:app.host+'/home/times',
+                url:'http://tester.ideaworld.org'+'/home/times',
                 data:JSON.stringify({'ttype':ttype}),
                 dataType:'json',
                 success:function(result){
@@ -579,7 +578,7 @@ var app = app || {};
             })
         },
         componentDidMount:function(){
-            $.get(app.host+ '/home/rmatrix', function (result) {
+            $.get('http://tester.ideaworld.org'+ '/home/rmatrix', function (result) {
                 app.drawMatrix(result);
             }.bind(this));
             $('[data-toggle="tooltip"]').tooltip();
@@ -600,7 +599,7 @@ var app = app || {};
                 type:'POST',
                 dataType:'json',
                 data:JSON.stringify({ttype:ttype, time:ttime}),
-                url:app.host + '/home/matrix',
+                url:'http://tester.ideaworld.org' + '/home/matrix',
                 success:function(res){
                     app.drawMatrix(res.matrix);
                 }.bind(this)
@@ -652,7 +651,7 @@ var app = app || {};
             var self = this;
             console.log(postData);
             $.ajax({
-                url:app.host+ '/home/history',
+                url:'http://tester.ideaworld.org'+ '/home/history',
                 type:'POST',
                 data:JSON.stringify(postData),
                 dataType:'json',
@@ -745,4 +744,5 @@ var app = app || {};
         }
     });
 })();
+
 

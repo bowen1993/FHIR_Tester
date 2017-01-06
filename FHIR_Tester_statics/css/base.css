@@ -215,6 +215,11 @@ ul.customed-menu{
 
 ul.customed-menu li{
     text-align: left;
-    width: 90%;
+    width: 98%;
     margin: 10px auto;
+}
+
+.Observation, .Sequence , .FamilyMemberHistory, .DiagnosticRequest, .DiagnosticReport {
+    width: 10px;
+    height: 14px;
 }
