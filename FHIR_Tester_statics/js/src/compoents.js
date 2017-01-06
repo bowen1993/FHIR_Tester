@@ -8,7 +8,7 @@ var app = app || {};
             return {resources:[],curr_type:app.APP_TEST,name:""};
         },
         componentDidMount:function(){
-            $.get('http://tester.ideaworld.org'+ '/home/resources', function (result) {
+            $.get(app.host+ '/home/resources', function (result) {
                 if( result.isSuccessful ){
                     this.setState({resources:result.names});
                 }
@@ -28,7 +28,7 @@ var app = app || {};
         handleClick:function(){
             this.props.submitTestTask(app.FHIR_TEST,this.state.resources);
         },
-        cpCode:function(index){
+        cpCode:function(){
         	console.log("copy options", this);
         },
         render:function(){
@@ -195,11 +195,16 @@ var app = app || {};
     });
     var ServerList = app.ServerList = React.createClass({
         getInitialState:function(){
-            return {chosedServer:-1, currentDisplay:"Servers",servers:[]};
+            return {chosedServer:-1, currentDisplay:"Servers",servers:[], strlist:""};
+        },
+        getDefaultProps: function() {
+            return {
+                str: "HAPI Public Stu3, HAPI Public Dstu2, Grahame, Wildfhir"    
+            }                    
         },
         componentDidMount:function(){
             //get server list
-            this.serverRequest = $.get('http://tester.ideaworld.org'+ '/home/servers', function (result) {
+            this.serverRequest = $.get(app.host+ '/home/servers', function (result) {
                 if( result.isSuccessful ){
                     this.setState({servers:result.servers});
                 }
@@ -214,17 +219,18 @@ var app = app || {};
         },
         render:function(){
             return (
-                    <div className="dropdown server-list">
-                        <button ref="menu_display" className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                            {this.state.currentDisplay}
-                            <span className="caret"></span>
-                        </button>
+            	<div className="input-group">
+                    <div className="dropdown server-list input-group-btn">
+                        <button ref="menu_display" className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">{this.state.currentDisplay}<span className="caret"></span></button>                            
                         <ul className="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                             {this.state.servers.map(function(server){
                                 return <li role="presentation"><a data-serverName={server.name} data-serverid={server.id} onClick={this.onServerClick} role="menuitem" tabindex="-1" href="#">{server.name}</a></li>
                             }.bind(this))}
                         </ul>
                     </div>
+                    <input className="form-control awesomplete" data-list={this.props.str} placeholder={'server name'}/>
+                </div>
+                     
             );
         }
     })
@@ -337,7 +343,7 @@ var app = app || {};
                     return <div id={step.index}>
                         <h3>{step.name}</h3>
                         {step.status ? <span className="success-bar">Success</span> : <span className="fail-bar">Fail</span>}
-                        <img onClick={() =>this.handleShowFullImage(event,step.addi)} className="img-responsive img-rounded step-img" src={'http://tester.ideaworld.org' + step.addi} />
+                        <img onClick={() =>this.handleShowFullImage(event,step.addi)} className="img-responsive img-rounded step-img" src={app.host + step.addi} />
                     </div>
                 },this) :this.state.detail_infos.map(function(step){
                     return step.details.map(function(detail){
@@ -353,7 +359,7 @@ var app = app || {};
                             </div>
                     },this)
                 },this)}
-                {this.state.is_modal_show && this.state.is_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={'http://tester.ideaworld.org' + this.state.curr_img_src} />} /> : null}
+                {this.state.is_modal_show && this.state.is_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={app.host + this.state.curr_img_src} />} /> : null}
                 </div>
             );
         }
@@ -419,9 +425,9 @@ var app = app || {};
                     </div>
                     <div hidden={this.state.is_img_hide && !this.state.is_has_image} className="step-img-block">
                         
-                       <a href={"#"+this.props.stepInfo.index}> <img className="img-responsive img-thumbnail step-img-small" src={'http://tester.ideaworld.org' + this.props.stepInfo.addi} /> </a>
+                       <a href={"#"+this.props.stepInfo.index}> <img className="img-responsive img-thumbnail step-img-small" src={app.host + this.props.stepInfo.addi} /> </a>
                     </div>
-                    {this.state.is_modal_show && this.state.is_has_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={'http://tester.ideaworld.org' + this.props.stepInfo.addi} />} /> : null}
+                    {this.state.is_modal_show && this.state.is_has_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={app.host + this.props.stepInfo.addi} />} /> : null}
                 </div>
             );
         }
@@ -518,7 +524,7 @@ var app = app || {};
                 'keyword':this.refs.keywordField.value
             }
             $.ajax({
-                url:'http://tester.ideaworld.org'+ '/home/search',
+                url:app.host+ '/home/search',
                 type:'POST',
                 data:JSON.stringify(postData),
                 dataType:'json',
@@ -554,7 +560,7 @@ var app = app || {};
         componentWillMount:function(){
             $.ajax({
                 type:"POST",
-                url:'http://tester.ideaworld.org'+'/home/times',
+                url:app.host+'/home/times',
                 data:JSON.stringify({'ttype':this.state.type}),
                 dataType:'json',
                 success:function(result){
@@ -566,7 +572,7 @@ var app = app || {};
         updateTimeline:function(ttype){
             $.ajax({
                 type:"POST",
-                url:'http://tester.ideaworld.org'+'/home/times',
+                url:app.host+'/home/times',
                 data:JSON.stringify({'ttype':ttype}),
                 dataType:'json',
                 success:function(result){
@@ -576,7 +582,7 @@ var app = app || {};
             })
         },
         componentDidMount:function(){
-            $.get('http://tester.ideaworld.org'+ '/home/rmatrix', function (result) {
+            $.get(app.host+ '/home/rmatrix', function (result) {
                 app.drawMatrix(result);
             }.bind(this));
             $('[data-toggle="tooltip"]').tooltip();
@@ -597,7 +603,7 @@ var app = app || {};
                 type:'POST',
                 dataType:'json',
                 data:JSON.stringify({ttype:ttype, time:ttime}),
-                url:'http://tester.ideaworld.org' + '/home/matrix',
+                url:app.host + '/home/matrix',
                 success:function(res){
                     app.drawMatrix(res.matrix);
                 }.bind(this)
@@ -649,7 +655,7 @@ var app = app || {};
             var self = this;
             console.log(postData);
             $.ajax({
-                url:'http://tester.ideaworld.org'+ '/home/history',
+                url:app.host+ '/home/history',
                 type:'POST',
                 data:JSON.stringify(postData),
                 dataType:'json',

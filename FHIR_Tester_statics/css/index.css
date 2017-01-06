@@ -78,7 +78,11 @@ div#main div.box{
 }
 
 .server-list button{
-    width: 50%;
+    width: 100%;
+}
+
+.server-list input{
+    width: 100%;
 }
 
 .server-list ul{
