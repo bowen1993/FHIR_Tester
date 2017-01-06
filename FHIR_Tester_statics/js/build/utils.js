@@ -77,9 +77,9 @@ var app = app || {};
         }
         datas.links.forEach(function(link) {
 			matrix[link.source][link.target].value = link.value;
-		}
+		});
 
-	);
+
 
 	console.log("matrix");
 	console.log(matrix);

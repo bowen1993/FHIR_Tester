@@ -3,7 +3,7 @@ from services.genomics_test_generator.fhir_genomics_test_gene import *
 import os
 import json
 
-base_resource_list = ['Patient','Device','Encounter','ImagingStudy','Media', 'Observation', 'Practitioner', 'Provenance','Specimen', 'DiagnosticRequest']
+base_resource_list = ['Patient','Device','Encounter','ImagingStudy','Media', 'Observation', 'Practitioner', 'Provenance','Specimen', 'DiagnosticRequest', 'Organization']
 
 def create_pre_resources(url, basepath, access_token=None):
     #walk through all resource files
