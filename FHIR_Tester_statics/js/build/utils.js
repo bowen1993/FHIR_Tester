@@ -17,18 +17,24 @@ var app = app || {};
     }
     app.drawMatrix = function(datas){
 
-        var colors = [d3.rgb(143,143,143), d3.rgb(0,102,164),
-				  	  d3.rgb(206,49,224),d3.rgb(230,227,27),
-				  	  d3.rgb(27,230,89),d3.rgb(64,215,211)];
+        var colors = [d3.rgb(30,105,180), d3.rgb(68,114,196),
+				  	  d3.rgb(107,174,214),d3.rgb(158,154,200),
+				  	  d3.rgb(117,107,177),d3.rgb(64,215,211)];
 
-		var red = d3.rgb(211,26,26);
+		var red = d3.rgb(253,141,60)
+			green = d3.rgb(33,205,112)
+			gray = d3.rgb(107, 174, 214);
 
         var c = function(idx, val){
-            if( val == -1 ){
-                return d3.rgb(161,219,187);
-            }else if(val == 0){
+            if( val == -1 ){				//	null
+                return d3.rgb(198,219,239);
+            }else if(val == 1){				//	error
             	return red;
             }else{
+            	if (idx == 0) {				//	title
+            		return gray;
+            	}
+            	// return green;				//	right
             	return colors[idx];
         	}
         }
@@ -38,9 +44,9 @@ var app = app || {};
             resources = datas.resources,
             xn = resources.length;
 
-        var margin = {top: 100, right: 0, bottom: 10, left: 200},
-            width = 600,
-            height = 55 *yn;
+        var margin = {top: 50, right: 0, bottom: 10, left: 200},
+            width = 700,
+            height = 75 *yn;
 
         var server = d3.scale.ordinal().rangeBands([0, width]),
             level = d3.scale.ordinal().rangeBands([0,height]),
@@ -72,12 +78,28 @@ var app = app || {};
 			matrix[link.source][link.target].value = link.value;
 		}
 
-		var partition = d3.layout.partition()
+	);
+
+	console.log("matrix");
+	console.log(matrix);
+	
+	// Precompute the orders.
+	var server_orders = {
+	name: d3.range(yn).sort(function(a, b) { return d3.ascending(servers[a].name, servers[b].name); }),
+	};
+	var resource_orders = {
+		name: d3.range(xn).sort(function(a,b){return d3.ascending(resources[a].name, resources[b].name); })
+	}
+
+	// console.log(server_orders);
+	// console.log(resource_orders);
+	
+	var partition = d3.layout.partition()
 				.sort(null)
 				.size([width, height])
 				.value(function(d) { return 1; })
-    	);
-// matrix transforming
+    
+		// matrix transforming
 		var graph = {};
 		var server_list = [];
 		var level_list = [];
@@ -85,14 +107,15 @@ var app = app || {};
 		var cell = {};
 		for (var i = 0; i < matrix.length; i++) {
 			for (var j = 0; j < matrix[i].length; j++) {
-				cell.idx = matrix[i][j].server;
-				cell.name = resources[j].name;
-				cell.value = matrix[i][j].value;
+				cell.idx = matrix[i][j].server+1;
+				cell.name = resources[j].name.substr(0,3);
+				cell.val = matrix[i][j].value;
+				console.log(cell);
 				level_list.push(cell);
-				cell = {}
+				cell = {};
 			}
 			serv.idx = level_list[0].idx;
-			serv.name = servers[i].name;
+			serv.name = servers[i].name.substr(0,3);
 			serv.children = level_list;
 			server_list.push(serv);
 			serv = {};
@@ -102,60 +125,39 @@ var app = app || {};
 		graph.name = "matrix";
 		graph.children = server_list;
 
-		var nodes = partition.nodes(graph);
+		// console.log('graph');
+		console.log(graph);
+
+	    var nodes = partition.nodes(graph);
 		var links = partition.links(nodes);
 
-		console.log(matrix);
-		console.log(graph);
-		// Precompute the orders.
-		var server_orders = {
-			name: d3.range(yn).sort(function(a, b) {
-				return d3.ascending(servers[a].name, servers[b].name);
-			}),
-		};
-		var resource_orders = {
-			name: d3.range(xn).sort(function(a, b) {
-				return d3.ascending(resources[a].name, resources[b].name);
-			})
-		}
+	console.log(nodes.slice(1,nodes.length));
+	
+	svg.append("rect")
+	  .attr("class", "background")
+	  .attr("width", width)
+	  .attr("height", height);
+	
+	var rect = svg.selectAll("g").data(nodes.slice(1,nodes.length)).enter().append("g");
 
-		console.log(server_orders);
-		console.log(resource_orders);
+	rect.append("rect")
+		.attr("x", function(d) { return d.x; })  
+		.attr("y", function(d) { return d.y-100; })  
+		.attr("width", function(d) { return d.dx; })  
+		.attr("height", function(d) { return width*(1/2); })  
+		.style("stroke", "#fff")
+		.style("fill", function(d) { 
+					return c(d.idx, d.val);
+				});
 
-		svg.append("rect")
-			.attr("class", "background")
-			.attr("width", width)
-			.attr("height", height);
-
-		var rect = svg.selectAll("g").data(nodes).enter().append("g");
-
-		rect.append("rect")
-			.attr("x", function(d) {
-				return d.x;
-			})
-			.attr("y", function(d) {
-				return d.y / 2;
-			})
-			.attr("width", function(d) {
-				return d.dx;
-			})
-			.attr("height", function(d) {
-				return d.dy / 2;
-			})
-			.style("stroke", "#fff")
-			.style("fill", function(d) {
-				return c(d.idx, d.value);
-			});
-
-		rect.append("text")
-			.attr("class", "node_text")
-			.attr("text-anchor", "middle")
-			.attr("transform", function(d, i) {
-				return "translate(" + (d.x + d.dx / 2) + "," + (d.y / 2 + d.dy / 4) + ")";
-			})
-			.text(function(d, i) {
-				return d.name;
-			});
+	rect.append("text")  
+		.attr("class","node_text")
+		.attr("text-anchor","middle")
+		.style("fill", "#fff")
+		.attr("transform",function(d,i){
+			return "translate(" + (d.x + d.dx/2) + "," + (d.y+d.dy/4-73.33333333333333) + ")";
+		}) 
+		.text(function(d,i) {	return d.name;	});	
 					
 	// The default sort order.
 	// x.domain(resource_orders.name);
