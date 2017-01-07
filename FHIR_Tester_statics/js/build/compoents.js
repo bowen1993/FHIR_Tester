@@ -222,7 +222,7 @@ var app = app || {};
                 if(this.state.serv == this.state.servers[i].name){
                     this.setState({currentDisplay:this.state.serv});
                 }else{
-                    // console.log("you should input true server name");
+                    console.log("please input true server name");
                 }
             }
         },        
@@ -233,7 +233,7 @@ var app = app || {};
                     if(this.state.serv == this.state.servers[i].name){
                         this.setState({currentDisplay:this.state.serv});
                     }else{
-                        console.log("you should input true server name");
+                        console.log("please input true server name");
                     }
                 }
             }            
@@ -249,7 +249,7 @@ var app = app || {};
                             }.bind(this))
                         )
                     ), 
-                    React.createElement("input", {className: "form-control awesomplete", onChange: this.handleChange, onBlur: this.getServer, onKeyUp: this.handleKey, id: "serverlist", placeholder: 'server name'})
+                    React.createElement("input", {className: "form-control awesomplete", onChange: this.handleChange, onFocus: this.getServer, onBlur: this.getServer, onKeyUp: this.handleKey, id: "serverlist", placeholder: 'server name'})
                 )
                      
             );
