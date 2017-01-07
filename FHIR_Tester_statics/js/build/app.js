@@ -202,8 +202,8 @@ var app = app || {};
                     React.createElement("div", {className: "test-input"}, 
                         React.createElement(ServerList, {updateServer: this.updateChosenServer}), 
                         React.createElement("div", {className: "btnArea"}, 
-                            React.createElement(TestButton, {btn_name: "Level Test", submitTestTask: this.handleTaskSubmit, btnType: app.STANDARD_TEST}), 
-                            React.createElement(SideMenuButton, {updateResource: this.updateResourceState, submitTestTask: this.handleTaskSubmit}), 
+                            React.createElement(SideMenuButton, {updateResource: this.updateResourceState, submitTestTask: this.handleTaskSubmit, btn_name: "Level Test", test_type: app.STANDARD_TEST, resource_url: "/home/resources?type=1"}), 
+                            React.createElement(SideMenuButton, {updateResource: this.updateResourceState, submitTestTask: this.handleTaskSubmit, btn_name: "FHIR Test", test_type: app.FHIR_TEST, resource_url: "/home/resources?type=0"}), 
                             this.state.isReportReady ? React.createElement("button", {className: "btn btn-primary", onClick: this.toggle_report}, "Report") : null
                         ), 
                         

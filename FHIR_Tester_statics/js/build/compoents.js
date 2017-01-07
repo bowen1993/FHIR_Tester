@@ -8,7 +8,7 @@ var app = app || {};
             return {resources:[],curr_type:app.APP_TEST};
         },
         componentDidMount:function(){
-            $.get(app.host+ '/home/resources', function (result) {
+            $.get(app.host+ this.props.resource_url, function (result) {
                 if( result.isSuccessful ){
                     this.setState({resources:result.names});
                 }
@@ -27,7 +27,7 @@ var app = app || {};
             // this.props.updateResource(resource_state);
         },
         handleClick:function(){
-            this.props.submitTestTask(app.FHIR_TEST,this.state.resources);
+            this.props.submitTestTask(this.props.test_type,this.state.resources);
         },
         optionsCode:function(){
             if (this.state.name === ""){
@@ -37,7 +37,7 @@ var app = app || {};
         render:function(){
             return (
                 React.createElement("div", {className: "btn-group"}, 
-                    React.createElement("button", {type: "button", onClick: this.handleClick, className: "btn btn-primary"}, "FHIR Test"), 
+                    React.createElement("button", {type: "button", onClick: this.handleClick, className: "btn btn-primary"}, this.props.btn_name), 
                     React.createElement("button", {type: "button", className: "btn btn-primary dropdown-toggle", "data-toggle": "dropdown"}, 
                         "Options ", React.createElement("span", {className: "caret"}), 
                         React.createElement("span", {className: "sr-only"}, "Toggle Dropdown")
@@ -48,7 +48,7 @@ var app = app || {};
                         React.createElement("li", null, 
                             React.createElement("label", {onClick: this.code}, 
                                 React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), 
-                                React.createElement("button", {ref: resource.name, onClick: this.optionsCode, id: "opt-code", className: "btn btn-primary options-code", value: this.state.name}, " ", resource.name, " ")
+                                React.createElement("button", {onClick: this.optionsCode, id: "opt-code", className: "btn btn-primary options-code", value: this.state.name}, " ", resource.name, " ")
                             )
                         )
                         );

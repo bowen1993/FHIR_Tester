@@ -202,8 +202,8 @@ var app = app || {};
                     <div className="test-input">
                         <ServerList updateServer={this.updateChosenServer}/>
                         <div className="btnArea">
-                            <TestButton btn_name="Level Test" submitTestTask={this.handleTaskSubmit} btnType={app.STANDARD_TEST}/>
-                            <SideMenuButton updateResource={this.updateResourceState} submitTestTask={this.handleTaskSubmit}/>
+                            <SideMenuButton updateResource={this.updateResourceState} submitTestTask={this.handleTaskSubmit} btn_name="Level Test" test_type={app.STANDARD_TEST} resource_url="/home/resources?type=1"/>
+                            <SideMenuButton updateResource={this.updateResourceState} submitTestTask={this.handleTaskSubmit} btn_name="FHIR Test" test_type={app.FHIR_TEST} resource_url="/home/resources?type=0"/>
                             {this.state.isReportReady ? <button className="btn btn-primary" onClick={this.toggle_report}>Report</button> : null }
                         </div>
                         

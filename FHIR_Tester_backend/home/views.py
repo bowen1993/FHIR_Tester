@@ -21,7 +21,7 @@ def submit_task(request):
     language = req_json['language']
     test_type = req_json['type']
     resource_list = []
-    if test_type == 3:
+    if test_type == 3 or test_type == 0:
         resource_state = req_json['resources']
         print resource_state
         for item in resource_state:
@@ -73,18 +73,26 @@ def get_resource_matrix(request):
 
 @csrf_exempt
 def get_resources(request):
+    resource_type = request.GET.get('type', 0)
+    if isinstance(resource_type,str):
+        try:
+            resource_type = int(resource_type)
+        except:
+            resource_type = 0
     result = {
         'isSuccessful':False,
         'names':[]
     }
     try:
-        resources = resource.objects.all()
+        resources = resource.objects.filter(resource_type=resource_type)
         for resource_obj in resources:
             result['names'].append({'name':resource_obj.name,'checked':True})
         result['isSuccessful'] = True
     except:
         pass
     return HttpResponse(json.dumps(result), content_type="application/json")
+
+
 
 @csrf_exempt
 def add_new_server(request):

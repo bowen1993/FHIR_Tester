@@ -11,6 +11,7 @@ class server(models.Model):
 
 class resource(models.Model):
     name = models.CharField(max_length=128)
+    resource_type = models.IntegerField(default=0)
 
 class task(models.Model):
     task_id = models.CharField(max_length=10, primary_key=True)
