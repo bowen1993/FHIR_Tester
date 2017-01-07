@@ -198,11 +198,6 @@ var app = app || {};
         getInitialState:function(){
             return {chosedServer:-1, currentDisplay:"Servers",servers:[], strlist:""};
         },
-        getDefaultProps: function() {
-            return {
-                str: "HAPI Public Stu3, HAPI Public Dstu2, Grahame, Wildfhir"    
-            }                    
-        },
         componentDidMount:function(){
             //get server list
             this.serverRequest = $.get(app.host+ '/home/servers', function (result) {
@@ -230,7 +225,8 @@ var app = app || {};
                     // console.log("you should input true server name");
                 }
             }
-        },        handleKey:function(event){
+        },        
+        handleKey:function(event){
             if (event.keyCode === 13) {
                 this.setState({serv:event.target.value});
                 for (var i = 0; i < this.state.servers.length; i++) {
@@ -253,7 +249,7 @@ var app = app || {};
                             }.bind(this))
                         )
                     ), 
-                    React.createElement("input", {className: "form-control awesomplete", onChange: this.handleChange, onBlur: this.getServer, onKeyUp: this.handleKey, "data-list": this.props.str, placeholder: 'server name'})
+                    React.createElement("input", {className: "form-control awesomplete", onChange: this.handleChange, onBlur: this.getServer, onKeyUp: this.handleKey, id: "serverlist", placeholder: 'server name'})
                 )
                      
             );
