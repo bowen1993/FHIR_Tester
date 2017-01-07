@@ -47,7 +47,7 @@ var app = app || {};
                                 <input ref={resource.name} onChange={this.onResourceChange} type="checkbox" checked={resource.checked}/> 
                                  <span>{resource.name}</span>
                             </label>
-                            
+                            <input type="button" onClick={this.cpCode} className={resource.name} id={resource.name} name={resource.name}/>
                         </li>
                         );
                     },this)}

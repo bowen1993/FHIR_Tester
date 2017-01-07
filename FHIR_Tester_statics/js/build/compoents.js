@@ -46,8 +46,8 @@ var app = app || {};
                             React.createElement("label", {onClick: this.code}, 
                                 React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), 
                                  React.createElement("span", null, resource.name)
-                            )
-                            
+                            ), 
+                            React.createElement("input", {type: "button", onClick: this.cpCode, className: resource.name, id: resource.name, name: resource.name})
                         )
                         );
                     },this)
