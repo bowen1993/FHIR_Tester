@@ -218,6 +218,30 @@ var app = app || {};
             this.props.updateServer(event.currentTarget.dataset.serverid);
             this.setState({currentDisplay:event.currentTarget.dataset.servername});
         },
+        handleChange:function(event){
+            this.setState({serv:event.target.value});
+        },
+        getServer:function(event){
+            this.handleChange(event);
+            for (var i = 0; i < this.state.servers.length; i++) {
+                if(this.state.serv == this.state.servers[i].name){
+                    this.setState({currentDisplay:this.state.serv});
+                }else{
+                    // console.log("you should input true server name");
+                }
+            }
+        },        handleKey:function(event){
+            if (event.keyCode === 13) {
+                this.setState({serv:event.target.value});
+                for (var i = 0; i < this.state.servers.length; i++) {
+                    if(this.state.serv == this.state.servers[i].name){
+                        this.setState({currentDisplay:this.state.serv});
+                    }else{
+                        console.log("you should input true server name");
+                    }
+                }
+            }            
+        },
         render:function(){
             return (
             	React.createElement("div", {className: "input-group"}, 
@@ -229,7 +253,7 @@ var app = app || {};
                             }.bind(this))
                         )
                     ), 
-                    React.createElement("input", {className: "form-control awesomplete", "data-list": this.props.str, placeholder: 'server name'})
+                    React.createElement("input", {className: "form-control awesomplete", onChange: this.handleChange, onBlur: this.getServer, onKeyUp: this.handleKey, "data-list": this.props.str, placeholder: 'server name'})
                 )
                      
             );
