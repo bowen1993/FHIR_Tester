@@ -1,15 +1,34 @@
-var app = app || {};
-
-var clipboard = new Clipboard('.options-code', {    
+var clipboard = new Clipboard('.Observation', {    
     text: function() {
-    	var btn = document.getElementById('opt-code'); 
-        return app[btn.value];
+    	var btn = document.getElementById('Observation'); 
+        return app[btn.name];
     }
 });
 
-clipboard.on('success', function(e) {
+var clipboard = new Clipboard('.Sequence', {    
+    text: function() {
+    	var btn = document.getElementById('Sequence'); 
+        return app[btn.name];
+    }
 });
 
-clipboard.on('error', function(e) {
-    console.log(e);
+var clipboard = new Clipboard('.FamilyMemberHistory', {    
+    text: function() {
+    	var btn = document.getElementById('FamilyMemberHistory'); 
+        return app[btn.name];
+    }
+});
+
+var clipboard = new Clipboard('.DiagnosticRequest', {    
+    text: function() {
+    	var btn = document.getElementById('DiagnosticRequest'); 
+        return app[btn.name];
+    }
+});
+
+var clipboard = new Clipboard('.DiagnosticReport', {    
+    text: function() {
+    	var btn = document.getElementById('DiagnosticReport'); 
+        return app[btn.name];
+    }
 });

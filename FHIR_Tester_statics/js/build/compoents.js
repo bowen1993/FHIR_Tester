@@ -5,7 +5,7 @@ var app = app || {};
 (function(){
     var SideMenuButton = app.SideMenuButton = React.createClass({displayName: "SideMenuButton",
         getInitialState(){
-            return {resources:[],curr_type:app.APP_TEST};
+            return {resources:[],curr_type:app.APP_TEST,name:""};
         },
         componentDidMount:function(){
             $.get(app.host+ this.props.resource_url, function (result) {
@@ -24,15 +24,12 @@ var app = app || {};
                 });
             }
             this.setState({resources:resource_state});
-            // this.props.updateResource(resource_state);
         },
         handleClick:function(){
             this.props.submitTestTask(this.props.test_type,this.state.resources);
         },
-        optionsCode:function(){
-            if (this.state.name === ""){
-                this.setState({name: this.refs.resource.name}); 
-            }
+        cpCode:function(){
+        	console.log("copy options", this);
         },
         render:function(){
             return (
@@ -48,8 +45,9 @@ var app = app || {};
                         React.createElement("li", null, 
                             React.createElement("label", {onClick: this.code}, 
                                 React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), 
-                                React.createElement("button", {onClick: this.optionsCode, id: "opt-code", className: "btn btn-primary options-code", value: this.state.name}, " ", resource.name, " ")
+                                 React.createElement("span", null, resource.name)
                             )
+                            
                         )
                         );
                     },this)
@@ -198,7 +196,12 @@ var app = app || {};
     });
     var ServerList = app.ServerList = React.createClass({displayName: "ServerList",
         getInitialState:function(){
-            return {chosedServer:-1, currentDisplay:"Servers",servers:[]};
+            return {chosedServer:-1, currentDisplay:"Servers",servers:[], strlist:""};
+        },
+        getDefaultProps: function() {
+            return {
+                str: "HAPI Public Stu3, HAPI Public Dstu2, Grahame, Wildfhir"    
+            }                    
         },
         componentDidMount:function(){
             //get server list
@@ -217,17 +220,18 @@ var app = app || {};
         },
         render:function(){
             return (
-                    React.createElement("div", {className: "dropdown server-list"}, 
-                        React.createElement("button", {ref: "menu_display", className: "btn btn-default dropdown-toggle", type: "button", id: "dropdownMenu1", "data-toggle": "dropdown"}, 
-                            this.state.currentDisplay, 
-                            React.createElement("span", {className: "caret"})
-                        ), 
+            	React.createElement("div", {className: "input-group"}, 
+                    React.createElement("div", {className: "dropdown server-list input-group-btn"}, 
+                        React.createElement("button", {ref: "menu_display", className: "btn btn-default dropdown-toggle", type: "button", id: "dropdownMenu1", "data-toggle": "dropdown"}, this.state.currentDisplay, React.createElement("span", {className: "caret"})), 
                         React.createElement("ul", {className: "dropdown-menu", role: "menu", "aria-labelledby": "dropdownMenu1"}, 
                             this.state.servers.map(function(server){
                                 return React.createElement("li", {role: "presentation"}, React.createElement("a", {"data-serverName": server.name, "data-serverid": server.id, onClick: this.onServerClick, role: "menuitem", tabindex: "-1", href: "#"}, server.name))
                             }.bind(this))
                         )
-                    )
+                    ), 
+                    React.createElement("input", {className: "form-control awesomplete", "data-list": this.props.str, placeholder: 'server name'})
+                )
+                     
             );
         }
     })
@@ -745,4 +749,5 @@ var app = app || {};
         }
     });
 })();
+
 

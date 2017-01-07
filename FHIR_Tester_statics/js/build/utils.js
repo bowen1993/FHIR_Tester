@@ -17,13 +17,14 @@ var app = app || {};
     }
     app.drawMatrix = function(datas){
 
-        var colors = [d3.rgb(30,105,180), d3.rgb(68,114,196),
-				  	  d3.rgb(107,174,214),d3.rgb(158,154,200),
-				  	  d3.rgb(117,107,177),d3.rgb(64,215,211)];
+        var colors = [d3.rgb(30,105,180), d3.rgb(68,114,196),d3.rgb(53,135,176),d3.rgb(107,174,214),
+				  	  d3.rgb(158,154,200),d3.rgb(122,116,180),d3.rgb(95,89,156),d3.rgb(53,57,133),
+				  	  d3.rgb(23,125,127)];
+				  	  
 
 		var red = d3.rgb(253,141,60)
-			green = d3.rgb(33,205,112)
-			gray = d3.rgb(107, 174, 214);
+			green = d3.rgb(49,163,84)
+			gray = d3.rgb(158, 202, 225);
 
         var c = function(idx, val){
             if( val == -1 ){				//	null
@@ -107,14 +108,16 @@ var app = app || {};
 		var cell = {};
 		for (var i = 0; i < matrix.length; i++) {
 			for (var j = 0; j < matrix[i].length; j++) {
-				cell.idx = matrix[i][j].server+1;
+				cell.idx = matrix[i][j].server;
+				cell.fname = resources[j].name;
 				cell.name = resources[j].name.substr(0,3);
 				cell.val = matrix[i][j].value;
-				console.log(cell);
+				// console.log(cell);
 				level_list.push(cell);
 				cell = {};
 			}
 			serv.idx = level_list[0].idx;
+			serv.fname = servers[i].name;
 			serv.name = servers[i].name.substr(0,3);
 			serv.children = level_list;
 			server_list.push(serv);
@@ -142,22 +145,36 @@ var app = app || {};
 
 	rect.append("rect")
 		.attr("x", function(d) { return d.x; })  
-		.attr("y", function(d) { return d.y-100; })  
+		.attr("y", function(d) { return d.y-110; })  
 		.attr("width", function(d) { return d.dx; })  
 		.attr("height", function(d) { return width*(1/2); })  
 		.style("stroke", "#fff")
 		.style("fill", function(d) { 
 					return c(d.idx, d.val);
-				});
+		})
+		.on("mouseover", function(d){
+			d.name = d.fname;
+			rtxt.text(function(d,i) {	return d.name;	});
+			console.log("show full name", d.name);
+		})
+		.on("mouseout", function(d){
+			d.name = d.name.substr(0,3);
+			rtxt.text(function(d,i) {	return d.name;	});
+			console.log("show sub name", d.name);
+		});
 
-	rect.append("text")  
-		.attr("class","node_text")
-		.attr("text-anchor","middle")
-		.style("fill", "#fff")
-		.attr("transform",function(d,i){
-			return "translate(" + (d.x + d.dx/2) + "," + (d.y+d.dy/4-73.33333333333333) + ")";
-		}) 
-		.text(function(d,i) {	return d.name;	});	
+	var rtxt = rect.append("text")  
+				.attr("class","node_text")
+				.attr("text-anchor","middle")
+				.style("fill", "#fff")
+				.attr("transform",function(d,i){
+					if (d.depth > 1) {
+						return ("translate(" + (d.x + d.dx/2) + "," + (d.y+d.dy/2-50) + ")") + ("rotate(-90)");
+					}
+					return "translate(" + (d.x + d.dx/2) + "," + (d.y+d.dy/2-100) + ")";
+				}) 
+				.text(function(d,i) {	return d.name;	});
+
 					
 	// The default sort order.
 	// x.domain(resource_orders.name);
