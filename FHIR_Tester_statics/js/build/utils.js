@@ -80,9 +80,7 @@ var app = app || {};
 		});
 
 
-
-	console.log("matrix");
-	console.log(matrix);
+	console.log("matrix_arr: ", matrix);
 	
 	// Precompute the orders.
 	var server_orders = {
@@ -128,8 +126,8 @@ var app = app || {};
 		graph.name = "matrix";
 		graph.children = server_list;
 
-		// console.log('graph');
-		console.log(graph);
+		// console.log();
+		console.log('matrix_obj: ', graph);
 
 	    var nodes = partition.nodes(graph);
 		var links = partition.links(nodes);
@@ -155,12 +153,12 @@ var app = app || {};
 		.on("mouseover", function(d){
 			d.name = d.fname;
 			rtxt.text(function(d,i) {	return d.name;	});
-			console.log("show full name", d.name);
+			// console.log("show full name", d.name);
 		})
 		.on("mouseout", function(d){
 			d.name = d.name.substr(0,3);
 			rtxt.text(function(d,i) {	return d.name;	});
-			console.log("show sub name", d.name);
+			// console.log("show sub name", d.name);
 		});
 
 	var rtxt = rect.append("text")  
