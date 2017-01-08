@@ -77,7 +77,7 @@ def form_resource_martix():
         'links':[]
     }
     #get resources
-    resource_list = resource.objects.all()
+    resource_list = resource.objects.filter(resource_type=0)
     for resource_obj in resource_list:
         datas['resources'].append({'name':resource_obj.name})
     server_list = server.objects.all()
