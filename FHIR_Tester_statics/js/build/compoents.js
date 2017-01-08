@@ -46,8 +46,8 @@ var app = app || {};
                             React.createElement("label", {onClick: this.code}, 
                                 React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), 
                                  React.createElement("span", null, resource.name)
-                            )
-                            
+                            ), 
+                            React.createElement("input", {type: "button", onClick: this.cpCode, className: resource.name, id: resource.name, name: resource.name})
                         )
                         );
                     },this)
@@ -198,11 +198,6 @@ var app = app || {};
         getInitialState:function(){
             return {chosedServer:-1, currentDisplay:"Servers",servers:[], strlist:""};
         },
-        getDefaultProps: function() {
-            return {
-                str: "HAPI Public Stu3, HAPI Public Dstu2, Grahame, Wildfhir"    
-            }                    
-        },
         componentDidMount:function(){
             //get server list
             this.serverRequest = $.get(app.host+ '/home/servers', function (result) {
@@ -218,6 +213,32 @@ var app = app || {};
             this.props.updateServer(event.currentTarget.dataset.serverid);
             this.setState({currentDisplay:event.currentTarget.dataset.servername});
         },
+        handleChange:function(event){
+            this.setState({serv:event.target.value});
+        },
+        getServer:function(event){
+            this.handleChange(event);
+            for (var i = 0; i < this.state.servers.length; i++) {
+                if(this.state.serv == this.state.servers[i].name){
+                    this.setState({currentDisplay:this.state.serv});
+                }else{
+                    console.log("please input true server name");
+                }
+            }
+        },        
+        handleKey:function(event){
+            if (event.keyCode === 13) {
+                this.setState({serv:event.target.value});
+                for (var i = 0; i < this.state.servers.length; i++) {
+                    if(this.state.serv == this.state.servers[i].name){
+                        this.setState({currentDisplay:this.state.serv});
+                        this.props.updateServer(this.state.servers[i].id);
+                    }else{
+                        console.log("please input true server name");
+                    }
+                }
+            }            
+        },
         render:function(){
             return (
             	React.createElement("div", {className: "input-group"}, 
@@ -229,7 +250,7 @@ var app = app || {};
                             }.bind(this))
                         )
                     ), 
-                    React.createElement("input", {className: "form-control awesomplete", "data-list": this.props.str, placeholder: 'server name'})
+                    React.createElement("input", {className: "form-control awesomplete", onChange: this.handleChange, onFocus: this.getServer, onBlur: this.getServer, onKeyUp: this.handleKey, id: "serverlist", placeholder: 'server name'})
                 )
                      
             );
