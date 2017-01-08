@@ -7,8 +7,8 @@ def find_resource(name,target):
             return i
     return -1
 
-def get_resources():
-    resource_list = resource.objects.all()
+def get_resources(resource_type=0):
+    resource_list = resource.objects.filter(resource_type=resource_type)
     resources = []
     for resource_obj in resource_list:
         resources.append({'name':resource_obj.name})
@@ -24,9 +24,9 @@ def form_matrix(ttype,ttime=None):
         'links':[]
     }
     if ttype == test_type['FHIR_TEST']:
-        datas['resources'] = get_resources()
+        datas['resources'] = get_resources(0)
     elif ttype == test_type['STANDARD_TEST']:
-        datas['resources'] = get_levels()
+        datas['resources'] = get_resources(1)
     else:
         return datas
     datetime_obj = None
