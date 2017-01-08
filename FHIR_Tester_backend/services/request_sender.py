@@ -17,7 +17,7 @@ def send_create_resource_request(resource_obj, url, access_token=None):
     except:
         traceback.print_exc()
         print 'server failed'
-        return 500, 'Server Error', r.request.headers, None
+        return 500, 'Server Error', None, None
 
 def send_read_resource_request(url, access_token):
     print url

@@ -7,11 +7,11 @@ def find_resource(name,target):
             return i
     return -1
 
-def get_resources():
-    resource_list = resource.objects.all()
+def get_resources(resource_type=0):
+    resource_list = resource.objects.filter(resource_type=resource_type)
     resources = []
     for resource_obj in resource_list:
-        resources.append({'name':resource_obj.name})
+        resources.append({'name': '%s %s' % ('Level' if resource_type==1 else '', resource_obj.name)})
     return resources
 
 def get_levels():
@@ -24,12 +24,13 @@ def form_matrix(ttype,ttime=None):
         'links':[]
     }
     if ttype == test_type['FHIR_TEST']:
-        datas['resources'] = get_resources()
+        datas['resources'] = get_resources(0)
     elif ttype == test_type['STANDARD_TEST']:
-        datas['resources'] = get_levels()
+        datas['resources'] = get_resources(1)
     else:
         return datas
     datetime_obj = None
+    print datas['resources']
     if ttime and len(ttime) > 0:
         datetime_obj = datetime.strptime(ttime, '%Y-%m-%d %H:%M:%S')
     server_list = server.objects.all()
@@ -58,6 +59,7 @@ def form_matrix(ttype,ttime=None):
                 if task_step_obj.name == None or len(task_step_obj.name) == 0:
                     continue
                 source = server_index
+                print task_step_obj.name
                 target = find_resource(task_step_obj.name,datas['resources'])
                 if target == -1:
                     continue
@@ -77,7 +79,7 @@ def form_resource_martix():
         'links':[]
     }
     #get resources
-    resource_list = resource.objects.all()
+    resource_list = resource.objects.filter(resource_type=0)
     for resource_obj in resource_list:
         datas['resources'].append({'name':resource_obj.name})
     server_list = server.objects.all()

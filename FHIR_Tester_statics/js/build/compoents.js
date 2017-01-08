@@ -232,6 +232,7 @@ var app = app || {};
                 for (var i = 0; i < this.state.servers.length; i++) {
                     if(this.state.serv == this.state.servers[i].name){
                         this.setState({currentDisplay:this.state.serv});
+                        this.props.updateServer(this.state.servers[i].id);
                     }else{
                         console.log("please input true server name");
                     }
