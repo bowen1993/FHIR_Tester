@@ -17,12 +17,12 @@
 > Redis 3.2.3^  
 
 #### Install Requirements
-1. Install other dependencies
+Install other dependencies
 ```bash
 sudo apt-get install build-essential libssl-dev libffi-dev libmysqlclient-dev 
 sudo apt-get install python-dev python-apt gyp
 ```
-2. In Directory FHIR_Tester, run command
+In Directory FHIR_Tester, run command
 ```bash
 pip install -r requirements.txt
 ```
