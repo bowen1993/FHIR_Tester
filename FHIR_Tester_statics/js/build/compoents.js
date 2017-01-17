@@ -588,6 +588,7 @@ var app = app || {};
                 success:function(result){
                     this.setState({time_list:result['times']});
                     $('[data-toggle="tooltip"]').tooltip();
+                    $('[data-show="show"]').tooltip("show");
                 }.bind(this)
             })
         },
@@ -600,6 +601,7 @@ var app = app || {};
                 success:function(result){
                     this.setState({time_list:result['times']});
                     $('[data-toggle="tooltip"]').tooltip();
+                    $('[data-show="show"]').tooltip("show");
                 }.bind(this)
             })
         },
@@ -608,6 +610,7 @@ var app = app || {};
                 app.drawMatrix(result);
             }.bind(this));
             $('[data-toggle="tooltip"]').tooltip();
+            $('[data-show="show"]').tooltip("show");
         },
         transTypeTitle:function(ttype){
             if( ttype == app.FHIR_TEST){
@@ -653,10 +656,16 @@ var app = app || {};
                         React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.SERVER_TEST}, "Server Test")
                     ), 
                     React.createElement("div", {className: "timeline"}, 
-                    this.state.time_list.map(function(t){
+                    this.state.time_list.map(function(t, time_list){
+                        console.log("time_list", time_list, '  / ', t);
+                        if (time_list == 0) {
+                            console.log("always show");
+                            return React.createElement("div", {onClick: this.updateTTime, className: "timedot", "data-toggle": "tooltip", "data-show": "show", "data-ttime": t, "data-placement": "bottom", title: t})
+                        }
                         return React.createElement("div", {onClick: this.updateTTime, className: "timedot", "data-toggle": "tooltip", "data-ttime": t, "data-placement": "bottom", title: t})
                     },this)
                     ), 
+                    React.createElement("div", {id: "tips"}), 
                     React.createElement("div", {id: "matrix"})
                 )
                 )
