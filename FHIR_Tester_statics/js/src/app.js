@@ -20,6 +20,7 @@ var app = app || {};
     var ReportView = app.ReportView;
     var SideMenuButton = app.SideMenuButton;
     var MatrixArea = app.MatrixArea;
+    var ServerView = app.ServerView;
     app.type2str = function(test_type){
         var typeStr = '';
         switch (test_type)
@@ -48,7 +49,7 @@ var app = app || {};
         };
     var TesterApp = React.createClass({
         getInitialState: function() {
-            return {resources:[],isReportReady:false,test_report:{},code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false, isReportShow:false,isRMatrixShow:false};
+            return {resources:[],isReportReady:false,test_report:{},code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false, isServerBoxShow:false , isReportShow:false,isRMatrixShow:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
@@ -172,6 +173,13 @@ var app = app || {};
         showRMatrixView:function(){
             this.setState({isRMatrixShow:!this.state.isRMatrixShow});
         },
+        showServerView:function(){
+            console.log('server view')
+            this.setState({isServerBoxShow:true});
+        },
+        hideServerView:function(){
+            this.setState({isServerBoxShow:false});
+        },
         handleAddServer:function(){
             var server_url = this.state.url,
                 access_token = this.state.access_token;
@@ -195,28 +203,29 @@ var app = app || {};
                 }
             })
         },
+        updateServerList:function(){
+            this.refs.serverlist.update();
+        },
         render:function(){
             return (
                 <div className="box">
                     <UserBtnArea history_action={this.showHistoryView} search_action={this.showSearchView} showMatrix={this.showRMatrixView}/>
                     <div className="test-input">
-                        <ServerList updateServer={this.updateChosenServer}/>
+                        <ServerList ref="serverlist" showServerView={this.showServerView} updateServer={this.updateChosenServer}/>
                         <div className="btnArea">
-                            <SideMenuButton updateResource={this.updateResourceState} submitTestTask={this.handleTaskSubmit} btn_name="Level Test" test_type={app.STANDARD_TEST} resource_url="/home/resources?type=1"/>
-                            <SideMenuButton updateResource={this.updateResourceState} submitTestTask={this.handleTaskSubmit} btn_name="FHIR Test" test_type={app.FHIR_TEST} resource_url="/home/resources?type=0"/>
+                            <SideMenuButton name_prefix='Level' updateResource={this.updateResourceState} submitTestTask={this.handleTaskSubmit} btn_name="Level Test" test_type={app.STANDARD_TEST} resource_url="/home/resources?type=1"/>
+                            <SideMenuButton name_prefix='' updateResource={this.updateResourceState} submitTestTask={this.handleTaskSubmit} btn_name="FHIR Test" test_type={app.FHIR_TEST} resource_url="/home/resources?type=0"/>
                             {this.state.isReportReady ? <button className="btn btn-primary" onClick={this.toggle_report}>Report</button> : null }
                         </div>
                         
                         
                         <div className="btnArea">
-                            <label>
-                                <input type="checkbox" checked={this.state.isEditting} onChange={this.toggleEditting}/> Code Editor
-                            </label>
+                            
                             <label>
                                 <input type="checkbox" checked={this.state.isCustomedURL} onChange={this.toggleCustomedURL}/> Custom URL
                             </label>
                         </div>
-                        {this.state.isCustomedURL ? <div><UrlEditor updateUrl={this.updateUrl}/><TokenEditor updateToken={this.updateAccessToken} /> <button onClick={this.handleAddServer} className="btn btn-primary">Add</button></div> : null}
+                        {this.state.isCustomedURL ? <div><UrlEditor updateUrl={this.updateUrl}/> <button onClick={this.handleAddServer} className="btn btn-primary">Add</button></div> : null}
                         {this.state.isLoading ? <div className="loading"><img src="../img/5.png" alt="loading" class="img-responsive loading-img" /></div>  : null}
                         {!this.state.isLoading && this.state.isResultReady ? <ResultDisplay showFullyDetail={this.showFullyDetail} ref="res_area"/> : null }
                         {this.state.isEditting ? <CodeEditor submitTestTask={this.handleTaskSubmit} loadServerSample={this.loadServerSample} loadAppSample={this.loadAppSample} frame={document} updateCode={this.updateCode} ref="codeeditor" language="python"/> : null}
@@ -228,6 +237,7 @@ var app = app || {};
                     {this.state.isSearchShow ? <Modal handleHideModal={this.handleSearchHideModal} title="Search Task" content={<TaskSearchView />} /> : null}
                     {this.state.isReportShow ? <Modal handleHideModal={this.handleHideReportModal} title="Test Report" content={<ReportView report={this.state.test_report}/>} /> : null}
                     {this.state.isRMatrixShow ? <Modal handleHideMatrixModal={this.handleHideMatrixModal} title="Test Matrix" content={<MatrixArea />} /> : null}
+                    {this.state.isServerBoxShow ? <Modal handleHideModal={this.hideServerView} title="Manage Servers" content={<ServerView update={this.updateServerList} />} /> : null}
                 </div>
             );
         }

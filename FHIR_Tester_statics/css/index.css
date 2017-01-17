@@ -267,6 +267,23 @@ ul.customed-menu li label{
     align-items: center;
 }
 
+.url-box{
+    width: 90%;
+    margin: 10px auto;
+    display: flex;
+    flex: row;
+    align-items: center;
+    padding: 10px;
+}
+
+div.url-box input.url-main{
+    flex:3;
+}
+
+div.url-box input.url-side{
+    flex:1;
+}
+
 .matrix-area .btn-area .btn-matrix{
     flex: 1 0 auto;
     margin: 10px;
@@ -299,4 +316,50 @@ ul.customed-menu li label{
 
 .btn-group{
     margin-right:10px;
+}
+
+.server-manage-view{
+    width: 95%;
+    min-height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+div.server-manage-view div.url-box{
+    flex:1;
+}
+
+div.server-manage-view div.servers{
+    flex:3;
+    width: 90%;
+    margin: 10px auto;
+    padding: 5px;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: center;
+}
+
+div.server-manage-view div.servers ul{
+    flex:1;
+}
+
+div.server-manage-view div.servers ul li{
+    cursor: pointer;
+}
+
+div.server-manage-view div.servers ul li:hover{
+    background-color: rgb(211, 211, 211);
+}
+
+div.server-manage-view div.servers div.server-detail{
+    flex:1;
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: start;
+
 }

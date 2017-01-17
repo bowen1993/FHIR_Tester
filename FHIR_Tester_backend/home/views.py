@@ -114,15 +114,35 @@ def add_new_server(request):
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 @csrf_exempt
+def delete_server(request):
+    req_json = json.loads(request.body)
+    result = {
+        'isSuccessful': False
+    }
+    try:
+        server_id = req_json['id']
+        server_obj = server.objects.get(server_id=server_id)
+        if server_obj.is_deletable:
+            server_obj.is_delete = True
+            server_obj.save()
+            result['isSuccessful'] = True
+        else:
+            result['error'] = 'No access to delete this server'
+    except:
+        result['error'] = 'problem while deleting'
+    return HttpResponse(json.dumps(result), content_type='application/json')
+
+
+@csrf_exempt
 def get_all_servers(request):
     result = {
         'isSuccessful' : False
     }
     try:
-        server_list = server.objects.all()
+        server_list = server.objects.filter(is_delete=False)
         result['servers'] = []
         for server_obj in server_list:
-            result['servers'].append({'name':server_obj.server_name,'id':server_obj.server_id,'url':server_obj.server_url})
+            result['servers'].append({'name':server_obj.server_name,'id':server_obj.server_id,'url':server_obj.server_url, 'is_deletable':server_obj.is_deletable})
         result['isSuccessful'] = True
     except:
         pass
