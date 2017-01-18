@@ -108,8 +108,5 @@ def form_resource_martix():
         server_index += 1
     return datas
 
-
-
-
 def form_level_martix():
     pass
