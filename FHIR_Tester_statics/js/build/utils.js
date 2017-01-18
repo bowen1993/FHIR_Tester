@@ -32,13 +32,10 @@ var app = app || {};
         var c = function(idx, val){
             if( val == -1 ){				//	null
                 return gray;
-            }else if(val == 1){				//	error
+            }else if(val == 1){				//	failed
             	return red;
             }else{
-            	// if (idx == 0) {				//	title
-            	// 	return deep_blue;
-            	// }
-            	return deep_blue;			//	right
+            	return deep_blue;			//	succeed
             	// return colors[idx];
         	}
         }
@@ -94,8 +91,7 @@ var app = app || {};
 			matrix[link.source][link.target].value = link.value;
 		});
 
-	console.log("matrix");
-	console.log(matrix);
+	console.log("matrix", matrix);
 	
 	// Precompute the orders.
 	var server_orders = {
@@ -104,9 +100,6 @@ var app = app || {};
 	var resource_orders = {
 		name: d3.range(xn).sort(function(a,b){return d3.ascending(resources[a].name, resources[b].name); })
 	}
-
-	// console.log(server_orders);
-	// console.log(resource_orders);
 	
 	var partition = d3.layout.partition()
 				.sort(null)
@@ -126,7 +119,6 @@ var app = app || {};
 				// cell.name = resources[j].name.substr(0,3);
 				cell.name = resources[j].name;
 				cell.val = matrix[i][j].value;
-				// console.log(cell);
 				level_list.push(cell);
 				cell = {};
 			}
@@ -143,13 +135,10 @@ var app = app || {};
 		graph.name = "matrix";
 		graph.children = server_list;
 
-		console.log('graph');
-		console.log(graph);
+		console.log("graph", graph);
 
 	    var nodes = partition.nodes(graph);
 		var links = partition.links(nodes);
-
-	// console.log(nodes.slice(1,nodes.length));
 	
 	svg.append("rect")
 	  .attr("class", "background")
@@ -160,9 +149,9 @@ var app = app || {};
 
 	rect.append("rect")
 		.attr("x", function(d) { return d.x; })  
-		.attr("y", function(d) { return d.y-130; })  
+		.attr("y", function(d) { return d.y-graph.children[0].y; })  
 		.attr("width", function(d) { return d.dx; })  
-		.attr("height", function(d) { return width*(1/2); })  
+		.attr("height", function(d) { return 360-graph.children[0].dy*(d.depth-1); })  
 		.style("stroke", "#fff")
 		.style("fill", function(d) { 
 					return c(d.idx, d.val);
