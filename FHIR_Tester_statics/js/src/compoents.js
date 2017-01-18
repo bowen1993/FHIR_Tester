@@ -419,7 +419,6 @@ var app = app || {};
         render:function(){
             return(
                 <div className="http-area detail-result">
-<<<<<<< HEAD
                     
                     {this.props.detail.req_header != null ? 
                         <div className="http-content">
@@ -429,17 +428,6 @@ var app = app || {};
                     }    
                     
                     
-=======
-                    
-                    {this.props.detail.req_header != null ? 
-                        <div className="http-content">
-                        <h4>HTTP Request Header</h4> 
-                        <pre>{JSON.stringify(JSON.parse(this.props.detail.req_header), null, 2) }</pre> </div>:
-                        null
-                    }    
-                    
-                    
->>>>>>> 5df60b5b2ffd1fcc8a85c2f0b6cbfb9b53a56e09
                     {this.props.detail.res_header != null ? 
                         <div className="http-content">
                         <h4>HTTP Response Header</h4>
