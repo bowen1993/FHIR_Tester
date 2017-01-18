@@ -32,8 +32,7 @@ var app = app || {};
         	console.log("copy options", this);
         },
         render:function(){
-            return (
-                React.createElement("div", {className: "btn-group"}, 
+            return (React.createElement("div", {className: "btn-group"}, 
                     React.createElement("button", {type: "button", onClick: this.handleClick, className: "btn btn-primary"}, this.props.btn_name), 
                     React.createElement("button", {type: "button", className: "btn btn-primary dropdown-toggle", "data-toggle": "dropdown"}, 
                         "Options ", React.createElement("span", {className: "caret"}), 
@@ -52,8 +51,7 @@ var app = app || {};
                         );
                     },this)
                     )
-                )
-            );
+                ))
         }
     });
     var TestButton = app.TestButton = React.createClass({displayName: "TestButton",
@@ -265,7 +263,6 @@ var app = app || {};
                     ), 
                     React.createElement("input", {className: "form-control awesomplete", onChange: this.handleChange, onFocus: this.getServer, onBlur: this.getServer, onKeyUp: this.handleKey, id: "serverlist", placeholder: 'server name'})
                 )
-                     
             );
         }
     });
@@ -403,7 +400,7 @@ var app = app || {};
         render: function(){
             return (
                 React.createElement("div", {className: "result-container"}, 
-                    React.createElement("div", {className: "result-head"}, React.createElement("span", {className: "area-title area-title-black"}, (this.test_type==null ? '' : 'Test Type: ')+ this.state.test_type_str), " ", React.createElement("span", null)), 
+                    React.createElement("div", {className: "result-head"}, React.createElement("span", {className: "area-title area-title-black"}, this.state.test_type!=null?"Test Type: "+this.state.test_type_str:""), " ", React.createElement("span", null)), 
                     React.createElement("div", {className: "detail-result"}, 
                         React.createElement("div", {className: "result-sum"}, 
                             this.state.test_type == 0 ? React.createElement("h3", null, "Level: ", this.state.level.map(function(l){
@@ -607,7 +604,6 @@ var app = app || {};
             return (
                 React.createElement("div", {className: "user-op"}, 
                     React.createElement("button", {className: "btn btn-user", onClick: this.props.showMatrix}, "FHIR Matrix")
-                    
                 )
             );
         }
