@@ -749,7 +749,7 @@ var app = app || {};
         updateTType:function(event){
             var ttype = event.currentTarget.dataset.ttype;
             var ttype_title = this.transTypeTitle(ttype);
-            this.setState({'type':ttype, curr_title:ttype_title});
+            this.setState({'type':ttype, curr_title:ttype_title, time:''});
             this.retriveNewMatrix(ttype, this.state.time);
             this.updateTimeline(ttype);
         },
