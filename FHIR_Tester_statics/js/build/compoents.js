@@ -771,8 +771,8 @@ var app = app || {};
                 React.createElement("div", {className: "title"}, React.createElement("h4", null, this.state.curr_title)), 
                     React.createElement("div", {className: "btn-area"}, 
                         React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.FHIR_TEST}, "FHIR Genomics"), 
-                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.STANDARD_TEST}, "Level Test"), 
-                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.SERVER_TEST}, "Server Test")
+                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.STANDARD_TEST}, "Level Test")
+                        
                     ), 
                     React.createElement("div", {className: "timeline"}, 
                     this.state.time_list.map(function(t, time_list){
