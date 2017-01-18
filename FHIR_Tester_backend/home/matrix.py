@@ -32,7 +32,7 @@ def form_matrix(ttype,ttime=None):
     datetime_obj = None
     if ttime and len(ttime) > 0:
         datetime_obj = datetime.strptime(ttime, '%Y-%m-%d %H:%M:%S')
-    server_list = server.objects.all()
+    server_list = server.objects.filter(is_delete=False)
     server_index = 0
     for server_obj in server_list:
         datas['servers'].append({'name':server_obj.server_name})
@@ -80,7 +80,7 @@ def form_resource_martix():
     resource_list = resource.objects.filter(resource_type=0)
     for resource_obj in resource_list:
         datas['resources'].append({'name':resource_obj.name})
-    server_list = server.objects.all()
+    server_list = server.objects.filter(is_delete=False)
     server_index = 0
     for server_obj in server_list:
         datas['servers'].append({'name':server_obj.server_name})
