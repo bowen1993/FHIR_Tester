@@ -1,6 +1,6 @@
 var app = app || {};
 
-app.host = "http://localhost:8000";
+app.host = "http://tester.ideaworld.org";
 app.app_sample = ["Prefer \"PhantomJS\"",
 "LoadSmartApp \"https://gallery.smarthealthit.org/gemomics/genetic-report-viewer\"",
 "DoGenomicAuth",

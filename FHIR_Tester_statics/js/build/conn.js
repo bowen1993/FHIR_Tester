@@ -2,9 +2,12 @@ var app = app || {};
 
 (function(){
     app.setup_websocket = function(task_id,place){
+        if(app.tasksocket){
+            app.tasksocket.close();
+        }
         console.log(task_id);
         var ws_scheme = window.location.protocol == "https" ? "wss" : "ws";
-        var tasksocket = new ReconnectingWebSocket(ws_scheme + '://localhost:8000/task/' + task_id);
+        var tasksocket = app.tasksocket =  new ReconnectingWebSocket(ws_scheme + '://tester.ideaworld.org/task/' + task_id);
         tasksocket.onmessage = function(message){
             var data = JSON.parse(message.data);
             // console.log(window.comp)

@@ -41,7 +41,7 @@ def form_matrix(ttype,ttime=None):
         if datetime_obj:
             task_list = task.objects.filter(task_type=ttype,status="finished",target_server=server_obj,create_time=datetime_obj).values_list('task_id',flat=True)
             if len(task_list) != 0:
-                task_id =task_list[0]
+                task_id =task_list[-1]
             else:
                 server_index += 1
                 continue
@@ -87,7 +87,7 @@ def form_resource_martix():
         task_list = task.objects.filter(task_type=3,status="finished",target_server=server_obj).order_by('-create_time').values_list('task_id',flat=True)
         task_id = None
         if len(task_list) != 0:
-            task_id = task_list[0]
+            task_id = task_list[-1]
         else:
             server_index += 1
             continue
