@@ -1,4 +1,3 @@
-
 var app = app || {};
 
 
@@ -32,25 +31,15 @@ var app = app || {};
         	console.log("copy options", this);
         },
         render:function(){
-            return (
-                React.createElement("div", {className: "btn-group"}, 
-                    React.createElement("button", {type: "button", onClick: this.handleClick, className: "btn btn-primary"}, this.props.btn_name), 
-                    React.createElement("button", {type: "button", className: "btn btn-primary dropdown-toggle", "data-toggle": "dropdown"}, 
-                        "Options ", React.createElement("span", {className: "caret"}), 
-                        React.createElement("span", {className: "sr-only"}, "Toggle Dropdown")
-                    ), 
-                    React.createElement("ul", {className: "dropdown-menu customed-menu", role: "menu"}, 
-                    this.state.resources.map(function(resource){
+            return (<div className="btn-group">
+                    <button type="button" onClick={this.handleClick} className="btn btn-primary">{this.props.btn_name}</button>
+                    <button type="button" className="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        Options <span className="caret"></span>
+                        <span className="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul className="dropdown-menu customed-menu" role="menu">
+                    {this.state.resources.map(function(resource){
                         return (
-<<<<<<< HEAD
-                        React.createElement("li", null, 
-                            React.createElement("label", {onClick: this.code}, 
-                                React.createElement("input", {ref: resource.name, onChange: this.onResourceChange, type: "checkbox", checked: resource.checked}), 
-                                 React.createElement("span", null, resource.name)
-                            ), 
-                            React.createElement("input", {type: "button", onClick: this.cpCode, className: resource.name, id: resource.name, name: resource.name})
-                        )
-=======
                         <li>
                             <label onClick={this.code}>
                                 <input ref={resource.name} onChange={this.onResourceChange} type="checkbox" checked={resource.checked}/> 
@@ -58,24 +47,22 @@ var app = app || {};
                             </label>
                             
                         </li>
->>>>>>> f3116efab62ececadfe28964fe60ab3de3714af4
                         );
-                    },this)
-                    )
-                )
-            );
+                    },this)}
+                    </ul>
+                </div>)
         }
     });
-    var TestButton = app.TestButton = React.createClass({displayName: "TestButton",
+    var TestButton = app.TestButton = React.createClass({
         handleClick: function() {
             this.props.submitTestTask(this.props.btnType);
         },
         render: function() {
-            return ( React.createElement("button", {onClick:  this.handleClick, 
-                className: "btn btn-test"}, " ", React.createElement("span", {className: "btn-test-text"}, " ",  this.props.btn_name, " ")) );
+            return ( <button onClick = { this.handleClick }
+                className = "btn btn-test"> <span className = "btn-test-text"> { this.props.btn_name } </span></button> );
         }
     });
-    app.CodeEditor = React.createClass({displayName: "CodeEditor",
+    app.CodeEditor = React.createClass({
         getInitialState:function(){
             return {isDragging:true}
         },
@@ -155,34 +142,30 @@ var app = app || {};
         },
         render:function(){
             return (
-                React.createElement("div", {className: "editorWrap"}, 
-                React.createElement("ul", {className: "nav nav-tabs mode-tab", role: "tablist"}, 
-                    React.createElement("li", {role: "presentation", id: "tab-app", onClick: this.loadAppCode, className: "active"}, React.createElement("a", {href: "#"}, "App Test")), 
-                    React.createElement("li", {role: "presentation", id: "tab-server", onClick: this.loadServerCode}, React.createElement("a", {href: "#"}, "Server Test")), 
-                    React.createElement("button", {onClick: this.performTestCode, className: "btn btn-run pull-right"}, React.createElement("span", {className: "glyphicon glyphicon-play"}), " Run")
-                ), 
-                React.createElement("div", {id: "codeeditor", onDrop: this.handleDrop, onKeyUp: this.handleType}
-                )
-                )
+                <div className="editorWrap">
+                <ul className="nav nav-tabs mode-tab" role="tablist">
+                    <li role="presentation" id="tab-app" onClick={this.loadAppCode} className="active"><a href="#">App Test</a></li>
+                    <li role="presentation" id="tab-server" onClick={this.loadServerCode}><a href="#">Server Test</a></li>
+                    <button onClick={this.performTestCode} className="btn btn-run pull-right"><span className="glyphicon glyphicon-play"></span> Run</button>
+                </ul>
+                <div id="codeeditor" onDrop={this.handleDrop} onKeyUp={this.handleType} >
+                </div>
+                </div>
             );
         }
     });
-    app.TokenEditor = React.createClass({displayName: "TokenEditor",
+    app.TokenEditor = React.createClass({
         handleChange:function(){
             var new_token = this.refs.tokenInput.value;
             this.props.updateToken(new_token);
         },
         render: function(){
             return (
-                React.createElement("input", {className: "input-url", onChange: this.handleChange, ref: "tokenInput", placeholder: "Input Server Access Token"})
+                <input className="input-url" onChange={this.handleChange} ref="tokenInput" placeholder="Input Server Access Token" />
             );
         }
     });
-<<<<<<< HEAD
-    app.UrlEditor = React.createClass({displayName: "UrlEditor",
-=======
     var UrlEditor = app.UrlEditor = React.createClass({
->>>>>>> f3116efab62ececadfe28964fe60ab3de3714af4
         getInitialState: function(){
             return {
                 url_vaild:true
@@ -204,11 +187,7 @@ var app = app || {};
         },
         render: function(){
             return (
-<<<<<<< HEAD
-                React.createElement("input", {className: this.classNames(), onChange: this.handleChange, ref: "urlInput", placeholder: "Type Server or App URL"})
-=======
                 <input className={this.classNames()} onChange={this.handleChange} ref="urlInput" placeholder="Server URL"/>
->>>>>>> f3116efab62ececadfe28964fe60ab3de3714af4
             );
         }
     });
@@ -270,24 +249,6 @@ var app = app || {};
         },
         render:function(){
             return (
-<<<<<<< HEAD
-            	React.createElement("div", {className: "input-group"}, 
-                    React.createElement("div", {className: "dropdown server-list input-group-btn"}, 
-                        React.createElement("button", {ref: "menu_display", className: "btn btn-default dropdown-toggle", type: "button", id: "dropdownMenu1", "data-toggle": "dropdown"}, this.state.currentDisplay, React.createElement("span", {className: "caret"})), 
-                        React.createElement("ul", {className: "dropdown-menu", role: "menu", "aria-labelledby": "dropdownMenu1"}, 
-                            this.state.servers.map(function(server){
-                                return React.createElement("li", {role: "presentation"}, React.createElement("a", {"data-serverName": server.name, "data-serverid": server.id, onClick: this.onServerClick, role: "menuitem", tabindex: "-1", href: "#"}, server.name))
-                            }.bind(this))
-                        )
-                    ), 
-                    React.createElement("input", {className: "form-control awesomplete", onChange: this.handleChange, onFocus: this.getServer, onBlur: this.getServer, onKeyUp: this.handleKey, id: "serverlist", placeholder: 'server name'})
-                )
-                     
-            );
-        }
-    })
-    var ResultDisplay = app.ResultDisplay = React.createClass({displayName: "ResultDisplay",
-=======
             	<div className="input-group">
                     <div className="dropdown server-list input-group-btn">
                         <button ref="menu_display" className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">{this.state.currentDisplay}<span className="caret"></span></button>                            
@@ -301,7 +262,6 @@ var app = app || {};
                     </div>
                     <input className="form-control awesomplete" onChange={this.handleChange} onFocus={this.getServer} onBlur={this.getServer} onKeyUp={this.handleKey} id="serverlist" placeholder={'server name'}/>
                 </div>
-                     
             );
         }
     });
@@ -412,7 +372,6 @@ var app = app || {};
         } 
     });
     var ResultDisplay = app.ResultDisplay = React.createClass({
->>>>>>> f3116efab62ececadfe28964fe60ab3de3714af4
         getInitialState:function(){
             return {'level':[],test_type:null,  test_type_str:'', 'steps':[]}
         },
@@ -439,23 +398,8 @@ var app = app || {};
         },
         render: function(){
             return (
-<<<<<<< HEAD
-                React.createElement("div", {className: "result-container"}, 
-                    React.createElement("div", {className: "result-head"}, React.createElement("span", {className: "area-title area-title-black"}, "Test Type: ", this.state.test_type_str), " ", React.createElement("span", null)), 
-                    React.createElement("div", {className: "detail-result"}, 
-                        React.createElement("div", {className: "result-sum"}, 
-                            this.state.test_type == 0 ? React.createElement("h3", null, "Level: ", this.state.level.map(function(l){
-                                return React.createElement("span", null, l, ", ")
-                            })) : null
-                        ), 
-                        this.state.steps.map(function(step){
-                            return React.createElement(StepDisplay, {showFullyDetail: this.props.showFullyDetail, stepInfo: step})
-                        },this)
-                    )
-                )
-=======
                 <div className="result-container">
-                    <div className="result-head"><span className="area-title area-title-black">{(this.test_type==null ? '' : 'Test Type: ')+ this.state.test_type_str}</span> <span></span></div>
+                    <div className="result-head"><span className="area-title area-title-black">{this.state.test_type!=null?"Test Type: "+this.state.test_type_str:""}</span> <span></span></div>
                     <div className="detail-result">
                         <div className="result-sum">
                             {this.state.test_type == 0 ? <h3>Level: {this.state.level.map(function(l){
@@ -467,50 +411,49 @@ var app = app || {};
                         },this)}
                     </div>
                 </div>
->>>>>>> f3116efab62ececadfe28964fe60ab3de3714af4
             )
         }
     });
 
-    var HTTPDetail = app.HTTPDetail = React.createClass({displayName: "HTTPDetail",
+    var HTTPDetail = app.HTTPDetail = React.createClass({
         render:function(){
             return(
-                React.createElement("div", {className: "http-area detail-result"}, 
+                <div className="http-area detail-result">
                     
-                    this.props.detail.req_header != null ? 
-                        React.createElement("div", {className: "http-content"}, 
-                        React.createElement("h4", null, "HTTP Request Header"), 
-                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.req_header), null, 2) ), " "):
-                        null, 
-                    
-                    
-                    
-                    this.props.detail.res_header != null ? 
-                        React.createElement("div", {className: "http-content"}, 
-                        React.createElement("h4", null, "HTTP Response Header"), 
-                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.res_header), null, 2) )) :
-                        null, 
-                    
-                    this.props.detail.response_message != null ?
-                        React.createElement("div", {className: "http-content"}, 
-                        React.createElement("h4", null, "Response Message"), 
-                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.response_message), null, 2) ), " "): 
-                        null, 
-                    
-
-                    this.props.detail.req_resource != null ?
-                        React.createElement("div", {className: "http-content"}, 
-                        React.createElement("h4", null, "Test Resource"), 
-                        React.createElement("pre", null, JSON.stringify(JSON.parse(this.props.detail.req_resource), null, 2) )) :
+                    {this.props.detail.req_header != null ? 
+                        <div className="http-content">
+                        <h4>HTTP Request Header</h4> 
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.req_header), null, 2) }</pre> </div>:
                         null
+                    }    
                     
+                    
+                    {this.props.detail.res_header != null ? 
+                        <div className="http-content">
+                        <h4>HTTP Response Header</h4>
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.res_header), null, 2) }</pre></div> :
+                        null
+                    }
+                    {this.props.detail.response_message != null ?
+                        <div className="http-content">
+                        <h4>Response Message</h4>
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.response_message), null, 2) }</pre> </div>: 
+                        null
+                    }
 
-                )
+                    {this.props.detail.req_resource != null ?
+                        <div className="http-content">
+                        <h4>Test Resource</h4>
+                        <pre>{JSON.stringify(JSON.parse(this.props.detail.req_resource), null, 2) }</pre></div> :
+                        null
+                    }
+
+                </div>
             );
         }
     });
 
-    var FullyDetail = app.FullyDetail = React.createClass({displayName: "FullyDetail",
+    var FullyDetail = app.FullyDetail = React.createClass({
         getInitialState:function(){
             return {detail_infos:[],is_image:false,is_modal_show:false,curr_img_src:''}
         },
@@ -532,34 +475,34 @@ var app = app || {};
         },
         render:function(){
             return (
-                React.createElement("div", {className: "result-container"}, 
-                this.state.is_image ? this.state.detail_infos.map(function(step){
-                    return React.createElement("div", {id: step.index}, 
-                        React.createElement("h3", null, step.name), 
-                        step.status ? React.createElement("span", {className: "success-bar"}, "Success") : React.createElement("span", {className: "fail-bar"}, "Fail"), 
-                        React.createElement("img", {onClick: () =>this.handleShowFullImage(event,step.addi), className: "img-responsive img-rounded step-img", src: app.host + step.addi})
-                    )
+                <div className="result-container">
+                {this.state.is_image ? this.state.detail_infos.map(function(step){
+                    return <div id={step.index}>
+                        <h3>{step.name}</h3>
+                        {step.status ? <span className="success-bar">Success</span> : <span className="fail-bar">Fail</span>}
+                        <img onClick={() =>this.handleShowFullImage(event,step.addi)} className="img-responsive img-rounded step-img" src={app.host + step.addi} />
+                    </div>
                 },this) :this.state.detail_infos.map(function(step){
                     return step.details.map(function(detail){
-                        return React.createElement("div", {id: step.index + "_" + detail.index}, 
-                                React.createElement("h3", null, step.name + " " + detail.resource_name), 
-                                React.createElement("div", {className: "result-head"}, React.createElement("span", {className: "area-title area-title-black"}, "Test case detail "), 
-                                detail.status==2 ? React.createElement("span", {className: "success-bar"}, "Success") : detail.status==1? React.createElement("span", {className: "warning-bar"}, "Warning") : React.createElement("span", {className: "fail-bar"}, "Fall")
-                                ), 
-                                React.createElement("div", {className: "detail-desc-block"}, 
-                                        detail.desc
-                                ), 
-                                React.createElement(HTTPDetail, {detail: detail})
-                            )
+                        return <div id={step.index + "_" + detail.index}>
+                                <h3>{step.name + " " + detail.resource_name}</h3>
+                                <div className="result-head"><span className="area-title area-title-black">Test case detail </span>
+                                {detail.status==2 ? <span className="success-bar">Success</span> : detail.status==1? <span className="warning-bar">Warning</span> : <span className="fail-bar">Fall</span>} 
+                                </div>
+                                <div className="detail-desc-block">
+                                        {detail.desc}
+                                </div>
+                                <HTTPDetail detail={detail}/>
+                            </div>
                     },this)
-                },this), 
-                this.state.is_modal_show && this.state.is_image ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "Step Image", content: React.createElement(FullImageArea, {img_src: app.host + this.state.curr_img_src})}) : null
-                )
+                },this)}
+                {this.state.is_modal_show && this.state.is_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={app.host + this.state.curr_img_src} />} /> : null}
+                </div>
             );
         }
     });
 
-    var StepDisplay = app.StepDisplay = React.createClass({displayName: "StepDisplay",
+    var StepDisplay = app.StepDisplay = React.createClass({
         getInitialState: function(){
             return {
                 is_img_hide:true,
@@ -604,29 +547,29 @@ var app = app || {};
         },
         render:function(){
             return (
-                React.createElement("div", {className: "step-brief step-brief-success", onClick: this.handleTextClick}, 
-                    React.createElement("div", null, React.createElement("span", {className: "step-brief-text"}, this.props.stepInfo.desc)), 
-                    React.createElement("div", {className: "step-detail-area"}, 
-                        React.createElement("div", {className: "detail-hint-block"}, 
-                            this.props.stepInfo.details.map(function(detail){
-                                return React.createElement(StepDetail, {sindex: this.props.stepInfo.index, fully_detail: detail, status: detail.status, desc: detail.desc, showDetail: this.showDetail})
-                            }, this)
-                        ), 
-                        this.state.is_detail_showing ? React.createElement("div", {className: "detail-desc-block"}, 
-                            this.state.detail_desc
-                        ) : null
+                <div className="step-brief step-brief-success" onClick={this.handleTextClick}>
+                    <div><span  className="step-brief-text">{this.props.stepInfo.desc}</span></div>
+                    <div className="step-detail-area">
+                        <div className="detail-hint-block">
+                            {this.props.stepInfo.details.map(function(detail){
+                                return <StepDetail sindex={this.props.stepInfo.index} fully_detail={detail} status={detail.status} desc={detail.desc} showDetail={this.showDetail} />
+                            }, this)}
+                        </div>
+                        {this.state.is_detail_showing ? <div className="detail-desc-block">
+                            {this.state.detail_desc}
+                        </div> : null}
                         
-                    ), 
-                    React.createElement("div", {hidden: this.state.is_img_hide && !this.state.is_has_image, className: "step-img-block"}, 
+                    </div>
+                    <div hidden={this.state.is_img_hide && !this.state.is_has_image} className="step-img-block">
                         
-                       React.createElement("a", {href: "#"+this.props.stepInfo.index}, " ", React.createElement("img", {className: "img-responsive img-thumbnail step-img-small", src: app.host + this.props.stepInfo.addi}), " ")
-                    ), 
-                    this.state.is_modal_show && this.state.is_has_image ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "Step Image", content: React.createElement(FullImageArea, {img_src: app.host + this.props.stepInfo.addi})}) : null
-                )
+                       <a href={"#"+this.props.stepInfo.index}> <img className="img-responsive img-thumbnail step-img-small" src={app.host + this.props.stepInfo.addi} /> </a>
+                    </div>
+                    {this.state.is_modal_show && this.state.is_has_image ? <Modal handleHideModal={this.handleHideModal} title="Step Image" content={<FullImageArea img_src={app.host + this.props.stepInfo.addi} />} /> : null}
+                </div>
             );
         }
     });
-    var StepDetail = app.StepDetail = React.createClass({displayName: "StepDetail",
+    var StepDetail = app.StepDetail = React.createClass({
         getInitialState:function(){
             return {btnStatus:"success"}
         },
@@ -647,69 +590,58 @@ var app = app || {};
         },
         render:function(){
             return (
-                React.createElement("a", {href: "#"+this.props.sindex+"_"+this.props.fully_detail.index, onClick: this.onBtnClick, className: 'btn btn-circle btn-'+this.state.btnStatus},  this.props.status==2 ? 'P' : this.props.status==1 ? 'W' : 'F')
+                <a href={"#"+this.props.sindex+"_"+this.props.fully_detail.index} onClick={this.onBtnClick} className={'btn btn-circle btn-'+this.state.btnStatus}>{ this.props.status==2 ? 'P' : this.props.status==1 ? 'W' : 'F'}</a>
             )
         }
     })
-    app.UserBtnArea = React.createClass({displayName: "UserBtnArea",
+    app.UserBtnArea = React.createClass({
         handleLogout:function(){
             $.removeCookie('fhir_token', { path: '/' });
             window.location.href = '/'
         },
         render:function(){
             return (
-<<<<<<< HEAD
-                React.createElement("div", {className: "user-op"}, 
-                    React.createElement("button", {className: "btn btn-user", onClick: this.props.showMatrix}, "FHIR Matrix"), 
-                    React.createElement("button", {className: "btn btn-user", onClick: this.props.history_action}, "History"), 
-                    React.createElement("button", {className: "btn btn-user", onClick: this.props.search_action}, "Search Task"), 
-
-                    React.createElement("button", {className: "btn btn-user", onClick: this.handleLogout}, React.createElement("span", {className: "glyphicon glyphicon-off"}))
-                )
-=======
                 <div className="user-op">
                     <button className="btn btn-user" onClick={this.props.showMatrix}>FHIR Matrix</button>
-                    
                 </div>
->>>>>>> f3116efab62ececadfe28964fe60ab3de3714af4
             );
         }
     });
-    var FullImageArea = app.FullImageArea = React.createClass({displayName: "FullImageArea",
+    var FullImageArea = app.FullImageArea = React.createClass({
         render:function(){
             return(
-                React.createElement("img", {src: this.props.img_src, className: "img-responsive"})
+                <img src={this.props.img_src} className="img-responsive" />
             );
         }
     });
-    var TaskItem = app.TaskItem = React.createClass({displayName: "TaskItem",
+    var TaskItem = app.TaskItem = React.createClass({
         handleClick:function(){
             this.props.itemClicked(this.props.task_id);
         },
         render:function(){
             return (
-                React.createElement("div", {className: "list-item", onClick: this.handleClick}, 
-                    React.createElement("span", null, "Task ID: "), this.props.task_id, 
-                    React.createElement("span", {className: "pull-right"}, " Time: ", this.props.task_time)
-                )
+                <div className="list-item" onClick={this.handleClick}>
+                    <span>Task ID: </span>{this.props.task_id}
+                    <span className="pull-right"> Time: {this.props.task_time}</span>
+                </div>
             );
         }
     });
-    var TaskList = app.TaskList = React.createClass({displayName: "TaskList",
+    var TaskList = app.TaskList = React.createClass({
         render:function(){
             return (
-                React.createElement("div", {className: "task-list"}, 
+                <div className="task-list">
                     
-                    React.createElement("div", {className: "list-content"}, 
-                        this.props.tasks.map(function(task_info){
-                            return React.createElement(TaskItem, {itemClicked: this.props.fetchTaskDetail, task_id: task_info.task_id, task_time: task_info.time})
-                        },this)
-                    )
-                )
+                    <div className="list-content">
+                        {this.props.tasks.map(function(task_info){
+                            return <TaskItem itemClicked={this.props.fetchTaskDetail} task_id={task_info.task_id} task_time={task_info.time} />
+                        },this)}
+                    </div>
+                </div>
                 );
         }
     });
-    var TaskSearchView = app.TaskSearchView = React.createClass({displayName: "TaskSearchView",
+    var TaskSearchView = app.TaskSearchView = React.createClass({
         getInitialState:function(){
             return {keywords:'', tasks:[]}
         },
@@ -744,13 +676,13 @@ var app = app || {};
         },
         render:function(){
             return (
-                React.createElement("div", {className: "task-search-area"}, 
-                    React.createElement("input", {className: "input-url", placeholder: "Search Tasks...", ref: "keywordField", onChange: this.onUserInput}), 
-                    React.createElement("div", {className: "history-area"}, 
-                    React.createElement(TaskList, {fetchTaskDetail: this.getTaskDetail, tasks: this.state.tasks}), 
-                    React.createElement(ResultDisplay, {ref: "res_area"})
-                    )
-                )
+                <div className="task-search-area">
+                    <input className="input-url" placeholder="Search Tasks..." ref="keywordField" onChange={this.onUserInput} />
+                    <div className="history-area">
+                    <TaskList fetchTaskDetail={this.getTaskDetail} tasks={this.state.tasks}/>
+                    <ResultDisplay ref="res_area"/>
+                    </div>
+                </div>
             )
         }
     });
@@ -816,7 +748,7 @@ var app = app || {};
         updateTType:function(event){
             var ttype = event.currentTarget.dataset.ttype;
             var ttype_title = this.transTypeTitle(ttype);
-            this.setState({'type':ttype, curr_title:ttype_title});
+            this.setState({'type':ttype, curr_title:ttype_title, time:''});
             this.retriveNewMatrix(ttype, this.state.time);
             this.updateTimeline(ttype);
         },
@@ -827,30 +759,28 @@ var app = app || {};
         },
         render:function(){
             return (
-                React.createElement("div", {className: "matrix-area"}, 
-                React.createElement("div", {className: "title"}, React.createElement("h4", null, this.state.curr_title)), 
-                    React.createElement("div", {className: "btn-area"}, 
-                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.FHIR_TEST}, "FHIR Genomics"), 
-                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.STANDARD_TEST}, "Level Test"), 
-                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.SERVER_TEST}, "Server Test")
-                    ), 
-                    React.createElement("div", {className: "timeline"}, 
-                    this.state.time_list.map(function(t, time_list){
-                        console.log("time_list", time_list, '  / ', t);
+                <div className="matrix-area">
+                <div className="title"><h4>{this.state.curr_title}</h4></div>
+                    <div className="btn-area">
+                        <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.FHIR_TEST}>FHIR Genomics</button>
+                        <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.STANDARD_TEST}>Level Test</button>
+                        <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.SERVER_TEST}>Server Test</button>
+                    </div>
+                    <div className="timeline">
+                    {this.state.time_list.map(function(t, time_list){
                         if (time_list == 0) {
-                            console.log("always show");
-                            return React.createElement("div", {onClick: this.updateTTime, className: "timedot", "data-toggle": "tooltip", "data-show": "show", "data-ttime": t, "data-placement": "bottom", title: t})
+                            return <div onClick={this.updateTTime} className="timedot" data-toggle="tooltip" data-show="show" data-ttime={t} data-placement="bottom" title={t}></div>
                         }
-                        return React.createElement("div", {onClick: this.updateTTime, className: "timedot", "data-toggle": "tooltip", "data-ttime": t, "data-placement": "bottom", title: t})
-                    },this)
-                    ), 
-                    React.createElement("div", {id: "tips"}), 
-                    React.createElement("div", {id: "matrix"})
-                )
+                        return <div onClick={this.updateTTime} className="timedot" data-toggle="tooltip" data-ttime={t} data-placement="bottom" title={t}></div>
+                    },this)}
+                    </div>
+                    <div id="tips"></div>
+                    <div id="matrix"></div>
+                </div>
                 )
         }
     });
-    var HistoryViewer = app.HistoryViewer = React.createClass({displayName: "HistoryViewer",
+    var HistoryViewer = app.HistoryViewer = React.createClass({
         getInitialState:function(){
             return {tasks:[]};
         },
@@ -884,14 +814,14 @@ var app = app || {};
         },
         render:function(){
             return (
-                React.createElement("div", {className: "history-area"}, 
-                    React.createElement(TaskList, {fetchTaskDetail: this.getTaskDetail, tasks: this.state.tasks}), 
-                    React.createElement(ResultDisplay, {ref: "res_area"})
-                )
+                <div className="history-area">
+                    <TaskList fetchTaskDetail={this.getTaskDetail} tasks={this.state.tasks}/>
+                    <ResultDisplay ref="res_area"/>
+                </div>
             );
         }
     });
-    var ReportView = app.ReportView = React.createClass({displayName: "ReportView",
+    var ReportView = app.ReportView = React.createClass({
         getCellStatus:function(status){
                 if( status ){
                     return 'success'
@@ -901,62 +831,60 @@ var app = app || {};
         },
         render:function(){
             return(
-                React.createElement("div", {className: "report-area"}, 
-                    React.createElement("div", {className: "brief-info"}, 
-                        React.createElement("h4", null, "Test Type: ", this.props.report.test_type), 
-                        React.createElement("h4", null, "Target Server: ", this.props.report.server), 
-                        React.createElement("h4", null, "Level: ", this.props.report.level == null? null : this.props.report.level.map(function(l){
-                            return React.createElement("span", null, l, ", ")
-                        }))
-                    ), 
-                    React.createElement("div", {className: "table-info"}, 
-                    React.createElement("h3", null, "Details"), 
-                        React.createElement("table", {className: "table table-bordered"}, 
-                        React.createElement("tbody", null, 
-                        this.props.report.infos.map(function(info){
+                <div className="report-area">
+                    <div className="brief-info">
+                        <h4>Test Type: {this.props.report.test_type}</h4>
+                        <h4>Target Server: {this.props.report.server}</h4>
+                        <h4>Level: {this.props.report.level == null? null : this.props.report.level.map(function(l){
+                            return <span>{l}, </span>
+                        })}</h4>
+                    </div>
+                    <div className="table-info">
+                    <h3>Details</h3>
+                        <table className="table table-bordered">
+                        <tbody>
+                        {this.props.report.infos.map(function(info){
                             return (
-                                React.createElement("tr", null, 
-                                    React.createElement("td", null, info.name), 
-                                    info.detail_infos.map(function(detail){
-                                        return React.createElement("td", {className: this.getCellStatus(detail.status)}, detail.resource)
-                                    },this), 
-                                    React.createElement("td", {className: this.getCellStatus(info.status)}, " ", info.name, " ", info.status ? 'Passed' : 'Failed')
-                                )
+                                <tr>
+                                    <td>{info.name}</td>
+                                    {info.detail_infos.map(function(detail){
+                                        return <td className={this.getCellStatus(detail.status)}>{detail.resource}</td>
+                                    },this)}
+                                    <td className={this.getCellStatus(info.status)}> {info.name} {info.status ? 'Passed' : 'Failed'}</td>
+                                </tr>
                             );
-                        },this)
-                        )
-                        )
-                    )
-                )
+                        },this)}
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
             )
         }
     });
-    var Modal = app.Modal = React.createClass({displayName: "Modal",
+    var Modal = app.Modal = React.createClass({
         componentDidMount(){
             $(ReactDOM.findDOMNode(this)).modal('show');
             $(ReactDOM.findDOMNode(this)).on('hidden.bs.modal', this.props.handleHideModal);
         },
         render:function(){
             return (
-                React.createElement("div", {className: "modal modal-wide fade"}, 
-                    React.createElement("div", {className: "modal-dialog"}, 
-                        React.createElement("div", {className: "modal-content"}, 
-                            React.createElement("div", {className: "modal-header"}, 
-                                React.createElement("button", {type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close"}, React.createElement("span", {"aria-hidden": "true"}, "×")), 
-                                React.createElement("h4", {className: "modal-title"}, this.props.title)
-                            ), 
-                            React.createElement("div", {className: "modal-body"}, 
-                                this.props.content
-                            ), 
-                            React.createElement("div", {className: "modal-footer text-center"}, 
-                                React.createElement("button", {className: "btn btn-primary center-block", "data-dismiss": "modal"}, "Close")
-                            )
-                        )
-                    )
-                )
+                <div className="modal modal-wide fade">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 className="modal-title">{this.props.title}</h4>
+                            </div>
+                            <div className="modal-body">
+                                {this.props.content}
+                            </div>
+                            <div className="modal-footer text-center">
+                                <button className="btn btn-primary center-block" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             );
         }
     });
 })();
-
-

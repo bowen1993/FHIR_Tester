@@ -143,8 +143,8 @@ var app = app || {};
 		graph.name = "matrix";
 		graph.children = server_list;
 
-		// console.log('graph');
-		// console.log(graph);
+		console.log('graph');
+		console.log(graph);
 
 	    var nodes = partition.nodes(graph);
 		var links = partition.links(nodes);
