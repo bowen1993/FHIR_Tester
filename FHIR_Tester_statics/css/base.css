@@ -122,14 +122,14 @@
 }*/
 
 .msg{
+    z-index: 65535;
     position: fixed;
     top:50px;
     right: 10px;
     width: 220px;
     height: 100px;
-    border-radius: 10px;
     padding: 10px;
-    background-color: rgba(0, 200, 83, 0.886);
+    background-color: rgb(63, 63, 63);
     display: flex;
     flex-flow: column;
     align-items: center;

@@ -20,6 +20,7 @@ var app = app || {};
     var ReportView = app.ReportView;
     var SideMenuButton = app.SideMenuButton;
     var MatrixArea = app.MatrixArea;
+    var ServerView = app.ServerView;
     app.type2str = function(test_type){
         var typeStr = '';
         switch (test_type)
@@ -48,7 +49,7 @@ var app = app || {};
         };
     var TesterApp = React.createClass({displayName: "TesterApp",
         getInitialState: function() {
-            return {resources:[],isReportReady:false,test_report:{},code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false, isReportShow:false,isRMatrixShow:false};
+            return {resources:[],isReportReady:false,test_report:{},code:"",url:"", test_type:'', isResultReady:true, isLoading:false, isTestPass:true, isTestFail:false,chosen_server:-1, access_token:null, is_history_show:false, isEditting:false, isCustomedURL:false, isSearchShow:false, isDetailShow:false, isServerBoxShow:false , isReportShow:false,isRMatrixShow:false};
         },
         updateCode:function(newCode){
             this.setState({code:newCode});
@@ -172,6 +173,13 @@ var app = app || {};
         showRMatrixView:function(){
             this.setState({isRMatrixShow:!this.state.isRMatrixShow});
         },
+        showServerView:function(){
+            console.log('server view')
+            this.setState({isServerBoxShow:true});
+        },
+        hideServerView:function(){
+            this.setState({isServerBoxShow:false});
+        },
         handleAddServer:function(){
             var server_url = this.state.url,
                 access_token = this.state.access_token;
@@ -195,28 +203,29 @@ var app = app || {};
                 }
             })
         },
+        updateServerList:function(){
+            this.refs.serverlist.update();
+        },
         render:function(){
             return (
                 React.createElement("div", {className: "box"}, 
                     React.createElement(UserBtnArea, {history_action: this.showHistoryView, search_action: this.showSearchView, showMatrix: this.showRMatrixView}), 
                     React.createElement("div", {className: "test-input"}, 
-                        React.createElement(ServerList, {updateServer: this.updateChosenServer}), 
+                        React.createElement(ServerList, {ref: "serverlist", showServerView: this.showServerView, updateServer: this.updateChosenServer}), 
                         React.createElement("div", {className: "btnArea"}, 
-                            React.createElement(SideMenuButton, {updateResource: this.updateResourceState, submitTestTask: this.handleTaskSubmit, btn_name: "Level Test", test_type: app.STANDARD_TEST, resource_url: "/home/resources?type=1"}), 
-                            React.createElement(SideMenuButton, {updateResource: this.updateResourceState, submitTestTask: this.handleTaskSubmit, btn_name: "FHIR Test", test_type: app.FHIR_TEST, resource_url: "/home/resources?type=0"}), 
+                            React.createElement(SideMenuButton, {name_prefix: "Level", updateResource: this.updateResourceState, submitTestTask: this.handleTaskSubmit, btn_name: "Level Test", test_type: app.STANDARD_TEST, resource_url: "/home/resources?type=1"}), 
+                            React.createElement(SideMenuButton, {name_prefix: "", updateResource: this.updateResourceState, submitTestTask: this.handleTaskSubmit, btn_name: "FHIR Test", test_type: app.FHIR_TEST, resource_url: "/home/resources?type=0"}), 
                             this.state.isReportReady ? React.createElement("button", {className: "btn btn-primary", onClick: this.toggle_report}, "Report") : null
                         ), 
                         
                         
                         React.createElement("div", {className: "btnArea"}, 
-                            React.createElement("label", null, 
-                                React.createElement("input", {type: "checkbox", checked: this.state.isEditting, onChange: this.toggleEditting}), " Code Editor"
-                            ), 
+                            
                             React.createElement("label", null, 
                                 React.createElement("input", {type: "checkbox", checked: this.state.isCustomedURL, onChange: this.toggleCustomedURL}), " Custom URL"
                             )
                         ), 
-                        this.state.isCustomedURL ? React.createElement("div", null, React.createElement(UrlEditor, {updateUrl: this.updateUrl}), React.createElement(TokenEditor, {updateToken: this.updateAccessToken}), " ", React.createElement("button", {onClick: this.handleAddServer, className: "btn btn-primary"}, "Add")) : null, 
+                        this.state.isCustomedURL ? React.createElement("div", null, React.createElement(UrlEditor, {updateUrl: this.updateUrl}), " ", React.createElement("button", {onClick: this.handleAddServer, className: "btn btn-primary"}, "Add")) : null, 
                         this.state.isLoading ? React.createElement("div", {className: "loading"}, React.createElement("img", {src: "../img/5.png", alt: "loading", class: "img-responsive loading-img"}))  : null, 
                         !this.state.isLoading && this.state.isResultReady ? React.createElement(ResultDisplay, {showFullyDetail: this.showFullyDetail, ref: "res_area"}) : null, 
                         this.state.isEditting ? React.createElement(CodeEditor, {submitTestTask: this.handleTaskSubmit, loadServerSample: this.loadServerSample, loadAppSample: this.loadAppSample, frame: document, updateCode: this.updateCode, ref: "codeeditor", language: "python"}) : null
@@ -227,7 +236,8 @@ var app = app || {};
                     this.state.is_history_show ? React.createElement(Modal, {handleHideModal: this.handleHideModal, title: "History", content: React.createElement(HistoryViewer, null)}) : null, 
                     this.state.isSearchShow ? React.createElement(Modal, {handleHideModal: this.handleSearchHideModal, title: "Search Task", content: React.createElement(TaskSearchView, null)}) : null, 
                     this.state.isReportShow ? React.createElement(Modal, {handleHideModal: this.handleHideReportModal, title: "Test Report", content: React.createElement(ReportView, {report: this.state.test_report})}) : null, 
-                    this.state.isRMatrixShow ? React.createElement(Modal, {handleHideMatrixModal: this.handleHideMatrixModal, title: "Test Matrix", content: React.createElement(MatrixArea, null)}) : null
+                    this.state.isRMatrixShow ? React.createElement(Modal, {handleHideMatrixModal: this.handleHideMatrixModal, title: "Test Matrix", content: React.createElement(MatrixArea, null)}) : null, 
+                    this.state.isServerBoxShow ? React.createElement(Modal, {handleHideModal: this.hideServerView, title: "Manage Servers", content: React.createElement(ServerView, {update: this.updateServerList})}) : null
                 )
             );
         }

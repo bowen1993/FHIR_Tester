@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^rmatrix$', views.get_resource_matrix),
     url(r'^times$', views.all_test_time),
     url(r'^matrix$', views.get_certain_matrix),
+    url(r'^deleteServer$', views.delete_server),
 ]

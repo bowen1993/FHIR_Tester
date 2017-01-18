@@ -45,9 +45,9 @@ var app = app || {};
                         <li>
                             <label onClick={this.code}>
                                 <input ref={resource.name} onChange={this.onResourceChange} type="checkbox" checked={resource.checked}/> 
-                                 <span>{resource.name}</span>
+                                 <span> {this.props.name_prefix + ' ' + resource.name}</span>
                             </label>
-                            <input type="button" onClick={this.cpCode} className={resource.name} id={resource.name} name={resource.name}/>
+                            
                         </li>
                         );
                     },this)}
@@ -168,7 +168,7 @@ var app = app || {};
             );
         }
     });
-    app.UrlEditor = React.createClass({
+    var UrlEditor = app.UrlEditor = React.createClass({
         getInitialState: function(){
             return {
                 url_vaild:true
@@ -186,11 +186,11 @@ var app = app || {};
             this.props.updateUrl(url_str);
         },
         classNames:function(){
-            return 'input-url ' + ((this.state.url_vaild) ? 'input-right':'input-error');
+            return 'input-url ' + ((this.state.url_vaild) ? 'input-right ':'input-error ') + (this.props.customedClass!=null ? this.props.customedClass : '');
         },
         render: function(){
             return (
-                <input className={this.classNames()} onChange={this.handleChange} ref="urlInput" placeholder="Type Server or App URL"/>
+                <input className={this.classNames()} onChange={this.handleChange} ref="urlInput" placeholder="Server URL"/>
             );
         }
     });
@@ -206,12 +206,23 @@ var app = app || {};
                 }
             }.bind(this));
         },
-         componentWillUnmount: function() {
+        update:function(){
+            this.serverRequest = $.get(app.host+ '/home/servers', function (result) {
+                if( result.isSuccessful ){
+                    this.setState({servers:result.servers});
+                }
+            }.bind(this));
+            
+        },
+        componentWillUnmount: function() {
             this.serverRequest.abort();
         },
         onServerClick:function(event){
             this.props.updateServer(event.currentTarget.dataset.serverid);
             this.setState({currentDisplay:event.currentTarget.dataset.servername});
+        },
+        onEditClick:function(){
+            this.props.showServerView();
         },
         handleChange:function(event){
             this.setState({serv:event.target.value});
@@ -248,6 +259,8 @@ var app = app || {};
                             {this.state.servers.map(function(server){
                                 return <li role="presentation"><a data-serverName={server.name} data-serverid={server.id} onClick={this.onServerClick} role="menuitem" tabindex="-1" href="#">{server.name}</a></li>
                             }.bind(this))}
+                            <li className="divider"></li>
+                            <li role="presentation"><a role="menuitem" onClick={this.onEditClick} href="#"> Edit Servers</a></li>
                         </ul>
                     </div>
                     <input className="form-control awesomplete" onChange={this.handleChange} onFocus={this.getServer} onBlur={this.getServer} onKeyUp={this.handleKey} id="serverlist" placeholder={'server name'}/>
@@ -255,7 +268,113 @@ var app = app || {};
                      
             );
         }
-    })
+    });
+    var ServerView = app.ServerView = React.createClass({
+        getInitialState:function(){
+            return {servers:[], strlist:"", newUrl:"",curr_server:null};
+        },
+        componentDidMount:function(){
+            //get server list
+            this.serverRequest = $.get(app.host+ '/home/servers', function (result) {
+                if( result.isSuccessful ){
+                    result.servers.forEach(function(server,i){
+                        server.is_active=false;
+                        server.i = i;
+                    });
+                    this.setState({servers:result.servers});
+                }
+            }.bind(this));
+        },
+        updateServers:function(){
+            this.serverRequest = $.get(app.host+ '/home/servers', function (result) {
+                if( result.isSuccessful ){
+                    result.servers.forEach(function(server,i){
+                        server.is_active=false;
+                        server.i = i;
+                    });
+                    this.setState({servers:result.servers});
+                    this.setState({curr_server:null});
+                }
+            }.bind(this));
+            this.props.update();
+        },
+        addServer:function(){
+            if(app.isUrl(this.state.newUrl) && this.refs.servername.value.length!=0){
+                var post_data = {
+                    url:this.state.newUrl,
+                    name:this.refs.servername.value
+                }
+                $.ajax({
+                    url:app.host+ '/home/addServer',
+                    type:'POST',
+                    data:JSON.stringify(post_data),
+                    dataType:'json',
+                    cache:false,
+                    success:function(res){
+                        if( res.isSuccessful ){
+                            app.showMsg("Server Added");
+                            this.updateServers();
+                        }else{
+                            app.showMsg("Server can not be added");
+                        }
+                    }.bind(this)
+                })
+            }else{
+                app.showMsg("Please input valid info");
+            }
+        },
+        updateUrl:function(new_url){
+            this.setState({newUrl:new_url})
+        },
+        componentWillUnmount: function() {
+            this.serverRequest.abort();
+        },
+        showServerDetail:function(server){
+            this.setState({curr_server:server})
+        },
+        delete_server:function(server_id){
+            var post_data = {
+                id:server_id
+            }
+            $.ajax({
+                    url:app.host+ '/home/deleteServer',
+                    type:'POST',
+                    data:JSON.stringify(post_data),
+                    dataType:'json',
+                    cache:false,
+                    success:function(res){
+                        if( res.isSuccessful ){
+                            app.showMsg("Server Deleted");
+                            this.updateServers();
+                        }else{
+                            app.showMsg("Server can not be deleted");
+                        }
+                    }.bind(this)
+                });
+        },
+        render:function(){
+            return (
+                <div className="server-manage-view">
+                    <div className="url-box">
+                        <input className="input-url url-side" ref="servername" placeholder="Server Name"/>
+                        <UrlEditor updateUrl={this.updateUrl} customedClass="url-main" />
+                        <button onClick={this.addServer} className="btn btn-primary">Add</button>
+                    </div>
+                    <div className="servers">
+                        <ul class="list-group">
+                            {this.state.servers.map(function(server){
+                                return <li className="list-group-item" onClick={() =>this.showServerDetail(server)}>{server.name} {server.is_deletable ? <button className="btn btn-primary badge" onClick={()=> this.delete_server(server.id)}><span className="glyphicon glyphicon-trash"></span></button> : null} </li>
+                            }.bind(this))}
+                        </ul>
+                        <div className="server-detail">
+                            <h4>{this.state.curr_server!=null ? "Server Name: " + this.state.curr_server.name : ''}</h4>
+                            <p>{this.state.curr_server!=null ? "Server Url: " + this.state.curr_server.url : ''}</p>
+                        </div>
+                    </div>
+                </div>
+            )
+        } 
+    });
     var ResultDisplay = app.ResultDisplay = React.createClass({
         getInitialState:function(){
             return {'level':[],test_type:null,  test_type_str:'', 'steps':[]}
@@ -284,7 +403,7 @@ var app = app || {};
         render: function(){
             return (
                 <div className="result-container">
-                    <div className="result-head"><span className="area-title area-title-black">Test Type: {this.state.test_type_str}</span> <span></span></div>
+                    <div className="result-head"><span className="area-title area-title-black">{(this.test_type==null ? '' : 'Test Type: ')+ this.state.test_type_str}</span> <span></span></div>
                     <div className="detail-result">
                         <div className="result-sum">
                             {this.state.test_type == 0 ? <h3>Level: {this.state.level.map(function(l){
@@ -488,10 +607,7 @@ var app = app || {};
             return (
                 <div className="user-op">
                     <button className="btn btn-user" onClick={this.props.showMatrix}>FHIR Matrix</button>
-                    <button className="btn btn-user" onClick={this.props.history_action}>History</button>
-                    <button className="btn btn-user" onClick={this.props.search_action}>Search Task</button>
-
-                    <button className="btn btn-user" onClick={this.handleLogout}><span className="glyphicon glyphicon-off"></span></button>
+                    
                 </div>
             );
         }

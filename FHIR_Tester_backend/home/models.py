@@ -8,6 +8,8 @@ class server(models.Model):
     server_name = models.CharField(max_length=256)
     server_url = models.URLField(max_length=256)
     access_token = models.TextField(null=True)
+    is_delete = models.BooleanField(default=False)
+    is_deletable = models.BooleanField(default=True)
 
 class resource(models.Model):
     name = models.CharField(max_length=128)
