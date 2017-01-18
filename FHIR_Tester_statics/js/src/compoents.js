@@ -772,7 +772,7 @@ var app = app || {};
                     <div className="btn-area">
                         <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.FHIR_TEST}>FHIR Genomics</button>
                         <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.STANDARD_TEST}>Level Test</button>
-                        <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.SERVER_TEST}>Server Test</button>
+                        
                     </div>
                     <div className="timeline">
                     {this.state.time_list.map(function(t, time_list){
