@@ -710,7 +710,7 @@ var app = app || {};
                 data:JSON.stringify({'ttype':ttype}),
                 dataType:'json',
                 success:function(result){
-                    this.setState({time_list:result['times']});
+                    this.setState({time_list:result['times'],time:''});
                     $('[data-toggle="tooltip"]').tooltip();
                     $('[data-show="show"]').tooltip("show");
                 }.bind(this)
@@ -735,10 +735,18 @@ var app = app || {};
             }
         },
         retriveNewMatrix:function(ttype, ttime){
+            var post_data = {
+                ttype:ttype
+            };
+            console.log('time: '+ttime +' $')
+            if( ttime != null && ttime.length != 0){
+                post_data.time = ttime;
+            }
+            console.log(post_data);
             $.ajax({
                 type:'POST',
                 dataType:'json',
-                data:JSON.stringify({ttype:ttype, time:ttime}),
+                data:JSON.stringify(post_data),
                 url:app.host + '/home/matrix',
                 success:function(res){
                     app.drawMatrix(res.matrix);
