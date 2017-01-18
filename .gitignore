@@ -18,6 +18,7 @@ node_modules/*
 #bower
 bower_components/*
 */bower_components/*
+FHIR_Tester_backend/fhirtester/node_modules/*
 
 # Distribution / packaging
 .Python
