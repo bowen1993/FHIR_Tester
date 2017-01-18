@@ -196,7 +196,7 @@ def all_test_time(request):
     result = {
         'isSuccessful':True
     }
-    time_list = task.objects.filter(task_type=ttype).values_list('create_time', flat=True)
+    time_list = task.objects.filter(task_type=ttype).order_by('-create_time').values_list('create_time', flat=True)
     strtime_list = []
     for time_obj in time_list:
         strtime_list.append(time_obj.strftime('%Y-%m-%d %H:%M:%S'))

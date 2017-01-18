@@ -40,14 +40,14 @@ def form_matrix(ttype,ttime=None):
         #get task id
         task_id = None
         if datetime_obj:
-            task_list = task.objects.filter(task_type=ttype,target_server=server_obj,create_time=datetime_obj).values_list('task_id',flat=True)
+            task_list = task.objects.filter(task_type=ttype,status="finished",target_server=server_obj,create_time=datetime_obj).values_list('task_id',flat=True)
             if len(task_list) != 0:
                 task_id =task_list[0]
             else:
                 server_index += 1
                 continue
         else:
-            task_list = task.objects.filter(task_type=ttype,target_server=server_obj).order_by('-create_time').values_list('task_id',flat=True)
+            task_list = task.objects.filter(task_type=ttype,status="finished",target_server=server_obj).order_by('-create_time').values_list('task_id',flat=True)
             if len(task_list) != 0:
                 task_id =task_list[0]
             else:
