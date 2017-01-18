@@ -76,7 +76,13 @@ var app = app || {};
             this.refs.res_area.emptyCurrentDisplay();
             var token = $.cookie('fhir_token');
             if( this.state.isCustomedURL ){
-                var post_data = {curr_detail:null,code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token, token:token};
+                if( app.isUrl(this.state.url) ){
+                    var post_data = {curr_detail:null,code:this.state.code,language:'python',type:submitType,url:this.state.url,access_token :this.state.access_token, token:token};
+                }else{
+                    app.showMsg("Invalid URL");
+                    return;
+                }
+                
             }else{
                 if( this.state.chosen_server == -1 ){
                     app.showMsg("Please Choose a Server or Input one");
@@ -180,29 +186,6 @@ var app = app || {};
         hideServerView:function(){
             this.setState({isServerBoxShow:false});
         },
-        handleAddServer:function(){
-            var server_url = this.state.url,
-                access_token = this.state.access_token;
-            var post_data = {
-                url:server_url,
-                token:access_token,
-                name:'User server'
-            }
-            $.ajax({
-                url:app.host+ '/home/addServer',
-                type:'POST',
-                data:JSON.stringify(post_data),
-                dataType:'json',
-                cache:false,
-                success:function(res){
-                    if( res.isSuccessful ){
-                        app.showMsg("Server Added");
-                    }else{
-                        app.showMsg("Server can not be added");
-                    }
-                }
-            })
-        },
         updateServerList:function(){
             this.refs.serverlist.update();
         },
@@ -217,15 +200,12 @@ var app = app || {};
                             <SideMenuButton name_prefix='' updateResource={this.updateResourceState} submitTestTask={this.handleTaskSubmit} btn_name="FHIR Test" test_type={app.FHIR_TEST} resource_url="/home/resources?type=0"/>
                             {this.state.isReportReady ? <button className="btn btn-primary" onClick={this.toggle_report}>Report</button> : null }
                         </div>
-                        
-                        
                         <div className="btnArea">
-                            
                             <label>
                                 <input type="checkbox" checked={this.state.isCustomedURL} onChange={this.toggleCustomedURL}/> Custom URL
                             </label>
                         </div>
-                        {this.state.isCustomedURL ? <div><UrlEditor updateUrl={this.updateUrl}/> <button onClick={this.handleAddServer} className="btn btn-primary">Add</button></div> : null}
+                        {this.state.isCustomedURL ? <div><UrlEditor updateUrl={this.updateUrl}/></div> : null}
                         {this.state.isLoading ? <div className="loading"><img src="../img/5.png" alt="loading" class="img-responsive loading-img" /></div>  : null}
                         {!this.state.isLoading && this.state.isResultReady ? <ResultDisplay showFullyDetail={this.showFullyDetail} ref="res_area"/> : null }
                         {this.state.isEditting ? <CodeEditor submitTestTask={this.handleTaskSubmit} loadServerSample={this.loadServerSample} loadAppSample={this.loadAppSample} frame={document} updateCode={this.updateCode} ref="codeeditor" language="python"/> : null}
