@@ -710,7 +710,7 @@ var app = app || {};
                 data:JSON.stringify({'ttype':ttype}),
                 dataType:'json',
                 success:function(result){
-                    this.setState({time_list:result['times'],time:''});
+                    this.setState({time_list:result['times']});
                     $('[data-toggle="tooltip"]').tooltip();
                     $('[data-show="show"]').tooltip("show");
                 }.bind(this)
@@ -735,18 +735,10 @@ var app = app || {};
             }
         },
         retriveNewMatrix:function(ttype, ttime){
-            var post_data = {
-                ttype:ttype
-            };
-            console.log('time: '+ttime +' $')
-            if( ttime != null && ttime.length != 0){
-                post_data.time = ttime;
-            }
-            console.log(post_data);
             $.ajax({
                 type:'POST',
                 dataType:'json',
-                data:JSON.stringify(post_data),
+                data:JSON.stringify({ttype:ttype, time:ttime}),
                 url:app.host + '/home/matrix',
                 success:function(res){
                     app.drawMatrix(res.matrix);
@@ -771,12 +763,12 @@ var app = app || {};
                 React.createElement("div", {className: "title"}, React.createElement("h4", null, this.state.curr_title)), 
                     React.createElement("div", {className: "btn-area"}, 
                         React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.FHIR_TEST}, "FHIR Genomics"), 
-                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.STANDARD_TEST}, "Level Test")
-                        
+                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.STANDARD_TEST}, "Level Test"), 
+                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.SERVER_TEST}, "Server Test")
                     ), 
                     React.createElement("div", {className: "timeline"}, 
                     this.state.time_list.map(function(t, time_list){
-                        if (time_list == 0) {
+                        if ((time_list%6) == 0) {
                             return React.createElement("div", {onClick: this.updateTTime, className: "timedot", "data-toggle": "tooltip", "data-show": "show", "data-ttime": t, "data-placement": "bottom", title: t})
                         }
                         return React.createElement("div", {onClick: this.updateTTime, className: "timedot", "data-toggle": "tooltip", "data-ttime": t, "data-placement": "bottom", title: t})
