@@ -257,7 +257,7 @@ var app = app || {};
                                 return <li role="presentation"><a data-serverName={server.name} data-serverid={server.id} onClick={this.onServerClick} role="menuitem" tabindex="-1" href="#">{server.name}</a></li>
                             }.bind(this))}
                             <li className="divider"></li>
-                            <li role="presentation"><a role="menuitem" onClick={this.onEditClick} href="#"> Edit Servers</a></li>
+                            <li role="presentation"><a role="menuitem" onClick={this.onEditClick} href="#"> Manage Servers</a></li>
                         </ul>
                     </div>
                     <input className="form-control awesomplete" onChange={this.handleChange} onFocus={this.getServer} onBlur={this.getServer} onKeyUp={this.handleKey} id="serverlist" placeholder={'server name'}/>
@@ -710,7 +710,7 @@ var app = app || {};
                 data:JSON.stringify({'ttype':ttype}),
                 dataType:'json',
                 success:function(result){
-                    this.setState({time_list:result['times']});
+                    this.setState({time_list:result['times'],time:''});
                     $('[data-toggle="tooltip"]').tooltip();
                     $('[data-show="show"]').tooltip("show");
                 }.bind(this)
@@ -771,7 +771,6 @@ var app = app || {};
                     <div className="btn-area">
                         <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.FHIR_TEST}>FHIR Genomics</button>
                         <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.STANDARD_TEST}>Level Test</button>
-                        <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.SERVER_TEST}>Server Test</button>
                     </div>
                     <div className="timeline">
                     {this.state.time_list.map(function(t, time_list){
