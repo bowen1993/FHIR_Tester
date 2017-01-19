@@ -710,18 +710,25 @@ var app = app || {};
                 data:JSON.stringify({'ttype':ttype}),
                 dataType:'json',
                 success:function(result){
-                    this.setState({time_list:result['times'],time:''});
+                    this.setState({time_list:result['times']});
                     $('[data-toggle="tooltip"]').tooltip();
                     $('[data-show="show"]').tooltip("show");
                 }.bind(this)
             })
         },
         componentDidMount:function(){
-            $.get(app.host+ '/home/rmatrix', function (result) {
+           $.get(app.host+ '/home/rmatrix', function (result) {
                 app.drawMatrix(result);
             }.bind(this));
             $('[data-toggle="tooltip"]').tooltip();
             $('[data-show="show"]').tooltip("show");
+        },
+        componentWillUpdate:function(){
+           $.get(app.host+ '/home/rmatrix', function (result) {
+                app.drawMatrix(result);
+            }.bind(this));
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-show="show"]').tooltip("destroy");
         },
         transTypeTitle:function(ttype){
             if( ttype == app.FHIR_TEST){
@@ -735,18 +742,10 @@ var app = app || {};
             }
         },
         retriveNewMatrix:function(ttype, ttime){
-            var post_data = {
-                ttype:ttype
-            };
-            console.log('time: '+ttime +' $')
-            if( ttime != null && ttime.length != 0){
-                post_data.time = ttime;
-            }
-            console.log(post_data);
-            $.ajax({
+           $.ajax({
                 type:'POST',
                 dataType:'json',
-                data:JSON.stringify(post_data),
+                data:JSON.stringify({ttype:ttype, time:ttime}),
                 url:app.host + '/home/matrix',
                 success:function(res){
                     app.drawMatrix(res.matrix);
@@ -757,8 +756,8 @@ var app = app || {};
             var ttype = event.currentTarget.dataset.ttype;
             var ttype_title = this.transTypeTitle(ttype);
             this.setState({'type':ttype, curr_title:ttype_title, time:''});
-            this.retriveNewMatrix(ttype, this.state.time);
             this.updateTimeline(ttype);
+            this.retriveNewMatrix(ttype, this.state.time);
         },
         updateTTime:function(event){
             var ttime = event.currentTarget.dataset.ttime;
@@ -772,11 +771,12 @@ var app = app || {};
                     <div className="btn-area">
                         <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.FHIR_TEST}>FHIR Genomics</button>
                         <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.STANDARD_TEST}>Level Test</button>
-                        
+                        <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.SERVER_TEST}>Server Test</button>
                     </div>
                     <div className="timeline">
                     {this.state.time_list.map(function(t, time_list){
-                        if (time_list == 0) {
+                        console.log((Math.floor(this.state.time_list.length/4)));
+                        if ((time_list%(Math.floor(this.state.time_list.length/4))) == 0) {
                             return <div onClick={this.updateTTime} className="timedot" data-toggle="tooltip" data-show="show" data-ttime={t} data-placement="bottom" title={t}></div>
                         }
                         return <div onClick={this.updateTTime} className="timedot" data-toggle="tooltip" data-ttime={t} data-placement="bottom" title={t}></div>
