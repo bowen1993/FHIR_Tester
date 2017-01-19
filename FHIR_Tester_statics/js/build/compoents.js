@@ -688,7 +688,7 @@ var app = app || {};
     });
     app.MatrixArea = React.createClass({displayName: "MatrixArea",
         getInitialState:function(){
-            return {'type':app.FHIR_TEST,'curr_title':'FHIR Genomics','time':'', time_list:[]};
+            return {'type':app.FHIR_TEST,'curr_title':'FHIR Test','time':'', time_list:[]};
         },
         componentWillMount:function(){
             $.ajax({
@@ -732,11 +732,11 @@ var app = app || {};
         },
         transTypeTitle:function(ttype){
             if( ttype == app.FHIR_TEST){
-                return 'FHIR Genomics';
+                return 'FHIR Test';
             }else if( ttype == app.SERVER_TEST ){
                 return 'Custom Server Test';
             }else if( ttype == app.STANDARD_TEST ){
-                return 'Server Level';
+                return 'Level Test';
             }else{
                 return "";
             }
@@ -769,7 +769,7 @@ var app = app || {};
                 React.createElement("div", {className: "matrix-area"}, 
                 React.createElement("div", {className: "title"}, React.createElement("h4", null, this.state.curr_title)), 
                     React.createElement("div", {className: "btn-area"}, 
-                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.FHIR_TEST}, "FHIR Genomics"), 
+                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.FHIR_TEST}, "FHIR Test"), 
                         React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.STANDARD_TEST}, "Level Test")
                     ), 
                     React.createElement("div", {className: "timeline"}, 
@@ -836,11 +836,22 @@ var app = app || {};
                     return 'danger'
                 }
         },
+        getTestTypeStr:function(type_code){
+            if( type_code == app.FHIR_TEST ){
+                return "FHIR Test"
+            }else if( type_code == app.STANDARD_TEST ){
+                return "Level Test"
+            }else if( type_code == app.APP_TEST ){
+                return "App Test"
+            }else if( type_code == app.SERVER_TEST ){
+                return "Server Test"
+            }
+        },
         render:function(){
             return(
                 React.createElement("div", {className: "report-area"}, 
                     React.createElement("div", {className: "brief-info"}, 
-                        React.createElement("h4", null, "Test Type: ", this.props.report.test_type), 
+                        React.createElement("h4", null, "Test Type: ", this.getTestTypeStr(this.props.report.test_type)), 
                         React.createElement("h4", null, "Target Server: ", this.props.report.server), 
                         React.createElement("h4", null, "Level: ", this.props.report.level == null? null : this.props.report.level.map(function(l){
                             return React.createElement("span", null, l, ", ")
