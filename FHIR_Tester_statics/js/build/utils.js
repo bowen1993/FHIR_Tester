@@ -47,7 +47,8 @@ var app = app || {};
 
         var margin = {top: 50, right: 0, bottom: 10, left: 100},
             width = 700,
-            height = 75 *yn;
+            height = 450;
+            // height = 75 *yn;
 
         var server = d3.scale.ordinal().rangeBands([0, width]),
             level = d3.scale.ordinal().rangeBands([0,height]),
@@ -151,7 +152,7 @@ var app = app || {};
 		.attr("x", function(d) { return d.x; })  
 		.attr("y", function(d) { return d.y-graph.children[0].y; })  
 		.attr("width", function(d) { return d.dx; })  
-		.attr("height", function(d) { return 360-graph.children[0].dy*(d.depth-1); })  
+		.attr("height", function(d) { return height-graph.children[0].dy*(d.depth-1); })  
 		.style("stroke", "#fff")
 		.style("fill", function(d) { 
 					return c(d.idx, d.val);
@@ -175,6 +176,9 @@ var app = app || {};
 					if (d.depth > 1) {
 						return ("translate(" + (d.x + d.dx/2+5) + "," + (d.y+d.dy/2-50) + ")") + ("rotate(-90)");
 					}
+					else if(d.depth == 1){
+						return ("translate(" + (d.x + d.dx/2+5) + "," + (d.y+d.dy/2-150) + ")") + ("rotate(-90)");
+					}
 					return "translate(" + (d.x + d.dx/2) + "," + (d.y+d.dy/2-120) + ")";
 				}) 
 				.text(function(d,i) {	return d.name;	});
@@ -191,7 +195,7 @@ var app = app || {};
 	tip_svg.append("text")
 	  .attr("x", -51)
 	  .attr("y", 15)
-	  .text("succeed: ");
+	  .text("Succeed: ");
 
 	tip_svg.append("rect")
 	  .attr("class", "red")
@@ -204,7 +208,7 @@ var app = app || {};
 	tip_svg.append("text")
 	  .attr("x", -33)
 	  .attr("y", 45)
-	  .text("failed: ");
+	  .text("Failed: ");
 
 	tip_svg.append("rect")
 	  .attr("class", "grap")
@@ -217,7 +221,7 @@ var app = app || {};
 	tip_svg.append("text")
 	  .attr("x", -60)
 	  .attr("y", 75)
-	  .text("not tested: ");
+	  .text("Not Tested: ");
 
 					
 	// The default sort order.
