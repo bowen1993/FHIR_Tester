@@ -47,7 +47,7 @@ var app = app || {};
 
         var margin = {top: 50, right: 0, bottom: 10, left: 100},
             width = 700,
-            height = 450;
+            height = 140 * yn;
             // height = 75 *yn;
 
         var server = d3.scale.ordinal().rangeBands([0, width]),
@@ -60,16 +60,12 @@ var app = app || {};
         var svg = d3.select("#matrix").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
-            .style("margin-left", -50 + "px")
-            // .style("float", "right")
-        	.append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .style("margin-left", -50 + "px");
 
         var tip_svg = d3.select("#tips").append("svg")
         	.attr("width", margin.left*1.5 + "px")
         	.attr("height", height + margin.top + margin.bottom)
             .style("margin-left", margin.left/2 + "px")
-        	// .style("background", "#eea")
         	.style("float", "left")
         	.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -91,8 +87,6 @@ var app = app || {};
         datas.links.forEach(function(link) {
 			matrix[link.source][link.target].value = link.value;
 		});
-
-	console.log("matrix", matrix);
 	
 	// Precompute the orders.
 	var server_orders = {
@@ -136,15 +130,17 @@ var app = app || {};
 		graph.name = "matrix";
 		graph.children = server_list;
 
+		console.log("matrix", matrix);
 		console.log("graph", graph);
 
 	    var nodes = partition.nodes(graph);
 		var links = partition.links(nodes);
 	
 	svg.append("rect")
-	  .attr("class", "background")
-	  .attr("width", width)
-	  .attr("height", height);
+	  	.attr("class", "background")
+	  	.attr("width", width)
+	  	.attr("height", height)
+		.attr("transform", "translate(" + margin.left +","+ margin.top+")");
 
 	var rect = svg.selectAll("g").data(nodes.slice(1,nodes.length)).enter().append("g");
 
@@ -153,33 +149,25 @@ var app = app || {};
 		.attr("y", function(d) { return d.y-graph.children[0].y; })  
 		.attr("width", function(d) { return d.dx; })  
 		.attr("height", function(d) { return height-graph.children[0].dy*(d.depth-1); })  
+		.attr("transform", "translate(" + (width+margin.left) +","+ margin.top+")rotate(90)")
 		.style("stroke", "#fff")
 		.style("fill", function(d) { 
 					return c(d.idx, d.val);
 		});
-		// .on("mouseover", function(d){
-		// 	d.name = d.fname;
-		// 	rtxt.text(function(d,i) {	return d.name;	});
-		// 	// console.log("show full name", d.name);
-		// })
-		// .on("mouseout", function(d){
-		// 	d.name = d.name.substr(0,3);
-		// 	rtxt.text(function(d,i) {	return d.name;	});
-		// 	// console.log("show sub name", d.name);
-		// });
 
 	var rtxt = rect.append("text")  
 				.attr("class","node_text")
 				.attr("text-anchor","middle")
 				.style("fill", "#fff")
+				.attr("x", function(d) { return d.y; })  					
+				.attr("y", function(d) { return d.x; }) 
 				.attr("transform",function(d,i){
 					if (d.depth > 1) {
-						return ("translate(" + (d.x + d.dx/2+5) + "," + (d.y+d.dy/2-50) + ")") + ("rotate(-90)");
+						return ( "translate(" + (-140) +","+ (70)+")");
 					}
 					else if(d.depth == 1){
-						return ("translate(" + (d.x + d.dx/2+5) + "," + (d.y+d.dy/2-150) + ")") + ("rotate(-90)");
+						return ( "translate(" + (450) +","+ (130)+")");
 					}
-					return "translate(" + (d.x + d.dx/2) + "," + (d.y+d.dy/2-120) + ")";
 				}) 
 				.text(function(d,i) {	return d.name;	});
 	

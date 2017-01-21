@@ -710,7 +710,7 @@ var app = app || {};
                 data:JSON.stringify({'ttype':ttype}),
                 dataType:'json',
                 success:function(result){
-                    this.setState({time_list:result['times'],time:''});
+                    this.setState({time_list:result['times']});
                     $('[data-toggle="tooltip"]').tooltip();
                     $('[data-show="show"]').tooltip("show");
                 }.bind(this)
@@ -724,9 +724,6 @@ var app = app || {};
             $('[data-show="show"]').tooltip("show");
         },
         componentWillUpdate:function(){
-           $.get(app.host+ '/home/rmatrix', function (result) {
-                app.drawMatrix(result);
-            }.bind(this));
             $('[data-toggle="tooltip"]').tooltip();
             $('[data-show="show"]').tooltip("destroy");
         },
@@ -851,7 +848,7 @@ var app = app || {};
             return(
                 React.createElement("div", {className: "report-area"}, 
                     React.createElement("div", {className: "brief-info"}, 
-                        React.createElement("h4", null, "Test Type: ", this.getTestTypeStr(this.props.report.test_type)), 
+                        React.createElement("h4", null, "Test Type: ", this.props.report.test_type!=null ? this.getTestTypeStr(this.props.report.test_type) : ""), 
                         React.createElement("h4", null, "Target Server: ", this.props.report.server), 
                         React.createElement("h4", null, "Level: ", this.props.report.level == null? null : this.props.report.level.map(function(l){
                             return React.createElement("span", null, l, ", ")
