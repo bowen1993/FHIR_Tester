@@ -257,7 +257,7 @@ var app = app || {};
                                 return <li role="presentation"><a data-serverName={server.name} data-serverid={server.id} onClick={this.onServerClick} role="menuitem" tabindex="-1" href="#">{server.name}</a></li>
                             }.bind(this))}
                             <li className="divider"></li>
-                            <li role="presentation"><a role="menuitem" onClick={this.onEditClick} href="#"> Edit Servers</a></li>
+                            <li role="presentation"><a role="menuitem" onClick={this.onEditClick} href="#"> Manage Servers</a></li>
                         </ul>
                     </div>
                     <input className="form-control awesomplete" onChange={this.handleChange} onFocus={this.getServer} onBlur={this.getServer} onKeyUp={this.handleKey} id="serverlist" placeholder={'server name'}/>
@@ -688,7 +688,7 @@ var app = app || {};
     });
     app.MatrixArea = React.createClass({displayName: "MatrixArea",
         getInitialState:function(){
-            return {'type':app.FHIR_TEST,'curr_title':'FHIR Genomics','time':'', time_list:[]};
+            return {'type':app.FHIR_TEST,'curr_title':'FHIR Test','time':'', time_list:[]};
         },
         componentWillMount:function(){
             $.ajax({
@@ -710,7 +710,7 @@ var app = app || {};
                 data:JSON.stringify({'ttype':ttype}),
                 dataType:'json',
                 success:function(result){
-                    this.setState({time_list:result['times']});
+                    this.setState({time_list:result['times'],time:''});
                     $('[data-toggle="tooltip"]').tooltip();
                     $('[data-show="show"]').tooltip("show");
                 }.bind(this)
@@ -732,11 +732,11 @@ var app = app || {};
         },
         transTypeTitle:function(ttype){
             if( ttype == app.FHIR_TEST){
-                return 'FHIR Genomics';
+                return 'FHIR Test';
             }else if( ttype == app.SERVER_TEST ){
                 return 'Custom Server Test';
             }else if( ttype == app.STANDARD_TEST ){
-                return 'Server Level';
+                return 'Level Test';
             }else{
                 return "";
             }
@@ -769,9 +769,8 @@ var app = app || {};
                 <div className="matrix-area">
                 <div className="title"><h4>{this.state.curr_title}</h4></div>
                     <div className="btn-area">
-                        <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.FHIR_TEST}>FHIR Genomics</button>
+                        <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.FHIR_TEST}>FHIR Test</button>
                         <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.STANDARD_TEST}>Level Test</button>
-                        <button onClick={this.updateTType} className="btn btn-primary btn-matrix" data-ttype={app.SERVER_TEST}>Server Test</button>
                     </div>
                     <div className="timeline">
                     {this.state.time_list.map(function(t, time_list){
@@ -837,11 +836,22 @@ var app = app || {};
                     return 'danger'
                 }
         },
+        getTestTypeStr:function(type_code){
+            if( type_code == app.FHIR_TEST ){
+                return "FHIR Test"
+            }else if( type_code == app.STANDARD_TEST ){
+                return "Level Test"
+            }else if( type_code == app.APP_TEST ){
+                return "App Test"
+            }else if( type_code == app.SERVER_TEST ){
+                return "Server Test"
+            }
+        },
         render:function(){
             return(
                 <div className="report-area">
                     <div className="brief-info">
-                        <h4>Test Type: {this.props.report.test_type}</h4>
+                        <h4>Test Type: {this.getTestTypeStr(this.props.report.test_type)}</h4>
                         <h4>Target Server: {this.props.report.server}</h4>
                         <h4>Level: {this.props.report.level == null? null : this.props.report.level.map(function(l){
                             return <span>{l}, </span>
