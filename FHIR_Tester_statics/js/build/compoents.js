@@ -257,7 +257,7 @@ var app = app || {};
                                 return React.createElement("li", {role: "presentation"}, React.createElement("a", {"data-serverName": server.name, "data-serverid": server.id, onClick: this.onServerClick, role: "menuitem", tabindex: "-1", href: "#"}, server.name))
                             }.bind(this)), 
                             React.createElement("li", {className: "divider"}), 
-                            React.createElement("li", {role: "presentation"}, React.createElement("a", {role: "menuitem", onClick: this.onEditClick, href: "#"}, " Manage Servers"))
+                            React.createElement("li", {role: "presentation"}, React.createElement("a", {role: "menuitem", onClick: this.onEditClick, href: "#"}, " Edit Servers"))
                         )
                     ), 
                     React.createElement("input", {className: "form-control awesomplete", onChange: this.handleChange, onFocus: this.getServer, onBlur: this.getServer, onKeyUp: this.handleKey, id: "serverlist", placeholder: 'server name'})
@@ -710,7 +710,7 @@ var app = app || {};
                 data:JSON.stringify({'ttype':ttype}),
                 dataType:'json',
                 success:function(result){
-                    this.setState({time_list:result['times'],time:''});
+                    this.setState({time_list:result['times']});
                     $('[data-toggle="tooltip"]').tooltip();
                     $('[data-show="show"]').tooltip("show");
                 }.bind(this)
@@ -724,9 +724,6 @@ var app = app || {};
             $('[data-show="show"]').tooltip("show");
         },
         componentWillUpdate:function(){
-           $.get(app.host+ '/home/rmatrix', function (result) {
-                app.drawMatrix(result);
-            }.bind(this));
             $('[data-toggle="tooltip"]').tooltip();
             $('[data-show="show"]').tooltip("destroy");
         },
@@ -770,7 +767,8 @@ var app = app || {};
                 React.createElement("div", {className: "title"}, React.createElement("h4", null, this.state.curr_title)), 
                     React.createElement("div", {className: "btn-area"}, 
                         React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.FHIR_TEST}, "FHIR Genomics"), 
-                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.STANDARD_TEST}, "Level Test")
+                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.STANDARD_TEST}, "Level Test"), 
+                        React.createElement("button", {onClick: this.updateTType, className: "btn btn-primary btn-matrix", "data-ttype": app.SERVER_TEST}, "Server Test")
                     ), 
                     React.createElement("div", {className: "timeline"}, 
                     this.state.time_list.map(function(t, time_list){
