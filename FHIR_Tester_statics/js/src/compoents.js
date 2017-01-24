@@ -402,9 +402,9 @@ var app = app || {};
                     <div className="result-head"><span className="area-title area-title-black">{this.state.test_type!=null?"Test Type: "+this.state.test_type_str:""}</span> <span></span></div>
                     <div className="detail-result">
                         <div className="result-sum">
-                            {this.state.test_type == 0 ? <h3>Level: {this.state.level.map(function(l){
-                                return <span>{l}, </span>
-                            })}</h3> : null}
+                            {this.state.test_type == 0 ? <h3>Level: {this.state.level.map(function(l, i){
+                                return <span>{l}{i+1 == this.state.level.length ? '' : ', '}</span>
+                            }, this)}</h3> : null}
                         </div>
                         {this.state.steps.map(function(step){
                             return <StepDisplay showFullyDetail={this.props.showFullyDetail} stepInfo={step} />
@@ -552,7 +552,9 @@ var app = app || {};
                     <div className="step-detail-area">
                         <div className="detail-hint-block">
                             {this.props.stepInfo.details.map(function(detail){
-                                return <StepDetail sindex={this.props.stepInfo.index} fully_detail={detail} status={detail.status} desc={detail.desc} showDetail={this.showDetail} />
+                                if( detail.desc && detail.desc.length != 0){
+                                    return <StepDetail sindex={this.props.stepInfo.index} fully_detail={detail} status={detail.status} desc={detail.desc} showDetail={this.showDetail} />
+                                }
                             }, this)}
                         </div>
                         {this.state.is_detail_showing ? <div className="detail-desc-block">
@@ -850,9 +852,9 @@ var app = app || {};
                     <div className="brief-info">
                         <h4>Test Type: {this.props.report.test_type!=null ? this.getTestTypeStr(this.props.report.test_type) : ""}</h4>
                         <h4>Target Server: {this.props.report.server}</h4>
-                        <h4>Level: {this.props.report.level == null? null : this.props.report.level.map(function(l){
-                            return <span>{l}, </span>
-                        })}</h4>
+                        <h4>Level: {this.props.report.level == null? null : this.props.report.level.map(function(l,i){
+                            return <span>{l}{i+1 == this.props.report.level.length ? '' : ', '}</span>
+                        },this)}</h4>
                     </div>
                     <div className="table-info">
                     <h3>Details</h3>

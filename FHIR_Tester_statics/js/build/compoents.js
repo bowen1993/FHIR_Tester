@@ -402,9 +402,9 @@ var app = app || {};
                     React.createElement("div", {className: "result-head"}, React.createElement("span", {className: "area-title area-title-black"}, this.state.test_type!=null?"Test Type: "+this.state.test_type_str:""), " ", React.createElement("span", null)), 
                     React.createElement("div", {className: "detail-result"}, 
                         React.createElement("div", {className: "result-sum"}, 
-                            this.state.test_type == 0 ? React.createElement("h3", null, "Level: ", this.state.level.map(function(l){
-                                return React.createElement("span", null, l, ", ")
-                            })) : null
+                            this.state.test_type == 0 ? React.createElement("h3", null, "Level: ", this.state.level.map(function(l, i){
+                                return React.createElement("span", null, l, i+1 == this.state.level.length ? '' : ', ')
+                            }, this)) : null
                         ), 
                         this.state.steps.map(function(step){
                             return React.createElement(StepDisplay, {showFullyDetail: this.props.showFullyDetail, stepInfo: step})
@@ -552,7 +552,9 @@ var app = app || {};
                     React.createElement("div", {className: "step-detail-area"}, 
                         React.createElement("div", {className: "detail-hint-block"}, 
                             this.props.stepInfo.details.map(function(detail){
-                                return React.createElement(StepDetail, {sindex: this.props.stepInfo.index, fully_detail: detail, status: detail.status, desc: detail.desc, showDetail: this.showDetail})
+                                if( detail.desc && detail.desc.length != 0){
+                                    return React.createElement(StepDetail, {sindex: this.props.stepInfo.index, fully_detail: detail, status: detail.status, desc: detail.desc, showDetail: this.showDetail})
+                                }
                             }, this)
                         ), 
                         this.state.is_detail_showing ? React.createElement("div", {className: "detail-desc-block"}, 
@@ -850,9 +852,9 @@ var app = app || {};
                     React.createElement("div", {className: "brief-info"}, 
                         React.createElement("h4", null, "Test Type: ", this.props.report.test_type!=null ? this.getTestTypeStr(this.props.report.test_type) : ""), 
                         React.createElement("h4", null, "Target Server: ", this.props.report.server), 
-                        React.createElement("h4", null, "Level: ", this.props.report.level == null? null : this.props.report.level.map(function(l){
-                            return React.createElement("span", null, l, ", ")
-                        }))
+                        React.createElement("h4", null, "Level: ", this.props.report.level == null? null : this.props.report.level.map(function(l,i){
+                            return React.createElement("span", null, l, i+1 == this.props.report.level.length ? '' : ', ')
+                        },this))
                     ), 
                     React.createElement("div", {className: "table-info"}, 
                     React.createElement("h3", null, "Details"), 
