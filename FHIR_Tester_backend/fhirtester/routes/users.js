@@ -1,9 +1,12 @@
 var express = require('express');
 var router = express.Router();
+let models = require('../models');
 
+let ResourceDao = models.ResourceDao;
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  var resources = ResourceDao.find({});
+  res.send(resources);
 });
 
 module.exports = router;
