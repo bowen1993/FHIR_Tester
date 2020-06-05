@@ -12,7 +12,7 @@ chardet==2.3.0
 colorama==0.3.2
 cryptography==0.6.1
 daphne==0.15.0
-Django==1.9.2
+Django==1.11.29
 django-celery==3.1.17
 django-cors-headers==1.1.0
 gyp==0.1
