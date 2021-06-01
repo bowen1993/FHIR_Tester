@@ -35,5 +35,5 @@ selenium==2.53.6
 six==1.8.0
 Twisted==16.4.1
 txaio==2.5.1
-urllib3==1.9.1
+urllib3==1.26.5
 zope.interface==4.3.2
