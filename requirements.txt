@@ -16,7 +16,7 @@ Django==1.9.2
 django-celery==3.1.17
 django-cors-headers==1.1.0
 gyp==0.1
-html5lib==0.999
+html5lib==0.99999999
 kombu==3.0.35
 lxml==3.6.4
 msgpack-python==0.4.8
